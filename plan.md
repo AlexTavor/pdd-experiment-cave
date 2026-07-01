@@ -90,9 +90,11 @@ This makes the 20 percent headroom an enforced checkpoint, not a guess.
 
 - Equal budget across R, C, P. Without it, a PDD win reduces to "spent more attention,"
   which a raw user could also do.
-- Taxonomy-free decomposition for C: use the structural, duration-sized chunker, not PDD's
-  carve roadmap (which is risk-ranked from the atlas and would reintroduce the taxonomy).
-  VERIFY AT WIRING that the chunker boundaries come from structure, not the taxonomy pass.
+- Taxonomy-free decomposition for C: take units from the structural chunker `scopeSubsystems`
+  (`cli/src/scope.ts:162`, directory-depth boundaries), not PDD's risk-ranked carve roadmap
+  (`carveUnits` producing units.json). VERIFIED GREEN against `pdd_commit` 731ba4d; see
+  validity-taxonomy-free.md for the wiring rule and the one rank/limit trap to avoid (pass empty
+  findings, or run the worklist with no finite `--limit` and before any atlas).
 - Frozen, committed prompts: `raw.md` (shared by R and C), the PDD taxonomy for P,
   `judge.md`. Referenced by content hash.
 - Blind adjudication: the judge never sees which arm produced a finding; findings are
@@ -199,7 +201,7 @@ actual spread is known.
 | Stage | State |
 |---|---|
 | Pin commits | pending |
-| Chunk + verify taxonomy-free | pending |
+| Chunk + verify taxonomy-free | verify GREEN (validity-taxonomy-free.md); chunk pending |
 | Freeze prompts | pending |
 | Gate suite (wide) | pending |
 | Arm R (3 runs) | pending |

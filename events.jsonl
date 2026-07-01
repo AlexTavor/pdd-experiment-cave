@@ -5,3 +5,4 @@
 {"ts": "2026-07-01T16:09:46Z", "actor": "agent", "action": "fix-helper", "target": "log-event,view/README.md", "note": "tz-aware timestamp; dod depth note corrected to repo root"}
 {"ts": "2026-07-01T16:41:55Z", "actor": "agent", "action": "build", "target": "view/server.mjs", "note": "dod spec reader: /api/meta + /api/render, pending fallback, live ledger; smoke-tested :4320"}
 {"ts": "2026-07-01T16:41:56Z", "actor": "agent", "action": "pin", "target": "results/experiment.json,results/target.json", "note": "target 117cd7d, pdd 731ba4d, prompt sha256 frozen; region 29481 loc / 525 files"}
+{"ts": "2026-07-01T16:46:26Z", "actor": "agent", "action": "verify", "target": "validity-taxonomy-free.md", "note": "arm C taxonomy-free: GREEN, 0/3 refutations; scopeSubsystems scope.ts:162; rank/limit trap recorded"}
