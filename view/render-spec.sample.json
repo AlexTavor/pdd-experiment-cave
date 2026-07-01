@@ -1,0 +1,50 @@
+{
+  "title": "PDD vs raw, Cave engine",
+  "refresh_ms": 4000,
+  "panels": [
+    { "type": "section", "title": "headline outcomes" },
+    { "type": "stat", "label": "killable gaps missed by finders", "value": 18 },
+    { "type": "stat", "label": "gate suite verified-real yield", "value": 46 },
+    { "type": "stat", "label": "recall delta, C vs R", "value": "+9 pts" },
+    { "type": "stat", "label": "precision delta, P vs C", "value": "+13 pts" },
+
+    { "type": "section", "title": "finder findings by arm and run" },
+    { "type": "chart", "kind": "bars", "x": ["run 1", "run 2", "run 3"],
+      "series": [
+        { "name": "R raw", "values": [39, 42, 40] },
+        { "name": "C chunk-only", "values": [46, 49, 47] },
+        { "name": "P full pdd", "values": [43, 45, 44] }
+      ] },
+
+    { "type": "section", "title": "deterministic gate yield, verified-real" },
+    { "type": "chart", "kind": "hbar",
+      "x": ["mutation (gaps)", "silent-failure", "boundary-tests", "dead-branch", "no-op-paths", "cover-the-mirror", "properties (defects)", "vestigial", "trace-requirements"],
+      "values": [23, 6, 5, 4, 3, 2, 2, 1, 0] },
+
+    { "type": "section", "title": "kill-condition" },
+    { "type": "table", "columns": ["condition", "threshold", "status"],
+      "align": ["left", "left", "right"],
+      "rows": [
+        ["a. C recall exceeds R", ">= 10 pts and > run spread", "pending"],
+        ["b. killable gaps missed by finders", "K >= 1, report count", "pending"],
+        ["c. P precision exceeds C", ">= 8 pts and > run spread", "pending"]
+      ] },
+
+    { "type": "section", "title": "progress, arm by run" },
+    { "type": "table", "columns": ["arm", "run 1", "run 2", "run 3"],
+      "rows": [
+        ["R raw", "done", "done", "done"],
+        ["C chunk-only", "done", "running", "pending"],
+        ["P full pdd", "pending", "pending", "pending"]
+      ] },
+
+    { "type": "section", "title": "progress, pipeline" },
+    { "type": "table", "columns": ["stage", "status"],
+      "rows": [
+        ["gate suite (wide)", "done"],
+        ["blind adjudication", "running"],
+        ["survivor triage", "pending"],
+        ["metrics + kill-condition", "pending"]
+      ] }
+  ]
+}

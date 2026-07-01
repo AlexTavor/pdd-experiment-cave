@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Append one action to the ledger, then stage it.
+# Usage: ./log-event <actor> <action> <target> <note>
+#   actor : human | agent | tool
+#   action: pin | chunk | arm-run-start | finding-emitted | adjudicate | triage |
+#           budget-checkpoint | cut | kill-eval | ... (free text is fine)
+set -euo pipefail
+dir="$(cd "$(dirname "$0")" && pwd)"
+python3 - "$@" >> "$dir/events.jsonl" <<'PY'
+import json, sys, datetime
+a = sys.argv[1:]
+def g(i): return a[i] if len(a) > i else ""
+print(json.dumps({
+    "ts": datetime.datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+    "actor": g(0), "action": g(1), "target": g(2), "note": g(3),
+}))
+PY
+git -C "$dir" add events.jsonl 2>/dev/null || true
+tail -n 1 "$dir/events.jsonl"

@@ -1,0 +1,4 @@
+{"ts": "2026-07-01T16:07:17Z", "actor": "human", "action": "decide", "target": "project", "note": "promote experiment to its own private repo"}
+{"ts": "2026-07-01T16:07:17Z", "actor": "agent", "action": "create-project", "target": "pdd-experiment-cave", "note": "scaffold as standalone sibling repo"}
+{"ts": "2026-07-01T16:07:17Z", "actor": "agent", "action": "move-docs", "target": "plan.md,prompts,view,dod.project.json", "note": "moved out of proof-driven-development"}
+{"ts": "2026-07-01T16:07:17Z", "actor": "agent", "action": "scaffold-record", "target": "events.jsonl,log-event,README.md", "note": "append-only ledger, helper, index"}

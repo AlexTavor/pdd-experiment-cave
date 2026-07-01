@@ -1,0 +1,13 @@
+{
+  "id": "cave-experiment",
+  "name": "PDD vs raw, Cave engine",
+  "description": "Raw vs PDD finder comparison (R, C, P) plus the deterministic gate suite, per-gate attribution, and the kill-condition.",
+  "run": {
+    "cmd": ["node", "view/server.mjs", "--port", "4320"],
+    "cwd": ".",
+    "port": 4320,
+    "ready": { "kind": "http", "path": "/api/meta", "status": 200 },
+    "stop": "sigterm"
+  },
+  "tags": ["pdd", "experiment"]
+}
