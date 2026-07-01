@@ -1,0 +1,30 @@
+{
+  "id": "cave-public-engine-minus-compiler-linker",
+  "repo": "https://github.com/AlexTavor/cave-public.git",
+  "commit": "117cd7deb661067e4c503291fff99018427ed6f5",
+  "region_paths": [
+    "src/engine/balancing",
+    "src/engine/logic",
+    "src/engine/phaser",
+    "src/engine/physics",
+    "src/engine/registry",
+    "src/engine/runtime",
+    "src/engine/terminal",
+    "src/engine/vfs",
+    "src/engine/workspace"
+  ],
+  "excluded_paths": ["src/engine/compiler", "src/engine/linker", "src/engine/test"],
+  "source_loc": 29481,
+  "source_files": 525,
+  "test_loc": 23033,
+  "test_files": 294,
+  "prior_pdd": false,
+  "gate_scope": {
+    "note": "The deterministic gate suite runs WIDE over the whole engine, including compiler and linker; their gate output on hardened code is itself informative. The finder arms (R, C, P) see only region_paths.",
+    "engine_source_loc": 34232,
+    "engine_source_files": 610,
+    "compiler_source_loc": 4065,
+    "linker_source_loc": 686
+  },
+  "measured_note": "LOC and file counts measured at target_commit with find over *.ts/*.tsx, excluding *.test.*/*.spec.* and /test/ and __tests__ dirs. No source files sit loose at the src/engine root; all target source is under the nine region_paths."
+}

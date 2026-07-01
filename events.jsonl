@@ -4,3 +4,4 @@
 {"ts": "2026-07-01T16:07:17Z", "actor": "agent", "action": "scaffold-record", "target": "events.jsonl,log-event,README.md", "note": "append-only ledger, helper, index"}
 {"ts": "2026-07-01T16:09:46Z", "actor": "agent", "action": "fix-helper", "target": "log-event,view/README.md", "note": "tz-aware timestamp; dod depth note corrected to repo root"}
 {"ts": "2026-07-01T16:41:55Z", "actor": "agent", "action": "build", "target": "view/server.mjs", "note": "dod spec reader: /api/meta + /api/render, pending fallback, live ledger; smoke-tested :4320"}
+{"ts": "2026-07-01T16:41:56Z", "actor": "agent", "action": "pin", "target": "results/experiment.json,results/target.json", "note": "target 117cd7d, pdd 731ba4d, prompt sha256 frozen; region 29481 loc / 525 files"}

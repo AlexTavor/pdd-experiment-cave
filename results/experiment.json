@@ -1,0 +1,17 @@
+{
+  "id": "cave-experiment",
+  "protocol_version": "1",
+  "target_commit": "117cd7deb661067e4c503291fff99018427ed6f5",
+  "pdd_commit": "731ba4d09e9a654211bb23e2572ba4cfdc4b2776",
+  "models": { "finder": "claude-opus-4-8", "judge": "claude-opus-4-8" },
+  "prompt_refs": {
+    "raw": "prompts/raw.md@sha256:1f6333bfa1016a67e1406d3bf96b5a6e57fcb15bc6a6dc9f39105978c40238e8",
+    "pdd": "prompts/pdd.md@sha256:c44b75158d36582f175082c98bb1a0d2a095cba514c9a3968fe87793d925109a",
+    "judge": "prompts/judge.md@sha256:f4b1782c6729057258247280a96b6edb7dd5360a9c14cc0c4acf32e3ef1df802"
+  },
+  "arms": ["R", "C", "P"],
+  "runs_per_arm": 3,
+  "budget_per_arm": "pending-calibration",
+  "kill_condition": "Keep iff, on the large target: (a) C beats R on recall by >= 10 pts AND by more than the within-arm run spread; (b) the gate suite yields >= K=1 killable gap missed by all finders, confirmed killable after triage; (c) P beats C on precision by >= 8 pts AND by more than the within-arm run spread. Kill iff C is within R's run spread AND the gates yield near-zero killable-missed gaps after triage. A negative high-severity delta is expected and is not a kill trigger. K=1 is the floor read as 'keep exploring'; >= 5 confirmed killable-missed gaps is a clear signal. Authoritative text: plan.md.",
+  "notes": "budget_per_arm is set from the calibration read (one arm P over ~1-2k lines, meter before/after), not a token count. Prompt hashes are sha256 of the frozen files at pin time."
+}
