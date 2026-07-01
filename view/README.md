@@ -26,5 +26,5 @@ All atoms are shipped by dod (`dod/frontend/src/types.ts`), so nothing is missin
 build step is `server.mjs`, which is a thin reader that emits the spec from the results.
 
 Note: dod scans for `dod.project.json` under its roots to a bounded depth (default 4 from
-`~/Documents`). This manifest sits at depth 4; confirm dod's scan reaches it, or raise the
-depth/root config, at wiring.
+`~/Documents`). This manifest sits at the repo root, depth 2, so dod discovers it with no
+config change.
