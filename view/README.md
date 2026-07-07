@@ -10,17 +10,24 @@ The server (`server.mjs`, written at kickoff) answers two endpoints:
 - `GET /api/render` -> the `Spec` object: `{ title, refresh_ms, panels: [...] }`, built by reading
   `../results/` and `../metrics.json`.
 
-`render-spec.sample.json` is exactly that `Spec`, with sample numbers, so the atom layout is
-reviewable before any data exists. Panel-to-atom mapping:
+`render-spec.sample.json` is a snapshot of that `Spec` with the current real numbers. The layout
+is comparison-first: every per-arm panel is series-per-arm, so arm C drops in as a third
+series/column with no code change. Panel-to-atom mapping:
 
 | Panel | dod atom |
 |---|---|
-| headline numbers | `stat` (x4) |
-| finder by arm and run | `chart` kind `bars` (series per arm) |
-| gate yield | `chart` kind `hbar` (single series) |
-| kill-condition | `table` |
-| progress, arm by run | `table` |
-| progress, pipeline | `table` |
+| head-to-head (real, false, precision, high-sev, cost) | `table` (columns: metric, R, P) |
+| severity mix (real) | `chart` kind `bars` (series per arm) |
+| class mix (real) | `chart` kind `bars` (series per arm) |
+| coverage by subsystem (real) | `chart` kind `bars` (series per arm) |
+| cost (tokens priced, USD estimate) | `table` |
+| deterministic gate axis (PDD-only, primary metric) | `table` |
+| progress, arm by run + pipeline | `table` (x2) |
+| action ledger (live) | `log` |
+
+The panels are driven by `../metrics.json` (written from the adjudicated results). The finder
+axis is complete for R and P (run 1); the gate axis shows raw counts with the killable triage
+marked pending; production cost per arm is marked pending a controlled measure.
 
 All atoms are shipped by dod (`dod/frontend/src/types.ts`), so nothing is missing. The only
 build step is `server.mjs`, which is a thin reader that emits the spec from the results.

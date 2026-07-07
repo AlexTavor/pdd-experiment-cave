@@ -1,68 +1,170 @@
 {
-  "headline": {
-    "killable_missed": "pending",
-    "gate_verified_real": "pending",
-    "recall_delta_c_vs_r": "pending (no C)",
-    "precision_delta_p_vs_c": "pending (no C)"
-  },
-  "finder_by_arm_run": {
-    "runs": [
-      "run 1",
-      "run 2",
-      "run 3"
+  "title": "PDD vs raw, Cave engine",
+  "subtitle": "target region (9 engine subsystems, excl compiler+linker) | run 1 | blind-adjudicated by judge.md | C pending",
+  "headline": [
+    [
+      "metric",
+      "R (raw)",
+      "P (full PDD)"
+    ],
+    [
+      "real issues",
+      "37",
+      "150"
+    ],
+    [
+      "false positives",
+      "1",
+      "5"
+    ],
+    [
+      "trivial",
+      "0",
+      "27"
+    ],
+    [
+      "precision (real/decided)",
+      "97%",
+      "97%"
+    ],
+    [
+      "high-severity real",
+      "4",
+      "4"
+    ],
+    [
+      "validation cost (USD est)",
+      "$36",
+      "$147"
+    ]
+  ],
+  "severity": {
+    "x": [
+      "high",
+      "medium",
+      "low"
     ],
     "R": [
-      37,
-      null,
-      null
-    ],
-    "C": [
-      null,
-      null,
-      null
+      4,
+      15,
+      18
     ],
     "P": [
-      150,
-      null,
-      null
-    ]
-  },
-  "gate_yield": {
-    "labels": [
-      "mutation survivors",
-      "cover-the-mirror",
-      "boundary-tests",
-      "silent-failure",
-      "pin-values",
-      "no-op-paths",
-      "prove-boundary"
-    ],
-    "values": [
-      7227,
-      36,
-      10,
-      5,
       4,
-      3,
-      3
+      56,
+      90
     ]
   },
-  "kill_condition": [
-    {
-      "condition": "a. C recall exceeds R",
-      "threshold": ">= 10 pts and > run spread",
-      "status": "pending (no C)"
-    },
-    {
-      "condition": "b. killable gaps missed by finders",
-      "threshold": "K >= 1, report count",
-      "status": "pending triage"
-    },
-    {
-      "condition": "c. P precision exceeds C",
-      "threshold": ">= 8 pts and > run spread",
-      "status": "pending (no C)"
-    }
+  "klass": {
+    "x": [
+      "correctness",
+      "silent-failure",
+      "test-adequacy",
+      "resource",
+      "performance",
+      "other",
+      "determinism",
+      "concurrency"
+    ],
+    "R": [
+      16,
+      4,
+      14,
+      2,
+      1,
+      0,
+      0,
+      0
+    ],
+    "P": [
+      70,
+      39,
+      1,
+      10,
+      3,
+      26,
+      1,
+      0
+    ]
+  },
+  "coverage": {
+    "x": [
+      "phaser",
+      "runtime",
+      "terminal",
+      "physics",
+      "vfs",
+      "workspace",
+      "balancing",
+      "logic",
+      "registry"
+    ],
+    "R": [
+      16,
+      10,
+      2,
+      1,
+      2,
+      1,
+      2,
+      2,
+      1
+    ],
+    "P": [
+      60,
+      31,
+      12,
+      10,
+      7,
+      10,
+      8,
+      7,
+      5
+    ]
+  },
+  "cost": [
+    [
+      "lane",
+      "R",
+      "P"
+    ],
+    [
+      "validation (adjudicate output)",
+      "$36",
+      "$147"
+    ],
+    [
+      "production (generate findings)",
+      "~$125 (partial)",
+      "pending (entangled run)"
+    ],
+    [
+      "note",
+      "clean; scales with volume",
+      "controlled re-measure needed"
+    ]
+  ],
+  "gate": [
+    [
+      "deterministic gate (PDD-only, R has none)",
+      "count",
+      "status"
+    ],
+    [
+      "mutation survivors",
+      "7227",
+      "killable rate pending sample n=385"
+    ],
+    [
+      "static-gate findings",
+      "58",
+      "full validation pending (cheap)"
+    ],
+    [
+      "boundary survivors",
+      "3",
+      "high-severity, likely real"
+    ]
   ],
   "progress_arm_run": {
     "R": [
@@ -82,25 +184,33 @@
     ]
   },
   "pipeline": [
-    {
-      "stage": "gate suite (wide)",
-      "status": "extracted"
-    },
-    {
-      "stage": "blind adjudication (R, P)",
-      "status": "done"
-    },
-    {
-      "stage": "arm C",
-      "status": "pending"
-    },
-    {
-      "stage": "survivor triage",
-      "status": "pending"
-    },
-    {
-      "stage": "metrics + kill-condition",
-      "status": "pending"
-    }
+    [
+      "stage",
+      "status"
+    ],
+    [
+      "gate suite (wide)",
+      "extracted"
+    ],
+    [
+      "blind adjudication (R,P)",
+      "done"
+    ],
+    [
+      "overlap R vs P",
+      "pending"
+    ],
+    [
+      "arm C",
+      "pending"
+    ],
+    [
+      "gate triage (sample n=385)",
+      "pending"
+    ],
+    [
+      "metrics + kill-condition",
+      "pending"
+    ]
   ]
 }

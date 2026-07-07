@@ -10,3 +10,4 @@
 {"ts": "2026-07-07T09:47:05Z", "actor": "agent", "action": "extract", "target": "results/gates,results/findings/arm-P,results/adjudication/arm-P", "note": "gate axis + arm P blind-adjudicated: 171 real / 7 false / 27 trivial of 205"}
 {"ts": "2026-07-07T09:55:40Z", "actor": "agent", "action": "arm-run", "target": "results/findings/arm-R.run1.json", "note": "arm R run1: 38 raw findings, own navigation, all 9 subsystems; unadjudicated"}
 {"ts": "2026-07-07T10:08:57Z", "actor": "agent", "action": "adjudicate", "target": "results/findings/arm-R.adjudicated.json,metrics.json", "note": "arm R blind-judged: 37 real/1 false/0 trivial of 38; dashboard live"}
+{"ts": "2026-07-07T14:19:44Z", "actor": "agent", "action": "build", "target": "view/server.mjs,metrics.json", "note": "comparison-first dashboard: head-to-head + severity/class/coverage + cost + gate axis; R vs P live"}

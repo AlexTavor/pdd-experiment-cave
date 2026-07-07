@@ -2,49 +2,309 @@
   "title": "PDD vs raw, Cave engine",
   "refresh_ms": 4000,
   "panels": [
-    { "type": "section", "title": "headline outcomes" },
-    { "type": "stat", "label": "killable gaps missed by finders", "value": 18 },
-    { "type": "stat", "label": "gate suite verified-real yield", "value": 46 },
-    { "type": "stat", "label": "recall delta, C vs R", "value": "+9 pts" },
-    { "type": "stat", "label": "precision delta, P vs C", "value": "+13 pts" },
-
-    { "type": "section", "title": "finder findings by arm and run" },
-    { "type": "chart", "kind": "bars", "x": ["run 1", "run 2", "run 3"],
+    {
+      "type": "prose",
+      "text": "target region (9 engine subsystems, excl compiler+linker) | run 1 | blind-adjudicated by judge.md | C pending"
+    },
+    {
+      "type": "section",
+      "title": "head-to-head (real findings, target region)"
+    },
+    {
+      "type": "table",
+      "columns": [
+        "metric",
+        "R (raw)",
+        "P (full PDD)"
+      ],
+      "rows": [
+        [
+          "real issues",
+          "37",
+          "150"
+        ],
+        [
+          "false positives",
+          "1",
+          "5"
+        ],
+        [
+          "trivial",
+          "0",
+          "27"
+        ],
+        [
+          "precision (real/decided)",
+          "97%",
+          "97%"
+        ],
+        [
+          "high-severity real",
+          "4",
+          "4"
+        ],
+        [
+          "validation cost (USD est)",
+          "$36",
+          "$147"
+        ]
+      ],
+      "align": [
+        "left",
+        "right",
+        "right",
+        "right"
+      ]
+    },
+    {
+      "type": "section",
+      "title": "severity mix (real)"
+    },
+    {
+      "type": "chart",
+      "kind": "bars",
+      "x": [
+        "high",
+        "medium",
+        "low"
+      ],
       "series": [
-        { "name": "R raw", "values": [39, 42, 40] },
-        { "name": "C chunk-only", "values": [46, 49, 47] },
-        { "name": "P full pdd", "values": [43, 45, 44] }
-      ] },
-
-    { "type": "section", "title": "deterministic gate yield, verified-real" },
-    { "type": "chart", "kind": "hbar",
-      "x": ["mutation (gaps)", "silent-failure", "boundary-tests", "dead-branch", "no-op-paths", "cover-the-mirror", "properties (defects)", "vestigial", "trace-requirements"],
-      "values": [23, 6, 5, 4, 3, 2, 2, 1, 0] },
-
-    { "type": "section", "title": "kill-condition" },
-    { "type": "table", "columns": ["condition", "threshold", "status"],
-      "align": ["left", "left", "right"],
+        {
+          "name": "R raw",
+          "values": [
+            4,
+            15,
+            18
+          ]
+        },
+        {
+          "name": "P full pdd",
+          "values": [
+            4,
+            56,
+            90
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "class mix (real)"
+    },
+    {
+      "type": "chart",
+      "kind": "bars",
+      "x": [
+        "correctness",
+        "silent-failure",
+        "test-adequacy",
+        "resource",
+        "performance",
+        "other",
+        "determinism",
+        "concurrency"
+      ],
+      "series": [
+        {
+          "name": "R raw",
+          "values": [
+            16,
+            4,
+            14,
+            2,
+            1,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "name": "P full pdd",
+          "values": [
+            70,
+            39,
+            1,
+            10,
+            3,
+            26,
+            1,
+            0
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "coverage by subsystem (real)"
+    },
+    {
+      "type": "chart",
+      "kind": "bars",
+      "x": [
+        "phaser",
+        "runtime",
+        "terminal",
+        "physics",
+        "vfs",
+        "workspace",
+        "balancing",
+        "logic",
+        "registry"
+      ],
+      "series": [
+        {
+          "name": "R raw",
+          "values": [
+            16,
+            10,
+            2,
+            1,
+            2,
+            1,
+            2,
+            2,
+            1
+          ]
+        },
+        {
+          "name": "P full pdd",
+          "values": [
+            60,
+            31,
+            12,
+            10,
+            7,
+            10,
+            8,
+            7,
+            5
+          ]
+        }
+      ]
+    },
+    {
+      "type": "section",
+      "title": "cost (tokens priced, USD estimate)"
+    },
+    {
+      "type": "table",
+      "columns": [
+        "lane",
+        "R",
+        "P"
+      ],
       "rows": [
-        ["a. C recall exceeds R", ">= 10 pts and > run spread", "pending"],
-        ["b. killable gaps missed by finders", "K >= 1, report count", "pending"],
-        ["c. P precision exceeds C", ">= 8 pts and > run spread", "pending"]
-      ] },
-
-    { "type": "section", "title": "progress, arm by run" },
-    { "type": "table", "columns": ["arm", "run 1", "run 2", "run 3"],
+        [
+          "validation (adjudicate output)",
+          "$36",
+          "$147"
+        ],
+        [
+          "production (generate findings)",
+          "~$125 (partial)",
+          "pending (entangled run)"
+        ],
+        [
+          "note",
+          "clean; scales with volume",
+          "controlled re-measure needed"
+        ]
+      ]
+    },
+    {
+      "type": "section",
+      "title": "deterministic gate axis (PDD-only, R has no equivalent) \u2014 primary metric"
+    },
+    {
+      "type": "table",
+      "columns": [
+        "deterministic gate (PDD-only, R has none)",
+        "count",
+        "status"
+      ],
       "rows": [
-        ["R raw", "done", "done", "done"],
-        ["C chunk-only", "done", "running", "pending"],
-        ["P full pdd", "pending", "pending", "pending"]
-      ] },
-
-    { "type": "section", "title": "progress, pipeline" },
-    { "type": "table", "columns": ["stage", "status"],
+        [
+          "mutation survivors",
+          "7227",
+          "killable rate pending sample n=385"
+        ],
+        [
+          "static-gate findings",
+          "58",
+          "full validation pending (cheap)"
+        ],
+        [
+          "boundary survivors",
+          "3",
+          "high-severity, likely real"
+        ]
+      ]
+    },
+    {
+      "type": "section",
+      "title": "progress"
+    },
+    {
+      "type": "table",
+      "columns": [
+        "arm",
+        "run 1",
+        "run 2",
+        "run 3"
+      ],
       "rows": [
-        ["gate suite (wide)", "done"],
-        ["blind adjudication", "running"],
-        ["survivor triage", "pending"],
-        ["metrics + kill-condition", "pending"]
-      ] }
+        [
+          "R raw",
+          "done",
+          "pending",
+          "pending"
+        ],
+        [
+          "C chunk-only",
+          "pending",
+          "pending",
+          "pending"
+        ],
+        [
+          "P full pdd",
+          "done",
+          "pending",
+          "pending"
+        ]
+      ]
+    },
+    {
+      "type": "table",
+      "columns": [
+        "stage",
+        "status"
+      ],
+      "rows": [
+        [
+          "gate suite (wide)",
+          "extracted"
+        ],
+        [
+          "blind adjudication (R,P)",
+          "done"
+        ],
+        [
+          "overlap R vs P",
+          "pending"
+        ],
+        [
+          "arm C",
+          "pending"
+        ],
+        [
+          "gate triage (sample n=385)",
+          "pending"
+        ],
+        [
+          "metrics + kill-condition",
+          "pending"
+        ]
+      ]
+    }
   ]
 }
