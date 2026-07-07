@@ -8,3 +8,4 @@
 {"ts": "2026-07-01T16:46:26Z", "actor": "agent", "action": "verify", "target": "validity-taxonomy-free.md", "note": "arm C taxonomy-free: GREEN, 0/3 refutations; scopeSubsystems scope.ts:162; rank/limit trap recorded"}
 {"ts": "2026-07-07T09:47:05Z", "actor": "agent", "action": "pin", "target": "results/experiment.json", "note": "pdd_commit -> c63c7d9 (operator phase-1 run); budget uncalibrated"}
 {"ts": "2026-07-07T09:47:05Z", "actor": "agent", "action": "extract", "target": "results/gates,results/findings/arm-P,results/adjudication/arm-P", "note": "gate axis + arm P blind-adjudicated: 171 real / 7 false / 27 trivial of 205"}
+{"ts": "2026-07-07T09:55:40Z", "actor": "agent", "action": "arm-run", "target": "results/findings/arm-R.run1.json", "note": "arm R run1: 38 raw findings, own navigation, all 9 subsystems; unadjudicated"}
