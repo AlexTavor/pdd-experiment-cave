@@ -82,7 +82,7 @@ function buildSpec() {
   panels.push(stat('recall delta, C vs R', h.recall_delta_c_vs_r));
   panels.push(stat('precision delta, P vs C', h.precision_delta_p_vs_c));
 
-  panels.push({ type: 'section', title: 'finder findings by arm and run' });
+  panels.push({ type: 'section', title: 'real (adjudicated) findings by arm and run' });
   panels.push({
     type: 'chart', kind: 'bars', x: runs,
     series: [
@@ -92,7 +92,7 @@ function buildSpec() {
     ],
   });
 
-  panels.push({ type: 'section', title: 'deterministic gate yield, verified-real' });
+  panels.push({ type: 'section', title: 'deterministic gate yield (raw detector hits, triage pending)' });
   panels.push({
     type: 'chart', kind: 'hbar',
     x: g.labels || [],

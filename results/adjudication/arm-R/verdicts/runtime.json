@@ -1,0 +1,92 @@
+[
+  {
+    "id": "R.run1.012",
+    "fingerprint": "R.run1.012",
+    "verdict": "real",
+    "judge_severity": "high",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "CancelTransferHandler swaps fields to {sourceId:oldTargetId,targetId:oldSourceId} and retargets the body to oldSourceId (line 110), but ResolveTransferHandler's returning branch credits transfer.sourceId=oldTargetId (line 80) instead of targetId=oldSourceId. Resources land on the rejecting entity, oldSource permanently loses them, and the ledger decrement at 106-107 runs on the wrong receiver so oldSource.incoming keeps a phantom reservation."
+  },
+  {
+    "id": "R.run1.013",
+    "fingerprint": "R.run1.013",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "When receiver is not found, handle() returns at line 90 before the cleanup at 130-133, so the source (already debited at TransferHandler.ts:53) loses the amount and the pending entity plus its physics body leak. KillHandler removes a target and its body (lines 51-53) without cancelling in-flight transfers, and CANCEL_TRANSFER is only enqueued from UI paths, so the kill-mid-transfer race is reachable."
+  },
+  {
+    "id": "R.run1.014",
+    "fingerprint": "R.run1.014",
+    "verdict": "real",
+    "judge_severity": "high",
+    "judge_class": "test-adequacy",
+    "oracle_match": null,
+    "notes": "ResolveTransferHandler.test.ts only exercises status:'pending'; CancelTransferHandler.test.ts asserts status becomes 'returning' but never resolves it. No cancel-then-resolve round-trip test exists, so the inverted-receiver defect in R.run1.012 (high, data loss) ships undetected."
+  },
+  {
+    "id": "R.run1.015",
+    "fingerprint": "R.run1.015",
+    "verdict": "real",
+    "judge_severity": "high",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "saveStateEntry keeps 'max' only when scaleOnMaxChange===true (resolveStateEntryRuntimeKeys lines 13-15), but applyMaxChange (stateEntryNumeric.ts:27, reached via UpdateStateHandler.ts:34) mutates entry.max unconditionally. For a blueprint-backed entry lacking scaleOnMaxChange, a runtime-changed max is dropped on save and mergeStateEntryForHydrate restores the blueprint base, silently reverting runtime capacity on save/load."
+  },
+  {
+    "id": "R.run1.016",
+    "fingerprint": "R.run1.016",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "test-adequacy",
+    "oracle_match": null,
+    "notes": "flyweightPersistence.scaleOnMaxChange.test.ts requires scaleOnMaxChange:true; flyweightPersistence.serialize.test.ts uses max:20 in both blueprint and runtime entity (equal max). Neither exercises a runtime-DIFFERENT max on a blueprint-backed entry without scaleOnMaxChange, which is exactly the data-losing branch in R.run1.015."
+  },
+  {
+    "id": "R.run1.017",
+    "fingerprint": "R.run1.017",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "test-adequacy",
+    "oracle_match": null,
+    "notes": "AutomationSystem is instantiated in RuntimeSystemsRegistry and ticked via runtimeSystemPhase.ts:60-68, and its tick contains non-trivial repeat/kill/rollover math (lines 78-81, 121, 126, 145). A repo-wide grep for AutomationSystem across *.test.ts returns no file that imports or exercises it, so a regression in that math would ship silently."
+  },
+  {
+    "id": "R.run1.018",
+    "fingerprint": "R.run1.018",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "test-adequacy",
+    "oracle_match": null,
+    "notes": "reset() is the buffer-reuse path (updateSnapshotBuffers -> refreshSnapshotPhase -> snapshot.reset) and its correctness depends on the three clear() calls at lines 35-37. Snapshot.test.ts only builds fresh instances and calls query/getEntity once; no test calls reset() a second time with a different entity/physics set to assert removed entities disappear and the queryCache does not serve stale results."
+  },
+  {
+    "id": "R.run1.019",
+    "fingerprint": "R.run1.019",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "stepOncePreservingPause calls tick(LOGIC_STEP_MS/timeScale); normalizeDt clamps dt to MAX_DT_MS=100, so timeStep = 100*timeScale < 20 when timeScale in (0,0.2). runRuntimeTick's loop guard remainingTime>=LOGIC_STEP_MS(20) then fails and no step runs, violating the step-once contract. setTimeScale accepts any positive float via Math.max(0,scale), so the range is reachable."
+  },
+  {
+    "id": "R.run1.020",
+    "fingerprint": "R.run1.020",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "handleArrivals enqueues RESOLVE_TRANSFER then SET_TARGET{null} for the same bodyId, processed in one pass (runtimePhases.ts:22); RESOLVE removes the entity and body (ResolveTransferHandler.ts:130-132), so SET_TARGET always runs against a missing entity and logs an error on every arrival. The dead-command core is confirmed, but the exact channel differs from the claim: the production game registers SetTargetHandler (registerGameCommandHandlers.ts:51), so it logs 'entity not found' rather than the 'No handler registered' branch."
+  },
+  {
+    "id": "R.run1.021",
+    "fingerprint": "R.run1.021",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "test-adequacy",
+    "oracle_match": null,
+    "notes": "handleArrivals has real branching (per-arrival entity scan, transfer-component guard at line 17, RESOLVE_TRANSFER+SET_TARGET enqueue). It is referenced only by runtimePhases.ts, and a grep for handleArrivals/runtimeArrivalHandlers across *.test.ts finds no test; ResolveTransferHandler.test.ts enqueues RESOLVE_TRANSFER directly, never via an arrival."
+  }
+]

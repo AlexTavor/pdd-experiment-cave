@@ -1,0 +1,62 @@
+[
+  {
+    "id": "R.run1.000",
+    "fingerprint": "R.run1.000",
+    "file": "src/engine/vfs/FileSystem.base.ts",
+    "line": 34,
+    "title": "init() permanently caches a rejected promise after a transient failure",
+    "detail": "init() guards with `if (this.isInitialized) return;` but isInitialized is only set true at the end of the async IIFE (line 49). If the IIFE rejects (e.g. hydrateLoadedCartridge or fetchDiskData throws), isInitialized stays false while this.initPromise now holds a REJECTED promise. On the next init() call, `this.initPromise ??= (...)` sees a non-null value and does not reassign, so it returns the same already-rejected promise forever. A single transient init failure poisons the FileSystem for the lifetime of the object; there is no retry. Every subsequent readFile/writeFile/init throws the cached error.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure"
+  },
+  {
+    "id": "R.run1.001",
+    "fingerprint": "R.run1.001",
+    "file": "src/engine/vfs/indexedDbBatch.ts",
+    "line": 52,
+    "title": "moveMany applies all writes before all deletes; overlapping moves cause data loss",
+    "detail": "moveMany collects writes and deletes across all items, then performs every put (line 52) and afterwards every delete (line 53). If two moves in one batch conflict \u2014 e.g. move A->B and B->A, or a move whose target key equals another move's source key \u2014 the delete pass can remove a key that a prior write just populated, silently destroying data. Because writes and deletes are unordered Promise.all batches, a moved-to key that also appears in the delete set is lost. Single moves are safe, but a batch with overlapping from/to paths loses files.",
+    "finder_severity": "medium",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.003",
+    "fingerprint": "R.run1.003",
+    "file": "src/engine/physics/impulse/ImpulseSpatialIndex.ts",
+    "line": 63,
+    "title": "Bodies with negative/out-of-bounds positions are silently dropped from the spatial index",
+    "detail": "When fixed world bounds are used, resolveBounds returns a boundary rooted at (0,0) sized to width/height. Quadtree.insert (Quadtree.ts:93) returns false without storing any body whose center is outside boundary. Static bodies are never clamped (clampToBounds returns early for isStatic, ImpulseEngineIntegration.ts:12), and any body at a negative coordinate or beyond world size is therefore absent from the tree, so it is never returned as a neighbor for separation/flocking/avoidance queries. Such bodies exert and receive no local forces \u2014 a silent correctness gap for off-bounds or static-off-grid bodies.",
+    "finder_severity": "low",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.006",
+    "fingerprint": "R.run1.006",
+    "file": "src/engine/terminal/rmCommand.ts",
+    "line": 24,
+    "title": "core.json deletion guard is a bare exact-string check, bypassable via path variants",
+    "detail": "rm protects system files with `if (filename === \"core.json\")` on the raw argument (line 24). vfs.deleteFile passes the path straight to the DB without normalization, and vfs.readFile likewise. The guard only matches the exact literal 'core.json'; whether it actually protects the stored key depends on the key form. If core.json is reachable under any variant the existence check accepts but the equality check misses (e.g. a leading './' or '/' that the DB layer also resolves), the protected file can be deleted. The safeguard should normalize before comparing rather than string-equal the raw token.",
+    "finder_severity": "low",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.007",
+    "fingerprint": "R.run1.007",
+    "file": "src/engine/terminal/commands/fsCommands.ts",
+    "line": 114,
+    "title": "fs-save builds a RegExp from unescaped user scope to strip path prefix",
+    "detail": "handleFsSave computes the disk-relative path with `file.replace(new RegExp(`^${scope}/?`), \"\")` where scope is user input (normalizeScope(args[0])). Folder names commonly contain regex metacharacters (a '.' in a version folder, '+', parentheses). Those are interpolated raw into the RegExp, so the prefix strip can match/consume the wrong characters and produce a wrong `relative`, which is then written to `${root}/${relative}` on disk \u2014 files land at unintended disk paths. toVfsKey in fsCommandPaths.ts:27 interpolates SOURCE_ROOT into a RegExp the same unescaped way. User-supplied strings used to build path-manipulating regexes should be escaped.",
+    "finder_severity": "low",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.010",
+    "fingerprint": "R.run1.010",
+    "file": "src/engine/terminal/lsCommand.ts",
+    "line": 13,
+    "title": "ls overwrites the autocomplete cache with raw VFS keys, dropping disk files and re-adding dir markers",
+    "detail": "ls does `fileCache.length = 0; fileCache.push(...files)` with the raw vfs.listFiles() output. The canonical cache builder refreshFileCache (fileUtils.ts:22-40) instead MERGES VFS files with import-glob disk files and FILTERS OUT '.cave-dir' directory markers. Running ls therefore corrupts fileCache until the next refreshFileCache: disk-only files vanish from autocomplete and '.cave-dir' markers reappear as suggestions. ls also prints the raw list (line 19), showing '.cave-dir' markers to the user, inconsistent with vfs-tree/vfs-scan which hide them.",
+    "finder_severity": "low",
+    "finder_class": "correctness"
+  }
+]

@@ -1,0 +1,50 @@
+[
+  {
+    "id": "R.run1.002",
+    "fingerprint": "R.run1.002",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "notes": "Line 93 gates extinction classification on `isExtinct && i > 10`, while the snapshot push (line 83) fires on isExtinct regardless of i. So extinction at loop index <=10 records an extinct snapshot but leaves status='completed'; the run stays 'completed' when the tick budget ends at/before i=11 or the dip is transient. The finding's 'runs to the end as completed' mechanism is only partly right (persistent extinction is caught at i=11 for longer runs), but the boundary misclassification genuinely holds."
+  },
+  {
+    "id": "R.run1.004",
+    "fingerprint": "R.run1.004",
+    "verdict": "real",
+    "judge_severity": "high",
+    "judge_class": "correctness",
+    "notes": "compileExpression (lines 69-99) builds a strictly left-associative tree with no precedence: for [ref:population, op:>, val:10, kw:AND, ref:food, op:>, val:5] the trailing '>' at line 87-92 takes the whole {and:[{'>':[population,10]}, food]} as its left operand, yielding {'>':[{and:[...]},5]} exactly as claimed. Any rule mixing AND/OR with a following comparison compiles to wrong logic."
+  },
+  {
+    "id": "R.run1.005",
+    "fingerprint": "R.run1.005",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "notes": "Lines 41 and 65 use String.replace with a string arg (first, unanchored occurrence). The startsWith(oldNamespace) guard checks a prefix while replace targets the first literal hit, so they disagree when oldNamespace is a short/common substring (e.g. 'a' vs 'abc/a_mod.json' -> 'bbc/a_mod.json'), corrupting move targets and manifest entries. The ref rewrite on line 9 correctly uses replaceAll anchored by '::', confirming the inconsistency."
+  },
+  {
+    "id": "R.run1.008",
+    "fingerprint": "R.run1.008",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "test-adequacy",
+    "notes": "JsonLogicAdapter.test.ts has three cases, all passing tokens:[] and a pre-built `compiled` object, so compileExpression's token-parsing body (atom/NOT consumption, AND/OR chaining, OP_MAP mapping, incomplete/empty error paths) is never exercised with real tokens. The precedence defect in R.run1.004 and any op-mapping regression would go uncaught."
+  },
+  {
+    "id": "R.run1.009",
+    "fingerprint": "R.run1.009",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "test-adequacy",
+    "notes": "HeadlessRunner.utils.test.ts covers only initializeWorldState (seed handling); runSimulationLoop (lines 69-104) has no test, leaving SNAPSHOT_INTERVAL cadence, the `isExtinct && i > 10` extinction classification, and the YIELD_INTERVAL await uncharacterized. Real gap on the loop that produces the status output, though it is diagnostic tooling."
+  },
+  {
+    "id": "R.run1.011",
+    "fingerprint": "R.run1.011",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "notes": "walk resolves existing refs with existingIds.has(value) (exact, line 41) but flags broken refs with ENTITY_ID_PATTERN.test(value) (substring, line 52) and stores the whole string as missingId. A prose string containing a bare entity_ token (e.g. 'linked to entity_b') fails the exact match, passes the substring test, and survives the final filter at referenceIndex.ts:65 (which re-checks the whole string, not the extracted id), producing a false broken-reference; the exact-match half also misses ids embedded in larger strings."
+  }
+]

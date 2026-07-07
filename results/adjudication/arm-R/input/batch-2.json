@@ -1,0 +1,62 @@
+[
+  {
+    "id": "R.run1.002",
+    "fingerprint": "R.run1.002",
+    "file": "src/engine/balancing/HeadlessRunner.utils.ts",
+    "line": 93,
+    "title": "Early extinction (tick index <= 10) is misclassified as 'completed'",
+    "detail": "runSimulationLoop only sets status='extinction' and breaks when `isExtinct && i > 10` (line 93). If the population reaches <= 0 at or before loop index 10, the loop records the extinct snapshot (line 83 pushes because isExtinct is true) but does not break and leaves status='completed'. Since population at <=0 does not recover, the run continues ticking to the end and is reported as status:'completed' despite the colony being extinct. The result's status field is wrong for fast-collapsing configurations, which is exactly the balancing signal this runner exists to surface.",
+    "finder_severity": "medium",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.004",
+    "fingerprint": "R.run1.004",
+    "file": "src/engine/logic/JsonLogicAdapter.compile.ts",
+    "line": 87,
+    "title": "compileExpression has no operator precedence; comparison after AND/OR wraps the whole expression",
+    "detail": "compileExpression builds a strictly left-associative tree with no precedence between logical keywords (AND/OR) and comparison ops. For the natural compound condition 'population > 10 AND food > 5' the tokens are [population,>,10,AND,food,>,5]. Trace: population -> {'>':[population,10]} (op branch); AND consumes atom 'food' -> {and:[{'>':...},'food']}; then '>' op branch (line 87-92) takes `current` (the entire and-expression) as its LEFT operand -> {'>':[{and:[{'>':[population,10]},'food']},5]}. The result compares the boolean AND against 5 instead of computing (population>10) AND (food>5). Any rule mixing a logical keyword with a following comparison silently evaluates wrong logic. This is the ordinary way such rules are written, so the mis-compilation is broad, not a corner case.",
+    "finder_severity": "high",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.005",
+    "fingerprint": "R.run1.005",
+    "file": "src/engine/workspace/RefactorService.ts",
+    "line": 41,
+    "title": "moveNamespace uses String.replace with a substring, corrupting file paths",
+    "detail": "moveNamespace computes the renamed file with `filename.replace(oldNamespace, newNamespace)` (line 41) and the manifest file list with `file.replace(oldNamespace, newNamespace)` (line 65). String.prototype.replace with a string argument replaces only the FIRST, unanchored occurrence. If oldNamespace appears as a substring earlier in the path than the intended namespace segment, the wrong occurrence is rewritten. E.g. oldNamespace='a', filename='abc/a_mod.json': ns.startsWith('a') is true, but 'abc/a_mod.json'.replace('a','b') = 'bbc/a_mod.json'. The move target and manifest entry are corrupted, so modules are moved to / referenced at wrong paths \u2014 silent data misplacement during refactor. (The ref-string rewrite on line 9 is safer because it is anchored by '::'.)",
+    "finder_severity": "medium",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.008",
+    "fingerprint": "R.run1.008",
+    "file": "src/engine/logic/JsonLogicAdapter.compile.ts",
+    "line": 41,
+    "title": "compileExpression is never exercised with real tokens by any test",
+    "detail": "compileExpression is the token-to-JsonLogic compiler that every logic rule passes through. Its only test file is JsonLogicAdapter.test.ts, which has three cases and all of them use `tokens: []` (empty), so the compiler body (atom consumption, NOT handling, AND/OR chaining, op mapping, incomplete-expression errors) is entirely uncovered. There is no compile-specific test. A suite this thin cannot catch the precedence mis-compilation in R.run1.004 or any regression in operator mapping. Core parsing logic with branching and error paths must be pinned with real token inputs.",
+    "finder_severity": "medium",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.009",
+    "fingerprint": "R.run1.009",
+    "file": "src/engine/balancing/HeadlessRunner.utils.ts",
+    "line": 69,
+    "title": "runSimulationLoop (extinction classification, snapshot cadence) is untested",
+    "detail": "HeadlessRunner.utils.test.ts only covers initializeWorldState seed handling; runSimulationLoop has no test. Its non-trivial behavior \u2014 the SNAPSHOT_INTERVAL cadence, the `isExtinct && i > 10` extinction break/classification (see R.run1.002), and the YIELD_INTERVAL await \u2014 is unverified. The status field ('completed' vs 'extinction') is the primary output balancing consumers rely on, and the loop that computes it has no characterization. A regression in the extinction threshold or snapshot cadence would go undetected.",
+    "finder_severity": "low",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.011",
+    "fingerprint": "R.run1.011",
+    "file": "src/engine/registry/referenceIndex.walk.ts",
+    "line": 52,
+    "title": "Broken-reference detection uses substring match while incoming uses exact match",
+    "detail": "walk resolves an existing reference with `existingIds.has(value)` (exact, line 41) but flags a broken reference with `ENTITY_ID_PATTERN.test(value)` which matches the pattern anywhere in the string (substring, line 52), and records the ENTIRE string as missingId. A string field that merely mentions an entity id in prose (e.g. a label 'linked to entity_b') will not exact-match existingIds, will substring-match the pattern, and is reported broken even though entity_b exists; the final filter (referenceIndex.ts:65) only re-checks the whole string against existingIds, not the extracted id, so the false positive survives. Conversely, an existing id embedded in a larger string is never counted as an incoming reference. Both halves of the check should agree on extraction semantics.",
+    "finder_severity": "low",
+    "finder_class": "correctness"
+  }
+]

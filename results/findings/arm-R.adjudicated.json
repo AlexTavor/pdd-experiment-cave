@@ -1,0 +1,884 @@
+{
+  "arm": "R",
+  "run_index": 1,
+  "target_commit": "117cd7deb661067e4c503291fff99018427ed6f5",
+  "adjudication_instrument": "prompts/judge.md",
+  "adjudicated_by": "agent",
+  "count": 38,
+  "findings": [
+    {
+      "id": "R.run1.000",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/vfs/FileSystem.base.ts",
+      "line": 34,
+      "title": "init() permanently caches a rejected promise after a transient failure",
+      "detail": "init() guards with `if (this.isInitialized) return;` but isInitialized is only set true at the end of the async IIFE (line 49). If the IIFE rejects (e.g. hydrateLoadedCartridge or fetchDiskData throws), isInitialized stays false while this.initPromise now holds a REJECTED promise. On the next init() call, `this.initPromise ??= (...)` sees a non-null value and does not reassign, so it returns the same already-rejected promise forever. A single transient init failure poisons the FileSystem for the lifetime of the object; there is no retry. Every subsequent readFile/writeFile/init throws the cached error.",
+      "finder_severity": "medium",
+      "finder_class": "silent-failure",
+      "subsystem": "vfs",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "init() sets isInitialized only at line 49 after the async IIFE resolves; if fetchDiskData/hydrateLoadedCartridge reject, isInitialized stays false and initPromise (via ??=) keeps the already-rejected promise, so every later init/readFile/writeFile re-returns the cached rejection with no retry until a new instance is constructed."
+      }
+    },
+    {
+      "id": "R.run1.001",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/vfs/indexedDbBatch.ts",
+      "line": 52,
+      "title": "moveMany applies all writes before all deletes; overlapping moves cause data loss",
+      "detail": "moveMany collects writes and deletes across all items, then performs every put (line 52) and afterwards every delete (line 53). If two moves in one batch conflict \u2014 e.g. move A->B and B->A, or a move whose target key equals another move's source key \u2014 the delete pass can remove a key that a prior write just populated, silently destroying data. Because writes and deletes are unordered Promise.all batches, a moved-to key that also appears in the delete set is lost. Single moves are safe, but a batch with overlapping from/to paths loses files.",
+      "finder_severity": "medium",
+      "finder_class": "correctness",
+      "subsystem": "vfs",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "moveMany collects all puts (line 52) then all deletes (line 53) in one transaction; for a conflicting batch (e.g. A->B plus B->A, deletes={A,B}) both destination keys get deleted after being written, silently losing data. Single/non-overlapping moves are safe, so it is a narrower real case."
+      }
+    },
+    {
+      "id": "R.run1.002",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/balancing/HeadlessRunner.utils.ts",
+      "line": 93,
+      "title": "Early extinction (tick index <= 10) is misclassified as 'completed'",
+      "detail": "runSimulationLoop only sets status='extinction' and breaks when `isExtinct && i > 10` (line 93). If the population reaches <= 0 at or before loop index 10, the loop records the extinct snapshot (line 83 pushes because isExtinct is true) but does not break and leaves status='completed'. Since population at <=0 does not recover, the run continues ticking to the end and is reported as status:'completed' despite the colony being extinct. The result's status field is wrong for fast-collapsing configurations, which is exactly the balancing signal this runner exists to surface.",
+      "finder_severity": "medium",
+      "finder_class": "correctness",
+      "subsystem": "balancing",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "Line 93 gates extinction classification on `isExtinct && i > 10`, while the snapshot push (line 83) fires on isExtinct regardless of i. So extinction at loop index <=10 records an extinct snapshot but leaves status='completed'; the run stays 'completed' when the tick budget ends at/before i=11 or the dip is transient. The finding's 'runs to the end as completed' mechanism is only partly right (persistent extinction is caught at i=11 for longer runs), but the boundary misclassification genuinely holds."
+      }
+    },
+    {
+      "id": "R.run1.003",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/physics/impulse/ImpulseSpatialIndex.ts",
+      "line": 63,
+      "title": "Bodies with negative/out-of-bounds positions are silently dropped from the spatial index",
+      "detail": "When fixed world bounds are used, resolveBounds returns a boundary rooted at (0,0) sized to width/height. Quadtree.insert (Quadtree.ts:93) returns false without storing any body whose center is outside boundary. Static bodies are never clamped (clampToBounds returns early for isStatic, ImpulseEngineIntegration.ts:12), and any body at a negative coordinate or beyond world size is therefore absent from the tree, so it is never returned as a neighbor for separation/flocking/avoidance queries. Such bodies exert and receive no local forces \u2014 a silent correctness gap for off-bounds or static-off-grid bodies.",
+      "finder_severity": "low",
+      "finder_class": "correctness",
+      "subsystem": "physics",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "With fixed world bounds resolveBounds roots the boundary at (0,0); Quadtree.insert returns false without storing any body outside boundary (Quadtree.ts:93), and clampToBounds returns early for static bodies (ImpulseEngineIntegration.ts:12), so a static/off-grid body at negative or beyond-size coords is absent from the tree and never found as a neighbor. Dynamic bodies are clamped into range, so the gap is narrow (static or off-bounds bodies only)."
+      }
+    },
+    {
+      "id": "R.run1.004",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/logic/JsonLogicAdapter.compile.ts",
+      "line": 87,
+      "title": "compileExpression has no operator precedence; comparison after AND/OR wraps the whole expression",
+      "detail": "compileExpression builds a strictly left-associative tree with no precedence between logical keywords (AND/OR) and comparison ops. For the natural compound condition 'population > 10 AND food > 5' the tokens are [population,>,10,AND,food,>,5]. Trace: population -> {'>':[population,10]} (op branch); AND consumes atom 'food' -> {and:[{'>':...},'food']}; then '>' op branch (line 87-92) takes `current` (the entire and-expression) as its LEFT operand -> {'>':[{and:[{'>':[population,10]},'food']},5]}. The result compares the boolean AND against 5 instead of computing (population>10) AND (food>5). Any rule mixing a logical keyword with a following comparison silently evaluates wrong logic. This is the ordinary way such rules are written, so the mis-compilation is broad, not a corner case.",
+      "finder_severity": "high",
+      "finder_class": "correctness",
+      "subsystem": "logic",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "high",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "compileExpression (lines 69-99) builds a strictly left-associative tree with no precedence: for [ref:population, op:>, val:10, kw:AND, ref:food, op:>, val:5] the trailing '>' at line 87-92 takes the whole {and:[{'>':[population,10]}, food]} as its left operand, yielding {'>':[{and:[...]},5]} exactly as claimed. Any rule mixing AND/OR with a following comparison compiles to wrong logic."
+      }
+    },
+    {
+      "id": "R.run1.005",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/workspace/RefactorService.ts",
+      "line": 41,
+      "title": "moveNamespace uses String.replace with a substring, corrupting file paths",
+      "detail": "moveNamespace computes the renamed file with `filename.replace(oldNamespace, newNamespace)` (line 41) and the manifest file list with `file.replace(oldNamespace, newNamespace)` (line 65). String.prototype.replace with a string argument replaces only the FIRST, unanchored occurrence. If oldNamespace appears as a substring earlier in the path than the intended namespace segment, the wrong occurrence is rewritten. E.g. oldNamespace='a', filename='abc/a_mod.json': ns.startsWith('a') is true, but 'abc/a_mod.json'.replace('a','b') = 'bbc/a_mod.json'. The move target and manifest entry are corrupted, so modules are moved to / referenced at wrong paths \u2014 silent data misplacement during refactor. (The ref-string rewrite on line 9 is safer because it is anchored by '::'.)",
+      "finder_severity": "medium",
+      "finder_class": "correctness",
+      "subsystem": "workspace",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "Lines 41 and 65 use String.replace with a string arg (first, unanchored occurrence). The startsWith(oldNamespace) guard checks a prefix while replace targets the first literal hit, so they disagree when oldNamespace is a short/common substring (e.g. 'a' vs 'abc/a_mod.json' -> 'bbc/a_mod.json'), corrupting move targets and manifest entries. The ref rewrite on line 9 correctly uses replaceAll anchored by '::', confirming the inconsistency."
+      }
+    },
+    {
+      "id": "R.run1.006",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/terminal/rmCommand.ts",
+      "line": 24,
+      "title": "core.json deletion guard is a bare exact-string check, bypassable via path variants",
+      "detail": "rm protects system files with `if (filename === \"core.json\")` on the raw argument (line 24). vfs.deleteFile passes the path straight to the DB without normalization, and vfs.readFile likewise. The guard only matches the exact literal 'core.json'; whether it actually protects the stored key depends on the key form. If core.json is reachable under any variant the existence check accepts but the equality check misses (e.g. a leading './' or '/' that the DB layer also resolves), the protected file can be deleted. The safeguard should normalize before comparing rather than string-equal the raw token.",
+      "finder_severity": "low",
+      "finder_class": "correctness",
+      "subsystem": "terminal",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "false",
+        "judge_severity": "low",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "The guard is a raw ===\"core.json\", but no layer normalizes keys: IndexedDBPersistence load/delete use the path verbatim, so a variant like ./core.json is a distinct key that db.load will not find (existence check fails) and db.delete cannot remove; VFS delete only touches DB keys and cannot delete disk files at all, so the claimed bypass-to-deletion path is not supported by the code."
+      }
+    },
+    {
+      "id": "R.run1.007",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/terminal/commands/fsCommands.ts",
+      "line": 114,
+      "title": "fs-save builds a RegExp from unescaped user scope to strip path prefix",
+      "detail": "handleFsSave computes the disk-relative path with `file.replace(new RegExp(`^${scope}/?`), \"\")` where scope is user input (normalizeScope(args[0])). Folder names commonly contain regex metacharacters (a '.' in a version folder, '+', parentheses). Those are interpolated raw into the RegExp, so the prefix strip can match/consume the wrong characters and produce a wrong `relative`, which is then written to `${root}/${relative}` on disk \u2014 files land at unintended disk paths. toVfsKey in fsCommandPaths.ts:27 interpolates SOURCE_ROOT into a RegExp the same unescaped way. User-supplied strings used to build path-manipulating regexes should be escaped.",
+      "finder_severity": "low",
+      "finder_class": "correctness",
+      "subsystem": "terminal",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "handleFsSave builds new RegExp(`^${scope}/?`) from user scope (line 114) with no escaping; the files are pre-filtered by literal startsWith, but a scope containing a quantifier/metachar (e.g. 'a+', '(', '[') makes the regex consume a different prefix length, so 'relative' is wrong and the file is written to ${root}/${wrong}. The finding's '.' example happens to match its literal, but '+'/parens/brackets genuinely misstrip; toVfsKey uses the same pattern but with the constant SOURCE_ROOT so that half is benign."
+      }
+    },
+    {
+      "id": "R.run1.008",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/logic/JsonLogicAdapter.compile.ts",
+      "line": 41,
+      "title": "compileExpression is never exercised with real tokens by any test",
+      "detail": "compileExpression is the token-to-JsonLogic compiler that every logic rule passes through. Its only test file is JsonLogicAdapter.test.ts, which has three cases and all of them use `tokens: []` (empty), so the compiler body (atom consumption, NOT handling, AND/OR chaining, op mapping, incomplete-expression errors) is entirely uncovered. There is no compile-specific test. A suite this thin cannot catch the precedence mis-compilation in R.run1.004 or any regression in operator mapping. Core parsing logic with branching and error paths must be pinned with real token inputs.",
+      "finder_severity": "medium",
+      "finder_class": "test-adequacy",
+      "subsystem": "logic",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "JsonLogicAdapter.test.ts has three cases, all passing tokens:[] and a pre-built `compiled` object, so compileExpression's token-parsing body (atom/NOT consumption, AND/OR chaining, OP_MAP mapping, incomplete/empty error paths) is never exercised with real tokens. The precedence defect in R.run1.004 and any op-mapping regression would go uncaught."
+      }
+    },
+    {
+      "id": "R.run1.009",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/balancing/HeadlessRunner.utils.ts",
+      "line": 69,
+      "title": "runSimulationLoop (extinction classification, snapshot cadence) is untested",
+      "detail": "HeadlessRunner.utils.test.ts only covers initializeWorldState seed handling; runSimulationLoop has no test. Its non-trivial behavior \u2014 the SNAPSHOT_INTERVAL cadence, the `isExtinct && i > 10` extinction break/classification (see R.run1.002), and the YIELD_INTERVAL await \u2014 is unverified. The status field ('completed' vs 'extinction') is the primary output balancing consumers rely on, and the loop that computes it has no characterization. A regression in the extinction threshold or snapshot cadence would go undetected.",
+      "finder_severity": "low",
+      "finder_class": "test-adequacy",
+      "subsystem": "balancing",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "HeadlessRunner.utils.test.ts covers only initializeWorldState (seed handling); runSimulationLoop (lines 69-104) has no test, leaving SNAPSHOT_INTERVAL cadence, the `isExtinct && i > 10` extinction classification, and the YIELD_INTERVAL await uncharacterized. Real gap on the loop that produces the status output, though it is diagnostic tooling."
+      }
+    },
+    {
+      "id": "R.run1.010",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/terminal/lsCommand.ts",
+      "line": 13,
+      "title": "ls overwrites the autocomplete cache with raw VFS keys, dropping disk files and re-adding dir markers",
+      "detail": "ls does `fileCache.length = 0; fileCache.push(...files)` with the raw vfs.listFiles() output. The canonical cache builder refreshFileCache (fileUtils.ts:22-40) instead MERGES VFS files with import-glob disk files and FILTERS OUT '.cave-dir' directory markers. Running ls therefore corrupts fileCache until the next refreshFileCache: disk-only files vanish from autocomplete and '.cave-dir' markers reappear as suggestions. ls also prints the raw list (line 19), showing '.cave-dir' markers to the user, inconsistent with vfs-tree/vfs-scan which hide them.",
+      "finder_severity": "low",
+      "finder_class": "correctness",
+      "subsystem": "terminal",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "ls does fileCache.length=0; push(...raw vfs.listFiles()) (lines 13-14), bypassing refreshFileCache which merges import.meta.glob disk files and filters '/.cave-dir' markers (fileUtils.ts:22-40); until the next refresh, disk-only files drop from autocomplete and .cave-dir markers reappear, and line 19 also prints markers. Real but low-impact autocomplete/display inconsistency, no data loss."
+      }
+    },
+    {
+      "id": "R.run1.011",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/registry/referenceIndex.walk.ts",
+      "line": 52,
+      "title": "Broken-reference detection uses substring match while incoming uses exact match",
+      "detail": "walk resolves an existing reference with `existingIds.has(value)` (exact, line 41) but flags a broken reference with `ENTITY_ID_PATTERN.test(value)` which matches the pattern anywhere in the string (substring, line 52), and records the ENTIRE string as missingId. A string field that merely mentions an entity id in prose (e.g. a label 'linked to entity_b') will not exact-match existingIds, will substring-match the pattern, and is reported broken even though entity_b exists; the final filter (referenceIndex.ts:65) only re-checks the whole string against existingIds, not the extracted id, so the false positive survives. Conversely, an existing id embedded in a larger string is never counted as an incoming reference. Both halves of the check should agree on extraction semantics.",
+      "finder_severity": "low",
+      "finder_class": "correctness",
+      "subsystem": "registry",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "walk resolves existing refs with existingIds.has(value) (exact, line 41) but flags broken refs with ENTITY_ID_PATTERN.test(value) (substring, line 52) and stores the whole string as missingId. A prose string containing a bare entity_ token (e.g. 'linked to entity_b') fails the exact match, passes the substring test, and survives the final filter at referenceIndex.ts:65 (which re-checks the whole string, not the extracted id), producing a false broken-reference; the exact-match half also misses ids embedded in larger strings."
+      }
+    },
+    {
+      "id": "R.run1.012",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/runtime/handlers/ResolveTransferHandler.ts",
+      "line": 80,
+      "title": "Cancelled ('returning') transfer credits the wrong entity and leaks the source's ledger reservation",
+      "detail": "The receiver for a returning transfer is chosen as transfer.sourceId (line 80). But CancelTransferHandler swaps the component fields, so after cancellation transfer = { sourceId: oldTargetId, targetId: oldSourceId, status: 'returning' } and it retargets the physics body to oldSourceId (CancelTransferHandler.ts:110). The node therefore physically flies back to the original source (oldSource), yet resolve credits receiverId = transfer.sourceId = oldTargetId \u2014 the entity that rejected the deposit. The resources originally debited from oldSource in TransferHandler.ts:53 are thus added to oldTarget instead of returned to oldSource, so oldSource permanently loses them. Compounding this, CancelTransferHandler bumps oldSource.incoming += amount (CancelTransferHandler.ts:96-100) to reserve return headroom, but the ledger decrement at ResolveTransferHandler.ts:106-107 runs on the receiver (oldTarget), so oldSource.incoming keeps a phantom reservation forever, permanently shrinking its capacity. The receiver for a returning node should be transfer.targetId (the swapped destination = oldSource); the branch is inverted.",
+      "finder_severity": "high",
+      "finder_class": "correctness",
+      "subsystem": "runtime",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "high",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "CancelTransferHandler swaps fields to {sourceId:oldTargetId,targetId:oldSourceId} and retargets the body to oldSourceId (line 110), but ResolveTransferHandler's returning branch credits transfer.sourceId=oldTargetId (line 80) instead of targetId=oldSourceId. Resources land on the rejecting entity, oldSource permanently loses them, and the ledger decrement at 106-107 runs on the wrong receiver so oldSource.incoming keeps a phantom reservation."
+      }
+    },
+    {
+      "id": "R.run1.013",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/runtime/handlers/ResolveTransferHandler.ts",
+      "line": 85,
+      "title": "Transfer resolution against a missing receiver silently loses resources and leaks the pending node",
+      "detail": "When the receiver entity is not found, handle() logs an error and returns early (lines 85-91) WITHOUT running the cleanup at lines 130-133 (context.world.remove(pending) / impulseEngine.removeBody). Because the source was already debited when the transfer was initiated (TransferHandler.ts:53), the in-flight amount is now removed from the source and credited nowhere, and the orphaned pending entity plus its physics body remain in the world/engine indefinitely. This is reachable on normal input: KillHandler.handle (KillHandler.ts:52-53) removes a target entity and its body but does not cancel or drain in-flight transfer nodes targeting it, so killing a target while a deferred transfer is in flight removes the receiver before the node arrives.",
+      "finder_severity": "medium",
+      "finder_class": "silent-failure",
+      "subsystem": "runtime",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "silent-failure",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "When receiver is not found, handle() returns at line 90 before the cleanup at 130-133, so the source (already debited at TransferHandler.ts:53) loses the amount and the pending entity plus its physics body leak. KillHandler removes a target and its body (lines 51-53) without cancelling in-flight transfers, and CANCEL_TRANSFER is only enqueued from UI paths, so the kill-mid-transfer race is reachable."
+      }
+    },
+    {
+      "id": "R.run1.014",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/runtime/handlers/ResolveTransferHandler.ts",
+      "line": 79,
+      "title": "The 'returning' resolve branch is entirely untested",
+      "detail": "ResolveTransferHandler.test.ts only exercises status:'pending' transfers (crediting the target). The status==='returning' branch (lines 79-81) that selects the receiver for cancelled transfers is never executed by any test; the only 'returning' occurrence in any test file is CancelTransferHandler.test.ts asserting the status is set, never resolved. No cancel-then-resolve round-trip test verifies resources actually return to the original source, which is exactly why the inverted-receiver defect above ships undetected.",
+      "finder_severity": "high",
+      "finder_class": "test-adequacy",
+      "subsystem": "runtime",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "high",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "ResolveTransferHandler.test.ts only exercises status:'pending'; CancelTransferHandler.test.ts asserts status becomes 'returning' but never resolves it. No cancel-then-resolve round-trip test exists, so the inverted-receiver defect in R.run1.012 (high, data loss) ships undetected."
+      }
+    },
+    {
+      "id": "R.run1.015",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/runtime/persistence/flyweightStatePersistence.ts",
+      "line": 72,
+      "title": "Runtime-mutated `max` on blueprint-backed entities is lost on save/load unless scaleOnMaxChange is set",
+      "detail": "saveStateEntry persists only the keys returned by resolveStateEntryRuntimeKeys (line 72), and that helper includes 'max' ONLY when an entry has scaleOnMaxChange === true (lines 13-15); otherwise it returns just ['value','visible']. But the engine mutates .max at runtime independent of scaleOnMaxChange: UPDATE_STATE -> UpdateStateHandler.updateExistingEntry calls applyMaxChange(entry, max) (UpdateStateHandler.ts:34), and applyMaxChange unconditionally sets entry.max = newMax (stateEntryNumeric.ts:27). For a blueprint-backed (flyweight) entity whose max was changed at runtime and whose entry lacks scaleOnMaxChange, saveStateEntry drops the new max; on load, mergeStateEntryForHydrate (lines 26-47) restores max from the blueprint base. The runtime capacity therefore silently reverts to the blueprint default on every save/load. (Non-blueprint entities are unaffected: with no base entry, saveStateEntry falls through to the structuredClone path at lines 63-64 that keeps all keys.)",
+      "finder_severity": "high",
+      "finder_class": "correctness",
+      "subsystem": "runtime",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "high",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "saveStateEntry keeps 'max' only when scaleOnMaxChange===true (resolveStateEntryRuntimeKeys lines 13-15), but applyMaxChange (stateEntryNumeric.ts:27, reached via UpdateStateHandler.ts:34) mutates entry.max unconditionally. For a blueprint-backed entry lacking scaleOnMaxChange, a runtime-changed max is dropped on save and mergeStateEntryForHydrate restores the blueprint base, silently reverting runtime capacity on save/load."
+      }
+    },
+    {
+      "id": "R.run1.016",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/runtime/persistence/flyweightStatePersistence.ts",
+      "line": 62,
+      "title": "No test covers round-trip of a runtime-changed `max` without scaleOnMaxChange",
+      "detail": "The only test asserting max survives serialize->hydrate (flyweightPersistence.scaleOnMaxChange.test.ts) requires scaleOnMaxChange: true. flyweightPersistence.serialize.test.ts pins the opposite (max stripped) but only where the runtime max equals the blueprint max, so it never exercises a runtime-DIFFERENT max on a blueprint-backed entry without scaleOnMaxChange -- exactly the branch in saveStateEntry (lines 62-77) that loses data per the finding above. A test for it would fail, so the gap masks a real defect.",
+      "finder_severity": "medium",
+      "finder_class": "test-adequacy",
+      "subsystem": "runtime",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "flyweightPersistence.scaleOnMaxChange.test.ts requires scaleOnMaxChange:true; flyweightPersistence.serialize.test.ts uses max:20 in both blueprint and runtime entity (equal max). Neither exercises a runtime-DIFFERENT max on a blueprint-backed entry without scaleOnMaxChange, which is exactly the data-losing branch in R.run1.015."
+      }
+    },
+    {
+      "id": "R.run1.017",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/runtime/systems/AutomationSystem.ts",
+      "line": 89,
+      "title": "AutomationSystem timing/repeat/rollover logic has no unit test",
+      "detail": "AutomationSystem.tick is production-wired (invoked via runtimeSystemPhase.ts) and contains non-trivial, defect-prone logic: the repeat decrement (resolveNextTiming line 78-79: repeats < 0 ? -1 : repeats - 1), kill-on-exhaust (repeats===0 at line 121 and nextRepeats===0 at line 145), the exact-boundary case where nextRemaining<=0 must still fire (the nextRemaining > 0 gate at line 126), and interval rollover carrying overshoot (line 80-81: intervalMs + (nextRemaining % intervalMs)). A repo-wide search for 'AutomationSystem' across *.test.ts returns no test file that imports or exercises it. None of these branches is covered, so a regression in the repeat/kill/rollover math would ship silently.",
+      "finder_severity": "medium",
+      "finder_class": "test-adequacy",
+      "subsystem": "runtime",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "AutomationSystem is instantiated in RuntimeSystemsRegistry and ticked via runtimeSystemPhase.ts:60-68, and its tick contains non-trivial repeat/kill/rollover math (lines 78-81, 121, 126, 145). A repo-wide grep for AutomationSystem across *.test.ts returns no file that imports or exercises it, so a regression in that math would ship silently."
+      }
+    },
+    {
+      "id": "R.run1.018",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/runtime/Snapshot.ts",
+      "line": 28,
+      "title": "Snapshot.reset() stale-entry clearing on buffer reuse is untested",
+      "detail": "reset() is the reuse path for the double-buffered snapshots: runtimeSnapshotBuffers.updateSnapshotBuffers picks buffers[nextIndex] and, when non-null, calls refreshSnapshotPhase -> snapshot.reset(...), mutating an already-populated Snapshot in place (reached from the 3rd sub-step onward, i.e. any accumulated tick >= 60ms). Its correctness hinges on the three clear() calls (entityIndex, physicsIndex, queryCache) at lines 35-37 wiping the previous population before rebuild; otherwise a reused buffer returns stale getEntity/getPhysicsBody/query results for entities that no longer exist. Snapshot.test.ts only exercises the constructor and query()/getEntity() on a fresh instance; it never calls reset() a second time with a different entity/physics set to assert removed entities disappear and queryCache does not serve a stale result. Integration ticks execute the path so a crash would surface, but no assertion pins the stale-clearing invariant, so dropping any clear() would pass the suite while silently leaking stale snapshot state across ticks.",
+      "finder_severity": "medium",
+      "finder_class": "test-adequacy",
+      "subsystem": "runtime",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "reset() is the buffer-reuse path (updateSnapshotBuffers -> refreshSnapshotPhase -> snapshot.reset) and its correctness depends on the three clear() calls at lines 35-37. Snapshot.test.ts only builds fresh instances and calls query/getEntity once; no test calls reset() a second time with a different entity/physics set to assert removed entities disappear and the queryCache does not serve stale results."
+      }
+    },
+    {
+      "id": "R.run1.019",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/runtime/RuntimeCore.ts",
+      "line": 11,
+      "title": "stepOncePreservingPause advances zero ticks when timeScale is below 0.2",
+      "detail": "stepOncePreservingPause forces exactly one logic step by calling this.tick(LOGIC_STEP_MS / this.timeScale) so that advanceRuntimeCoreTick computes timeStep = safeDt * timeScale = LOGIC_STEP_MS. But normalizeDt clamps dt to MAX_DT_MS (100) (runtimeTiming.ts:5, runtimeConstants.ts:1). When timeScale is in (0, 0.2), LOGIC_STEP_MS/timeScale exceeds 100 and is clamped, so timeStep = 100 * timeScale < LOGIC_STEP_MS (20) and the sub-step loop in runRuntimeTick (remainingTime >= LOGIC_STEP_MS) never runs: no tick advances and the function returns the unchanged tick, violating its 'step once' contract. timeScale below 0.2 is reachable (setTimeScale accepts any positive float via Math.max(0, scale)), and this path is used by editor/pointer stepping.",
+      "finder_severity": "low",
+      "finder_class": "correctness",
+      "subsystem": "runtime",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "stepOncePreservingPause calls tick(LOGIC_STEP_MS/timeScale); normalizeDt clamps dt to MAX_DT_MS=100, so timeStep = 100*timeScale < 20 when timeScale in (0,0.2). runRuntimeTick's loop guard remainingTime>=LOGIC_STEP_MS(20) then fails and no step runs, violating the step-once contract. setTimeScale accepts any positive float via Math.max(0,scale), so the range is reachable."
+      }
+    },
+    {
+      "id": "R.run1.020",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/runtime/runtimeArrivalHandlers.ts",
+      "line": 22,
+      "title": "SET_TARGET(null) enqueued after RESOLVE_TRANSFER is a dead command on the transfer-completion path",
+      "detail": "For an arriving pending-transfer body, handleArrivals enqueues RESOLVE_TRANSFER (line 18) then SET_TARGET{targetId:null} for the same bodyId (line 22). Both are consumed in the same commandsManager.process() pass (runtimePhases.ts applyPhase). On the normal path RESOLVE_TRANSFER removes the entity and its physics body (ResolveTransferHandler.ts:130,132), so by the time SET_TARGET is processed the target no longer exists: the command is redundant and, because the engine's createGameRuntime registers no handler for SET_TARGET, it hits the 'No handler registered' branch (CommandsManager.ts:53-57) and logs to the 'errors' channel on every successful transfer arrival. The command's implicit assumption that the entity still exists when SET_TARGET runs is false whenever the transfer resolves.",
+      "finder_severity": "low",
+      "finder_class": "silent-failure",
+      "subsystem": "runtime",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "silent-failure",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "handleArrivals enqueues RESOLVE_TRANSFER then SET_TARGET{null} for the same bodyId, processed in one pass (runtimePhases.ts:22); RESOLVE removes the entity and body (ResolveTransferHandler.ts:130-132), so SET_TARGET always runs against a missing entity and logs an error on every arrival. The dead-command core is confirmed, but the exact channel differs from the claim: the production game registers SetTargetHandler (registerGameCommandHandlers.ts:51), so it logs 'entity not found' rather than the 'No handler registered' branch."
+      }
+    },
+    {
+      "id": "R.run1.021",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/runtime/runtimeArrivalHandlers.ts",
+      "line": 6,
+      "title": "handleArrivals arrival->command glue has no test coverage",
+      "detail": "handleArrivals contains real branching logic (scan world.entities per arrival, guard on the entity.transfer component at line 17, enqueue a RESOLVE_TRANSFER + SET_TARGET pair). It is referenced only by its own file and runtimePhases.ts, and no test drives the physics-arrival -> RESOLVE_TRANSFER path (ResolveTransferHandler.test.ts enqueues RESOLVE_TRANSFER directly, never via an arrival). Neither the transfer-present branch nor the no-transfer / entity-not-found branches are exercised, so the dead-SET_TARGET ordering issue above and any regression in the guard or enqueued pair would go undetected.",
+      "finder_severity": "low",
+      "finder_class": "test-adequacy",
+      "subsystem": "runtime",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "handleArrivals has real branching (per-arrival entity scan, transfer-component guard at line 17, RESOLVE_TRANSFER+SET_TARGET enqueue). It is referenced only by runtimePhases.ts, and a grep for handleArrivals/runtimeArrivalHandlers across *.test.ts finds no test; ResolveTransferHandler.test.ts enqueues RESOLVE_TRANSFER directly, never via an arrival."
+      }
+    },
+    {
+      "id": "R.run1.022",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/veins/graphBuilderEdges.ts",
+      "line": 26,
+      "title": "Routed demand edges emit a spurious sys_world->sys_world self-loop",
+      "detail": "addDemandRoute sets `current = sourceNode` (the worldNode, id 'sys_world') at line 22, then iterates `[...route, entityId]` where route = resolveAncestorPath(source, entityId).reverse(). resolveAncestorPath walks getParentId upward and returns ancestors nearest-first; for any entity transitively parented to the world the top ancestor is 'sys_world', so after .reverse() the FIRST element is 'sys_world'. On that first iteration nodeId==='sys_world'===current.id, and pushVeinEdge emits sourceId='sys_world' -> targetId='sys_world' before advancing current. The sibling nervous router (graphBuilderNervous.ts:35) guards this exact case with `if (nodeId === current.id) continue;`, which addDemandRoute omits. Verified by an isolated probe on a child->parent->sys_world hierarchy: it produces edges [sys_world->sys_world, sys_world->parent, parent->child]. The self-loop becomes a degenerate zero-length display edge and perturbs resolveTerminalChainTargetId flow attribution, every frame.",
+      "finder_severity": "medium",
+      "finder_class": "correctness",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "resolveAncestorPath walks getParentId upward and returns ancestors nearest-first; after .reverse() the first element is the topmost ancestor 'sys_world' for any entity parented (even directly) to the world. With current=sourceNode(sys_world) the first loop iteration emits sourceId=sys_world->targetId=sys_world before advancing. The nervous sibling (graphBuilderNervous.ts:35) guards this exact case with `if (nodeId === current.id) continue;`, which addDemandRoute omits. Effect is a degenerate zero-length edge each frame; terminal-target chain resolution stays robust, so impact is a spurious edge, not data loss."
+      }
+    },
+    {
+      "id": "R.run1.023",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/veins/graphBuilderSinkEdges.ts",
+      "line": 30,
+      "title": "Routed sink demand edges emit a spurious sys_world->sys_world self-loop",
+      "detail": "addSinkDemandEdge sets `current = worldNode` (id 'sys_world') at line 25, then iterates `[...route, entityId]` with route = resolveAncestorPath(source, entityId).reverse(). For any sink transitively parented to the world, the reversed route begins with 'sys_world', so the first iteration (nodeId==='sys_world'===current.id) calls pushVeinEdge at line 30 emitting sourceId='sys_world' -> targetId='sys_world'. This is the same missing `nodeId === current.id` guard that graphBuilderNervous.ts:35 has. Confirmed by reading the source (current=worldNode, route reversed begins with sys_world) and with a world/parent/child probe. Existing coverage misses it because graphBuilderUtils.test.ts exercises only unparented sinks and the parentRouting test asserts with toContainEqual, which tolerates the extra self-loop edge.",
+      "finder_severity": "medium",
+      "finder_class": "correctness",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "addSinkDemandEdge has current=worldNode(sys_world) and route=resolveAncestorPath(...).reverse(), whose first element is sys_world for any world-parented sink, so line 30 pushVeinEdge emits sys_world->sys_world on the first iteration. Same missing `nodeId === current.id` guard that graphBuilderNervous.ts:35 has. Produces a degenerate self-loop edge; confirmed by tracing the reversed-route logic."
+      }
+    },
+    {
+      "id": "R.run1.024",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/veins/graphBuilderEdges.ts",
+      "line": 43,
+      "title": "No test guards routed demand/sink chains against self-loops",
+      "detail": "The nervous router's self-loop avoidance is tested (GraphBuilder.nervousPassport.test.ts routes child<-parent<-sys_world), but no test covers the analogous resource-demand/sink routing through ancestors reaching sys_world. GraphBuilder.parentRouting.test.ts builds a parented hierarchy yet asserts only with toContainEqual (satisfied by a superset, never checks edge count or absence of sourceId===targetId), and graphBuilderUtils.test.ts uses only unparented sinks. The self-loop defect in addDemandRoute and addSinkDemandEdge is thus entirely uncaught. A test asserting no edge has sourceId===targetId on a world->parent->child demand/sink graph would fail and pin the behavior.",
+      "finder_severity": "low",
+      "finder_class": "test-adequacy",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "GraphBuilder.parentRouting.test.ts builds a sys_world->parent->child hierarchy but asserts only with toContainEqual (superset-tolerant; never checks edge count or absence of sourceId===targetId), and graphBuilderUtils.test.ts uses only unparented sinks. The nervousPassport test's toHaveLength check is nervous-only. So the demand/sink self-loop of R.run1.022/023 is genuinely uncaught."
+      }
+    },
+    {
+      "id": "R.run1.025",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/veins/colorUtils.ts",
+      "line": 4,
+      "title": "parseHex mis-decodes 3-digit and malformed hex colors",
+      "detail": "parseHex does Number.parseInt(hex.replace('#',''),16) then extracts r/g/b via bit shifts, assuming a 6-digit hex. VeinConfig colors (base_body/base_mind/base_social/base_nervous/base_assignable/base_absorption) are declared in src/data/schemas/assets/veins.ts as bare z.string().default(...) with NO regex constraint, and the broader color schema accepts 3-digit shorthand. For '#fff', parseInt('fff',16)=4095 yields r=0,g=15,b=255 (a blue) instead of white (255,255,255) \u2014 verified by reading the code. A malformed value yields NaN, and (NaN>>16)&0xff=0, silently producing black. This function feeds vein colors in production (veinsDisplayBuilder.ts:58 -> resolveDisplayColors -> shiftHue/resolveHeartbeatBlobTint), so a standard 3-digit hex in vein config renders every vein the wrong color.",
+      "finder_severity": "medium",
+      "finder_class": "correctness",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "parseHex does parseInt(hex,16) then 6-digit bit-shifts, so '#fff'(0xFFF=4095) decodes to (0,15,255) not white, and a malformed value yields NaN->(0,0,0) black with no error. Vein colors in schemas/assets/veins.ts are bare z.string().default(...) with no regex (the repo's HEX_COLOR /^#[0-9a-fA-F]{6}$/ is applied elsewhere but not here), so a valid 3-digit hex passes validation and renders the wrong color via shiftHue/resolveHeartbeatBlobTint. Silent mis-decode in a real, narrower case."
+      }
+    },
+    {
+      "id": "R.run1.026",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/veins/veinDisplayColors.ts",
+      "line": 6,
+      "title": "parseHex mis-decodes 3-digit and malformed hex colors (primary path)",
+      "detail": "Same defect as colorUtils.parseHex, in the primary path: veinDisplayColors.parseHex does Number.parseInt(hex.replace('#',''),16) and treats the result as a 6-digit color. resolveDisplayColors (line 20) reads config.colors[`base_${veinType}`] (an unconstrained z.string()) and passes it here via applyFactor. A 3-digit hex like '#fff' decodes to (0,15,255) instead of white, and a non-hex string decodes to NaN -> (0,0,0) black with no error. This is the exact function that colors supply veins each frame, so authoring a valid shorthand hex silently produces wrong vein colors.",
+      "finder_severity": "medium",
+      "finder_class": "correctness",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "correctness",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "Same 6-digit-assuming parseHex in the primary path: veinsDisplayBuilder.ts:58 calls resolveDisplayColors (veinDisplayColors.ts:20) which reads unconstrained config.colors[base_*] and passes it to applyFactor->parseHex. '#fff'->(0,15,255), non-hex->NaN->(0,0,0). Wrong vein color rendered with no error for a valid shorthand hex."
+      }
+    },
+    {
+      "id": "R.run1.027",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/background/BiologicalFogBackground.ts",
+      "line": 70,
+      "title": "Background config Zod-parsed on every render frame",
+      "detail": "update() (called from GameScene.update every frame at scenes/GameScene.ts:97) calls refreshConfig(runtime) at line 22, which at lines 69-70 unconditionally runs parseBackgroundConfig(runtime.getCartridge().assets) -> BackgroundConfigSchema.parse(...). A full Zod parse/validate of the background config thus runs ~60x/sec even though the cartridge config only changes on load. The correct pattern is already used elsewhere: VeinsSystem.refreshConfig (veins/VeinsSystem.ts:58-63) caches the raw reference and skips re-parsing when raw === this.lastSeenRawConfig. BiologicalFogBackground has no such guard, so it repeatedly allocates and validates each frame.",
+      "finder_severity": "medium",
+      "finder_class": "performance",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "performance",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "update() (called from GameScene.update:97 every frame) calls refreshConfig->parseBackgroundConfig which runs BackgroundConfigSchema.parse unconditionally (backgroundRuntimeHelpers.ts:14). VeinsSystem.refreshConfig:58-63 caches raw and skips re-parse when raw===lastSeenRawConfig; BiologicalFogBackground has no such guard, so it re-validates each frame. Real but minor (one small-config Zod parse ~60x/s), no correctness impact."
+      }
+    },
+    {
+      "id": "R.run1.028",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts",
+      "line": 9,
+      "title": "Presentation cache never invalidated on epoch/seed change; grows unbounded and can return stale avatars",
+      "detail": "The module-level `const cache = new Map<string, BodyAvatarPresentation>()` (line 9) is read/written at lines 26/29 keyed only by appearance.appearanceKey. buildAppearanceKey (display/avatar/AvatarAppearanceRegistry.ts) encodes only appearance fields (face/hair/eye indices, offsets, blink), NOT the epoch seed. AvatarAppearanceRegistry.resolve seeds its PRNG with this.currentEpochSeed, so the same subject yields a DIFFERENT appearance after a run/epoch seed change; the registry clears its own cache in syncEpoch() (called here at line 20), but this parallel module cache has no invalidation hook and is never cleared. Consequences: (a) entries accumulate for the whole process lifetime across every run/restart, each retaining three base64 PNG data-URL strings; (b) if two epochs produce appearances that fingerprint to the same key, the first epoch's cached presentation is returned for the second.",
+      "finder_severity": "medium",
+      "finder_class": "resource",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "resource",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "The module-level cache in resolveBodyAvatarPresentation.ts:9 is keyed by appearance.appearanceKey and never cleared; AvatarAppearanceRegistry.syncEpoch clears only its own cache, so across epochs/runs this parallel cache grows unbounded for the process lifetime. The 'returns stale avatars' sub-claim is unsupported: buildAppearanceKey encodes all rendering-relevant appearance fields and the presentation is a pure function of appearance, so identical key => identical presentation. Real unbounded-growth resource concern only."
+      }
+    },
+    {
+      "id": "R.run1.029",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts",
+      "line": 31,
+      "title": "Empty catch swallows real avatar-build failures with no logging",
+      "detail": "Lines 31-33 wrap the whole body in `catch { return null; }`, discarding the error with no logging. This masks actionable failures and makes them indistinguishable from the benign no-runtime/no-entity null: avatarRegistry.resolve() throws Error('[AvatarAppearanceRegistry] Empty subject seed') when the resolved seed trims empty, and buildBodyAvatarPresentation() throws Error('[BodyAvatarPresentation] Missing canvas 2d context.') when canvas.getContext('2d') returns null (context loss/headless). Both become a silent null identical to 'entity not found', so a genuine rendering/config fault is undiagnosable.",
+      "finder_severity": "low",
+      "finder_class": "silent-failure",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "silent-failure",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "Lines 31-33 `catch { return null; }` discard the error. buildBodyAvatarPresentation->renderLayer throws 'Missing canvas 2d context.' (buildBodyAvatarPresentation.ts:48) with no console.error, so that failure is swallowed with zero trace and is indistinguishable from a benign null. (The empty-seed error is logged before throwing, so that path is partially traced.) Real silent-failure for the canvas-context path."
+      }
+    },
+    {
+      "id": "R.run1.030",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/scenes/GameScene.pointer.ts",
+      "line": 27,
+      "title": "Scene 'update' listener registered but never removed on teardown",
+      "detail": "attachPointerSceneSystems registers scene.events.on('update', update) at line 27 and stores the update closure in the WeakMap at line 28, but destroyPointerSceneSystems (lines 31-37) only calls controller.destroy() and preview.destroy() and never calls scene.events.off('update', update). The closure was captured expressly so it could be removed, yet it isn't. Every other listener in this subsystem has a matching .off, making this a teardown asymmetry: in Phaser the scene events emitter is cleared on DESTROY but not on SHUTDOWN, so after a scene shutdown/restart/sleep the stale update keeps firing each frame and calls preview.update(...) on an already-destroyed PointerPreviewSystem, and repeated attach without removal accumulates listeners.",
+      "finder_severity": "medium",
+      "finder_class": "resource",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "resource",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "attachPointerSceneSystems registers scene.events.on('update', update) (line 27) and stores the closure in the WeakMap (line 28), but destroyPointerSceneSystems (31-37) only destroys controller/preview and never calls scene.events.off('update', update). Cleanup runs on both SHUTDOWN and DESTROY (GameScene.shutdown.ts); Phaser clears the emitter on DESTROY but not SHUTDOWN, so after a shutdown/restart the stale update keeps firing preview.update on a destroyed system and listeners accumulate. Closure captured expressly for removal yet unused."
+      }
+    },
+    {
+      "id": "R.run1.031",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/scenes/GameScene.pointer.ts",
+      "line": 31,
+      "title": "Pointer scene-system bind/teardown has no test coverage",
+      "detail": "No test references attachPointerSceneSystems or destroyPointerSceneSystems (grep finds only the source file). This is core scene wiring: it constructs and binds the PointerInputController, wires the per-frame preview update loop, and is the sole teardown path for those resources. Because it is untested, the listener-teardown asymmetry at line 27/31 (the update listener that destroyPointerSceneSystems never removes) is uncaught; a test that binds then tears down and asserts every registered listener is removed would fail today.",
+      "finder_severity": "low",
+      "finder_class": "test-adequacy",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "grep confirms no test references attachPointerSceneSystems or destroyPointerSceneSystems (only source files: GameScene.pointer/create/cleanup). Core scene wiring and the sole teardown path are untested, so the listener-removal asymmetry of R.run1.030 is uncaught."
+      }
+    },
+    {
+      "id": "R.run1.032",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/display-export/drawTintedTexture.ts",
+      "line": 20,
+      "title": "Core avatar tint-compositing math has no executing test",
+      "detail": "drawTintedTexture is the load-bearing avatar compositing routine: it sizes an offscreen canvas from src.width/height (lines 14-15, with a `?? 128` fallback that does NOT catch a 0 width since ?? only guards null/undefined), draws the source, applies a source-in tint fill formatted via params.tint.toString(16).padStart(6,'0') (line 22), then scales/centers onto the target (lines 28-30). The only test referencing it (renderBodyAvatarImage.test.ts) mocks the entire module (vi.mock('./drawTintedTexture')) and asserts only that it was called 3 times. The compositing, tint-hex formatting, dimension fallback, and scale/centre math are never actually executed under test, so a regression in any of them ships uncaught.",
+      "finder_severity": "medium",
+      "finder_class": "test-adequacy",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "The only test referencing drawTintedTexture (renderBodyAvatarImage.test.ts) does vi.mock('./drawTintedTexture') and asserts only toHaveBeenCalledTimes(3). The compositing, source-in tint fill, tint-hex formatting (toString(16).padStart(6,'0')), the `?? 128` dimension fallback (which does not catch a 0 width), and scale/center math are never executed. Load-bearing compositing routine with no executed coverage."
+      }
+    },
+    {
+      "id": "R.run1.033",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/display-export/renderAttributeDisplayImage.ts",
+      "line": 36,
+      "title": "Attribute-display renderer logic never executed in tests",
+      "detail": "renderAttributeDisplayImage resolves the attribute pool key and power shape, fetches a shape texture, and sizes the output canvas from the texture (lines 36-39: canvas.width = image.width ?? 128; drawImage(image,0,0,width,height)). Its only appearance in the suite is DisplayImageExportService.test.ts, which mocks the whole module (vi.mock('./renderAttributeDisplayImage')) and checks call counts. None of the real behaviour runs in a test: the unsupported-key / missing-textureManager / missing-2d-context guards, and the dimension math. The `?? 128` fallbacks coalesce only null/undefined, so a 0-width texture would produce a 0x0 canvas and a blank data URL, with nothing pinning any of this.",
+      "finder_severity": "medium",
+      "finder_class": "test-adequacy",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "renderAttributeDisplayImage appears only in DisplayImageExportService.test.ts, which vi.mock's the whole module and checks call counts. The unsupported-key/missing-textureManager/missing-2d-context guards and the `?? 128` dimension math never run under test. Real gap, but the untested logic is straightforward guards-that-throw plus a dimension copy."
+      }
+    },
+    {
+      "id": "R.run1.034",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/display-export/buildDisplayImageRequest.ts",
+      "line": 114,
+      "title": "buildDisplayImageRequest swallows all errors from source resolution",
+      "detail": "The source loop wraps buildRequestFromModule in `try { ... } catch { continue; }` with no logging (line 114). Skipping a source that legitimately cannot resolve the key is intended, but this also swallows genuine defects \u2014 a TypeError from malformed blueprint/display data or a throw out of resolveDisplaySource/resolveDisplaySpec \u2014 and silently falls through to the next source or returns null (line 118). The caller then renders a placeholder/fallback image with no signal that a real error occurred, turning corrupt module data into a silently wrong image instead of a diagnosable failure.",
+      "finder_severity": "low",
+      "finder_class": "silent-failure",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "silent-failure",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "buildDisplayImageRequest wraps buildRequestFromModule in `try { ... } catch { continue; }` with no logging (line 114). The legitimate can't-resolve-key path returns null (lines 60/89), not a throw, so the catch only swallows genuine exceptions (TypeErrors from malformed blueprint/display data, throws out of resolveDisplaySource/resolveDisplaySpec), falling through to a fallback with no signal. Real silent-failure."
+      }
+    },
+    {
+      "id": "R.run1.035",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/display/visual-instance/EntityVisualInstanceHelpers.ts",
+      "line": 7,
+      "title": "Per-entity pool acquire/release lifecycle (acquireAnchors/releaseAnchors) is untested",
+      "detail": "acquireAnchors (line 7) acquires 4 pooled Containers per entity (rootPool/backgroundAnchorPool/effectsAnchorPool/overlayAnchorPool) and adds each to a specific layer; releaseAnchors (line 40) is its mirror that detaches from parent and returns each to the matching pool. This acquire/release symmetry determines whether pooled Phaser GameObjects leak as entities are added/removed each tick. grep confirms no test references acquireAnchors, releaseAnchors, EntityVisualInstanceHelpers, or constructs an EntityVisualInstance. The pool tests exercise only the raw primitives, and DisplayInstanceManager.test.ts asserts only 'no throw' without inspecting pool in-use counts. A regression that released an anchor to the wrong pool, released only some anchors, or forgot to detach before release would not be caught.",
+      "finder_severity": "medium",
+      "finder_class": "test-adequacy",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "medium",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "grep confirms no test references acquireAnchors, releaseAnchors, EntityVisualInstanceHelpers, or constructs an EntityVisualInstance. These implement per-entity acquire of 4 pooled Containers and their mirror release (detach from parent + return to matching pool); a wrong-pool, partial, or missing-detach release would leak Phaser GameObjects each tick and is unpinned (pool tests exercise only raw primitives)."
+      }
+    },
+    {
+      "id": "R.run1.036",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/display/modules/cycle-progress/cycleProgressPath.ts",
+      "line": 78,
+      "title": "Cycle-progress arc-length path resolution is untested",
+      "detail": "resolveCycleProgressPath (plus helpers findTopPathStart L45, measureClosedPathLength L36, orderedVertices L26, interpolate L11) implements the most intricate geometry in this scope: choosing the topmost start vertex of a closed polygon, walking ordered vertices by arc length, interpolating a partial segment, and special-casing fraction boundaries (clamped===0 returns [] at L85; clamped===1 drops the duplicated closing vertex at L94-97). No test imports resolveCycleProgressPath or findTopPathStart. The only coverage is cycleProgressVisual.test.ts, which asserts two things only for family:'circle' at fraction=1 plus family:'none'. Partial-fraction path length, the fraction=0 empty-path boundary, flat-top-edge start selection, and degenerate inputs are entirely unexercised.",
+      "finder_severity": "medium",
+      "finder_class": "test-adequacy",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "No test imports resolveCycleProgressPath or findTopPathStart; cycleProgressVisual.test.ts covers only family:'circle' at full progress plus family:'none'. The arc-length walk, partial-segment interpolation, the clamped===0 empty-path boundary (L85), the clamped===1 duplicate-drop (L94-97), and flat-top start selection are unexercised. Real gap; blast radius is cosmetic rope geometry."
+      }
+    },
+    {
+      "id": "R.run1.037",
+      "source": {
+        "arm": "R",
+        "run_index": 1
+      },
+      "file": "src/engine/phaser/display/modules/cycle-progress/cycleProgressGeometry.ts",
+      "line": 49,
+      "title": "Cycle-progress ring geometry (polygon/spiky families) is untested",
+      "detail": "computeCycleProgressRopeGeometry and its shape math radiusFactor (L27), polygonFactor (L18), organicScale (L23) are imported only by cycleProgressVisual.ts, and no test references computeCycleProgressRopeGeometry. The single integration test uses only family:'circle', for which radiusFactor short-circuits to 1 (L33) and polygonFactor is never called. The triangle/square/hex branch (lobe selection L38-40, polygonFactor division by cos(local) L21), the spiky_circle branch (L34-37), the outerMaxRadius clamp (L74-88), and the radius<=0.5 empty-output guard (L57) all have zero coverage, so an error in the polygon radius factor or lobe count would ship undetected.",
+      "finder_severity": "low",
+      "finder_class": "test-adequacy",
+      "subsystem": "phaser",
+      "in_target_region": true,
+      "adjudication": {
+        "verdict": "real",
+        "judge_severity": "low",
+        "judge_class": "test-adequacy",
+        "by": "agent",
+        "oracle_match": null,
+        "notes": "No test references computeCycleProgressRopeGeometry; the only integration test uses family:'circle', for which radiusFactor short-circuits to 1 (L33) and polygonFactor is never called. The polygon (lobe selection L38-40, polygonFactor L18-22), spiky_circle (L34-37), outerMaxRadius clamp, and radius<=0.5 empty guard (L57) branches have zero coverage. Real gap; cosmetic ring geometry."
+      }
+    }
+  ]
+}

@@ -1,0 +1,102 @@
+[
+  {
+    "id": "R.run1.012",
+    "fingerprint": "R.run1.012",
+    "file": "src/engine/runtime/handlers/ResolveTransferHandler.ts",
+    "line": 80,
+    "title": "Cancelled ('returning') transfer credits the wrong entity and leaks the source's ledger reservation",
+    "detail": "The receiver for a returning transfer is chosen as transfer.sourceId (line 80). But CancelTransferHandler swaps the component fields, so after cancellation transfer = { sourceId: oldTargetId, targetId: oldSourceId, status: 'returning' } and it retargets the physics body to oldSourceId (CancelTransferHandler.ts:110). The node therefore physically flies back to the original source (oldSource), yet resolve credits receiverId = transfer.sourceId = oldTargetId \u2014 the entity that rejected the deposit. The resources originally debited from oldSource in TransferHandler.ts:53 are thus added to oldTarget instead of returned to oldSource, so oldSource permanently loses them. Compounding this, CancelTransferHandler bumps oldSource.incoming += amount (CancelTransferHandler.ts:96-100) to reserve return headroom, but the ledger decrement at ResolveTransferHandler.ts:106-107 runs on the receiver (oldTarget), so oldSource.incoming keeps a phantom reservation forever, permanently shrinking its capacity. The receiver for a returning node should be transfer.targetId (the swapped destination = oldSource); the branch is inverted.",
+    "finder_severity": "high",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.013",
+    "fingerprint": "R.run1.013",
+    "file": "src/engine/runtime/handlers/ResolveTransferHandler.ts",
+    "line": 85,
+    "title": "Transfer resolution against a missing receiver silently loses resources and leaks the pending node",
+    "detail": "When the receiver entity is not found, handle() logs an error and returns early (lines 85-91) WITHOUT running the cleanup at lines 130-133 (context.world.remove(pending) / impulseEngine.removeBody). Because the source was already debited when the transfer was initiated (TransferHandler.ts:53), the in-flight amount is now removed from the source and credited nowhere, and the orphaned pending entity plus its physics body remain in the world/engine indefinitely. This is reachable on normal input: KillHandler.handle (KillHandler.ts:52-53) removes a target entity and its body but does not cancel or drain in-flight transfer nodes targeting it, so killing a target while a deferred transfer is in flight removes the receiver before the node arrives.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure"
+  },
+  {
+    "id": "R.run1.014",
+    "fingerprint": "R.run1.014",
+    "file": "src/engine/runtime/handlers/ResolveTransferHandler.ts",
+    "line": 79,
+    "title": "The 'returning' resolve branch is entirely untested",
+    "detail": "ResolveTransferHandler.test.ts only exercises status:'pending' transfers (crediting the target). The status==='returning' branch (lines 79-81) that selects the receiver for cancelled transfers is never executed by any test; the only 'returning' occurrence in any test file is CancelTransferHandler.test.ts asserting the status is set, never resolved. No cancel-then-resolve round-trip test verifies resources actually return to the original source, which is exactly why the inverted-receiver defect above ships undetected.",
+    "finder_severity": "high",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.015",
+    "fingerprint": "R.run1.015",
+    "file": "src/engine/runtime/persistence/flyweightStatePersistence.ts",
+    "line": 72,
+    "title": "Runtime-mutated `max` on blueprint-backed entities is lost on save/load unless scaleOnMaxChange is set",
+    "detail": "saveStateEntry persists only the keys returned by resolveStateEntryRuntimeKeys (line 72), and that helper includes 'max' ONLY when an entry has scaleOnMaxChange === true (lines 13-15); otherwise it returns just ['value','visible']. But the engine mutates .max at runtime independent of scaleOnMaxChange: UPDATE_STATE -> UpdateStateHandler.updateExistingEntry calls applyMaxChange(entry, max) (UpdateStateHandler.ts:34), and applyMaxChange unconditionally sets entry.max = newMax (stateEntryNumeric.ts:27). For a blueprint-backed (flyweight) entity whose max was changed at runtime and whose entry lacks scaleOnMaxChange, saveStateEntry drops the new max; on load, mergeStateEntryForHydrate (lines 26-47) restores max from the blueprint base. The runtime capacity therefore silently reverts to the blueprint default on every save/load. (Non-blueprint entities are unaffected: with no base entry, saveStateEntry falls through to the structuredClone path at lines 63-64 that keeps all keys.)",
+    "finder_severity": "high",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.016",
+    "fingerprint": "R.run1.016",
+    "file": "src/engine/runtime/persistence/flyweightStatePersistence.ts",
+    "line": 62,
+    "title": "No test covers round-trip of a runtime-changed `max` without scaleOnMaxChange",
+    "detail": "The only test asserting max survives serialize->hydrate (flyweightPersistence.scaleOnMaxChange.test.ts) requires scaleOnMaxChange: true. flyweightPersistence.serialize.test.ts pins the opposite (max stripped) but only where the runtime max equals the blueprint max, so it never exercises a runtime-DIFFERENT max on a blueprint-backed entry without scaleOnMaxChange -- exactly the branch in saveStateEntry (lines 62-77) that loses data per the finding above. A test for it would fail, so the gap masks a real defect.",
+    "finder_severity": "medium",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.017",
+    "fingerprint": "R.run1.017",
+    "file": "src/engine/runtime/systems/AutomationSystem.ts",
+    "line": 89,
+    "title": "AutomationSystem timing/repeat/rollover logic has no unit test",
+    "detail": "AutomationSystem.tick is production-wired (invoked via runtimeSystemPhase.ts) and contains non-trivial, defect-prone logic: the repeat decrement (resolveNextTiming line 78-79: repeats < 0 ? -1 : repeats - 1), kill-on-exhaust (repeats===0 at line 121 and nextRepeats===0 at line 145), the exact-boundary case where nextRemaining<=0 must still fire (the nextRemaining > 0 gate at line 126), and interval rollover carrying overshoot (line 80-81: intervalMs + (nextRemaining % intervalMs)). A repo-wide search for 'AutomationSystem' across *.test.ts returns no test file that imports or exercises it. None of these branches is covered, so a regression in the repeat/kill/rollover math would ship silently.",
+    "finder_severity": "medium",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.018",
+    "fingerprint": "R.run1.018",
+    "file": "src/engine/runtime/Snapshot.ts",
+    "line": 28,
+    "title": "Snapshot.reset() stale-entry clearing on buffer reuse is untested",
+    "detail": "reset() is the reuse path for the double-buffered snapshots: runtimeSnapshotBuffers.updateSnapshotBuffers picks buffers[nextIndex] and, when non-null, calls refreshSnapshotPhase -> snapshot.reset(...), mutating an already-populated Snapshot in place (reached from the 3rd sub-step onward, i.e. any accumulated tick >= 60ms). Its correctness hinges on the three clear() calls (entityIndex, physicsIndex, queryCache) at lines 35-37 wiping the previous population before rebuild; otherwise a reused buffer returns stale getEntity/getPhysicsBody/query results for entities that no longer exist. Snapshot.test.ts only exercises the constructor and query()/getEntity() on a fresh instance; it never calls reset() a second time with a different entity/physics set to assert removed entities disappear and queryCache does not serve a stale result. Integration ticks execute the path so a crash would surface, but no assertion pins the stale-clearing invariant, so dropping any clear() would pass the suite while silently leaking stale snapshot state across ticks.",
+    "finder_severity": "medium",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.019",
+    "fingerprint": "R.run1.019",
+    "file": "src/engine/runtime/RuntimeCore.ts",
+    "line": 11,
+    "title": "stepOncePreservingPause advances zero ticks when timeScale is below 0.2",
+    "detail": "stepOncePreservingPause forces exactly one logic step by calling this.tick(LOGIC_STEP_MS / this.timeScale) so that advanceRuntimeCoreTick computes timeStep = safeDt * timeScale = LOGIC_STEP_MS. But normalizeDt clamps dt to MAX_DT_MS (100) (runtimeTiming.ts:5, runtimeConstants.ts:1). When timeScale is in (0, 0.2), LOGIC_STEP_MS/timeScale exceeds 100 and is clamped, so timeStep = 100 * timeScale < LOGIC_STEP_MS (20) and the sub-step loop in runRuntimeTick (remainingTime >= LOGIC_STEP_MS) never runs: no tick advances and the function returns the unchanged tick, violating its 'step once' contract. timeScale below 0.2 is reachable (setTimeScale accepts any positive float via Math.max(0, scale)), and this path is used by editor/pointer stepping.",
+    "finder_severity": "low",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.020",
+    "fingerprint": "R.run1.020",
+    "file": "src/engine/runtime/runtimeArrivalHandlers.ts",
+    "line": 22,
+    "title": "SET_TARGET(null) enqueued after RESOLVE_TRANSFER is a dead command on the transfer-completion path",
+    "detail": "For an arriving pending-transfer body, handleArrivals enqueues RESOLVE_TRANSFER (line 18) then SET_TARGET{targetId:null} for the same bodyId (line 22). Both are consumed in the same commandsManager.process() pass (runtimePhases.ts applyPhase). On the normal path RESOLVE_TRANSFER removes the entity and its physics body (ResolveTransferHandler.ts:130,132), so by the time SET_TARGET is processed the target no longer exists: the command is redundant and, because the engine's createGameRuntime registers no handler for SET_TARGET, it hits the 'No handler registered' branch (CommandsManager.ts:53-57) and logs to the 'errors' channel on every successful transfer arrival. The command's implicit assumption that the entity still exists when SET_TARGET runs is false whenever the transfer resolves.",
+    "finder_severity": "low",
+    "finder_class": "silent-failure"
+  },
+  {
+    "id": "R.run1.021",
+    "fingerprint": "R.run1.021",
+    "file": "src/engine/runtime/runtimeArrivalHandlers.ts",
+    "line": 6,
+    "title": "handleArrivals arrival->command glue has no test coverage",
+    "detail": "handleArrivals contains real branching logic (scan world.entities per arrival, guard on the entity.transfer component at line 17, enqueue a RESOLVE_TRANSFER + SET_TARGET pair). It is referenced only by its own file and runtimePhases.ts, and no test drives the physics-arrival -> RESOLVE_TRANSFER path (ResolveTransferHandler.test.ts enqueues RESOLVE_TRANSFER directly, never via an arrival). Neither the transfer-present branch nor the no-transfer / entity-not-found branches are exercised, so the dead-SET_TARGET ordering issue above and any regression in the guard or enqueued pair would go undetected.",
+    "finder_severity": "low",
+    "finder_class": "test-adequacy"
+  }
+]

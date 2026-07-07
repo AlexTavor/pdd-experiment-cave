@@ -1,0 +1,106 @@
+{
+  "headline": {
+    "killable_missed": "pending",
+    "gate_verified_real": "pending",
+    "recall_delta_c_vs_r": "pending (no C)",
+    "precision_delta_p_vs_c": "pending (no C)"
+  },
+  "finder_by_arm_run": {
+    "runs": [
+      "run 1",
+      "run 2",
+      "run 3"
+    ],
+    "R": [
+      37,
+      null,
+      null
+    ],
+    "C": [
+      null,
+      null,
+      null
+    ],
+    "P": [
+      150,
+      null,
+      null
+    ]
+  },
+  "gate_yield": {
+    "labels": [
+      "mutation survivors",
+      "cover-the-mirror",
+      "boundary-tests",
+      "silent-failure",
+      "pin-values",
+      "no-op-paths",
+      "prove-boundary"
+    ],
+    "values": [
+      7227,
+      36,
+      10,
+      5,
+      4,
+      3,
+      3
+    ]
+  },
+  "kill_condition": [
+    {
+      "condition": "a. C recall exceeds R",
+      "threshold": ">= 10 pts and > run spread",
+      "status": "pending (no C)"
+    },
+    {
+      "condition": "b. killable gaps missed by finders",
+      "threshold": "K >= 1, report count",
+      "status": "pending triage"
+    },
+    {
+      "condition": "c. P precision exceeds C",
+      "threshold": ">= 8 pts and > run spread",
+      "status": "pending (no C)"
+    }
+  ],
+  "progress_arm_run": {
+    "R": [
+      "done",
+      "pending",
+      "pending"
+    ],
+    "C": [
+      "pending",
+      "pending",
+      "pending"
+    ],
+    "P": [
+      "done",
+      "pending",
+      "pending"
+    ]
+  },
+  "pipeline": [
+    {
+      "stage": "gate suite (wide)",
+      "status": "extracted"
+    },
+    {
+      "stage": "blind adjudication (R, P)",
+      "status": "done"
+    },
+    {
+      "stage": "arm C",
+      "status": "pending"
+    },
+    {
+      "stage": "survivor triage",
+      "status": "pending"
+    },
+    {
+      "stage": "metrics + kill-condition",
+      "status": "pending"
+    }
+  ]
+}

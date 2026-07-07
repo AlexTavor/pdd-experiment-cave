@@ -1,0 +1,50 @@
+[
+  {
+    "id": "R.run1.000",
+    "fingerprint": "R.run1.000",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "notes": "init() sets isInitialized only at line 49 after the async IIFE resolves; if fetchDiskData/hydrateLoadedCartridge reject, isInitialized stays false and initPromise (via ??=) keeps the already-rejected promise, so every later init/readFile/writeFile re-returns the cached rejection with no retry until a new instance is constructed."
+  },
+  {
+    "id": "R.run1.001",
+    "fingerprint": "R.run1.001",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "notes": "moveMany collects all puts (line 52) then all deletes (line 53) in one transaction; for a conflicting batch (e.g. A->B plus B->A, deletes={A,B}) both destination keys get deleted after being written, silently losing data. Single/non-overlapping moves are safe, so it is a narrower real case."
+  },
+  {
+    "id": "R.run1.003",
+    "fingerprint": "R.run1.003",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "notes": "With fixed world bounds resolveBounds roots the boundary at (0,0); Quadtree.insert returns false without storing any body outside boundary (Quadtree.ts:93), and clampToBounds returns early for static bodies (ImpulseEngineIntegration.ts:12), so a static/off-grid body at negative or beyond-size coords is absent from the tree and never found as a neighbor. Dynamic bodies are clamped into range, so the gap is narrow (static or off-bounds bodies only)."
+  },
+  {
+    "id": "R.run1.006",
+    "fingerprint": "R.run1.006",
+    "verdict": "false",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "notes": "The guard is a raw ===\"core.json\", but no layer normalizes keys: IndexedDBPersistence load/delete use the path verbatim, so a variant like ./core.json is a distinct key that db.load will not find (existence check fails) and db.delete cannot remove; VFS delete only touches DB keys and cannot delete disk files at all, so the claimed bypass-to-deletion path is not supported by the code."
+  },
+  {
+    "id": "R.run1.007",
+    "fingerprint": "R.run1.007",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "notes": "handleFsSave builds new RegExp(`^${scope}/?`) from user scope (line 114) with no escaping; the files are pre-filtered by literal startsWith, but a scope containing a quantifier/metachar (e.g. 'a+', '(', '[') makes the regex consume a different prefix length, so 'relative' is wrong and the file is written to ${root}/${wrong}. The finding's '.' example happens to match its literal, but '+'/parens/brackets genuinely misstrip; toVfsKey uses the same pattern but with the constant SOURCE_ROOT so that half is benign."
+  },
+  {
+    "id": "R.run1.010",
+    "fingerprint": "R.run1.010",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "notes": "ls does fileCache.length=0; push(...raw vfs.listFiles()) (lines 13-14), bypassing refreshFileCache which merges import.meta.glob disk files and filters '/.cave-dir' markers (fileUtils.ts:22-40); until the next refresh, disk-only files drop from autocomplete and .cave-dir markers reappear, and line 19 also prints markers. Real but low-impact autocomplete/display inconsistency, no data loss."
+  }
+]

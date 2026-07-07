@@ -1,0 +1,130 @@
+[
+  {
+    "id": "R.run1.022",
+    "fingerprint": "R.run1.022",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "notes": "resolveAncestorPath walks getParentId upward and returns ancestors nearest-first; after .reverse() the first element is the topmost ancestor 'sys_world' for any entity parented (even directly) to the world. With current=sourceNode(sys_world) the first loop iteration emits sourceId=sys_world->targetId=sys_world before advancing. The nervous sibling (graphBuilderNervous.ts:35) guards this exact case with `if (nodeId === current.id) continue;`, which addDemandRoute omits. Effect is a degenerate zero-length edge each frame; terminal-target chain resolution stays robust, so impact is a spurious edge, not data loss."
+  },
+  {
+    "id": "R.run1.023",
+    "fingerprint": "R.run1.023",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "notes": "addSinkDemandEdge has current=worldNode(sys_world) and route=resolveAncestorPath(...).reverse(), whose first element is sys_world for any world-parented sink, so line 30 pushVeinEdge emits sys_world->sys_world on the first iteration. Same missing `nodeId === current.id` guard that graphBuilderNervous.ts:35 has. Produces a degenerate self-loop edge; confirmed by tracing the reversed-route logic."
+  },
+  {
+    "id": "R.run1.024",
+    "fingerprint": "R.run1.024",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "test-adequacy",
+    "notes": "GraphBuilder.parentRouting.test.ts builds a sys_world->parent->child hierarchy but asserts only with toContainEqual (superset-tolerant; never checks edge count or absence of sourceId===targetId), and graphBuilderUtils.test.ts uses only unparented sinks. The nervousPassport test's toHaveLength check is nervous-only. So the demand/sink self-loop of R.run1.022/023 is genuinely uncaught."
+  },
+  {
+    "id": "R.run1.025",
+    "fingerprint": "R.run1.025",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "notes": "parseHex does parseInt(hex,16) then 6-digit bit-shifts, so '#fff'(0xFFF=4095) decodes to (0,15,255) not white, and a malformed value yields NaN->(0,0,0) black with no error. Vein colors in schemas/assets/veins.ts are bare z.string().default(...) with no regex (the repo's HEX_COLOR /^#[0-9a-fA-F]{6}$/ is applied elsewhere but not here), so a valid 3-digit hex passes validation and renders the wrong color via shiftHue/resolveHeartbeatBlobTint. Silent mis-decode in a real, narrower case."
+  },
+  {
+    "id": "R.run1.026",
+    "fingerprint": "R.run1.026",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "notes": "Same 6-digit-assuming parseHex in the primary path: veinsDisplayBuilder.ts:58 calls resolveDisplayColors (veinDisplayColors.ts:20) which reads unconstrained config.colors[base_*] and passes it to applyFactor->parseHex. '#fff'->(0,15,255), non-hex->NaN->(0,0,0). Wrong vein color rendered with no error for a valid shorthand hex."
+  },
+  {
+    "id": "R.run1.027",
+    "fingerprint": "R.run1.027",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "performance",
+    "notes": "update() (called from GameScene.update:97 every frame) calls refreshConfig->parseBackgroundConfig which runs BackgroundConfigSchema.parse unconditionally (backgroundRuntimeHelpers.ts:14). VeinsSystem.refreshConfig:58-63 caches raw and skips re-parse when raw===lastSeenRawConfig; BiologicalFogBackground has no such guard, so it re-validates each frame. Real but minor (one small-config Zod parse ~60x/s), no correctness impact."
+  },
+  {
+    "id": "R.run1.028",
+    "fingerprint": "R.run1.028",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "resource",
+    "notes": "The module-level cache in resolveBodyAvatarPresentation.ts:9 is keyed by appearance.appearanceKey and never cleared; AvatarAppearanceRegistry.syncEpoch clears only its own cache, so across epochs/runs this parallel cache grows unbounded for the process lifetime. The 'returns stale avatars' sub-claim is unsupported: buildAppearanceKey encodes all rendering-relevant appearance fields and the presentation is a pure function of appearance, so identical key => identical presentation. Real unbounded-growth resource concern only."
+  },
+  {
+    "id": "R.run1.029",
+    "fingerprint": "R.run1.029",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "notes": "Lines 31-33 `catch { return null; }` discard the error. buildBodyAvatarPresentation->renderLayer throws 'Missing canvas 2d context.' (buildBodyAvatarPresentation.ts:48) with no console.error, so that failure is swallowed with zero trace and is indistinguishable from a benign null. (The empty-seed error is logged before throwing, so that path is partially traced.) Real silent-failure for the canvas-context path."
+  },
+  {
+    "id": "R.run1.030",
+    "fingerprint": "R.run1.030",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "resource",
+    "notes": "attachPointerSceneSystems registers scene.events.on('update', update) (line 27) and stores the closure in the WeakMap (line 28), but destroyPointerSceneSystems (31-37) only destroys controller/preview and never calls scene.events.off('update', update). Cleanup runs on both SHUTDOWN and DESTROY (GameScene.shutdown.ts); Phaser clears the emitter on DESTROY but not SHUTDOWN, so after a shutdown/restart the stale update keeps firing preview.update on a destroyed system and listeners accumulate. Closure captured expressly for removal yet unused."
+  },
+  {
+    "id": "R.run1.031",
+    "fingerprint": "R.run1.031",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "test-adequacy",
+    "notes": "grep confirms no test references attachPointerSceneSystems or destroyPointerSceneSystems (only source files: GameScene.pointer/create/cleanup). Core scene wiring and the sole teardown path are untested, so the listener-removal asymmetry of R.run1.030 is uncaught."
+  },
+  {
+    "id": "R.run1.032",
+    "fingerprint": "R.run1.032",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "test-adequacy",
+    "notes": "The only test referencing drawTintedTexture (renderBodyAvatarImage.test.ts) does vi.mock('./drawTintedTexture') and asserts only toHaveBeenCalledTimes(3). The compositing, source-in tint fill, tint-hex formatting (toString(16).padStart(6,'0')), the `?? 128` dimension fallback (which does not catch a 0 width), and scale/center math are never executed. Load-bearing compositing routine with no executed coverage."
+  },
+  {
+    "id": "R.run1.033",
+    "fingerprint": "R.run1.033",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "test-adequacy",
+    "notes": "renderAttributeDisplayImage appears only in DisplayImageExportService.test.ts, which vi.mock's the whole module and checks call counts. The unsupported-key/missing-textureManager/missing-2d-context guards and the `?? 128` dimension math never run under test. Real gap, but the untested logic is straightforward guards-that-throw plus a dimension copy."
+  },
+  {
+    "id": "R.run1.034",
+    "fingerprint": "R.run1.034",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "notes": "buildDisplayImageRequest wraps buildRequestFromModule in `try { ... } catch { continue; }` with no logging (line 114). The legitimate can't-resolve-key path returns null (lines 60/89), not a throw, so the catch only swallows genuine exceptions (TypeErrors from malformed blueprint/display data, throws out of resolveDisplaySource/resolveDisplaySpec), falling through to a fallback with no signal. Real silent-failure."
+  },
+  {
+    "id": "R.run1.035",
+    "fingerprint": "R.run1.035",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "test-adequacy",
+    "notes": "grep confirms no test references acquireAnchors, releaseAnchors, EntityVisualInstanceHelpers, or constructs an EntityVisualInstance. These implement per-entity acquire of 4 pooled Containers and their mirror release (detach from parent + return to matching pool); a wrong-pool, partial, or missing-detach release would leak Phaser GameObjects each tick and is unpinned (pool tests exercise only raw primitives)."
+  },
+  {
+    "id": "R.run1.036",
+    "fingerprint": "R.run1.036",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "test-adequacy",
+    "notes": "No test imports resolveCycleProgressPath or findTopPathStart; cycleProgressVisual.test.ts covers only family:'circle' at full progress plus family:'none'. The arc-length walk, partial-segment interpolation, the clamped===0 empty-path boundary (L85), the clamped===1 duplicate-drop (L94-97), and flat-top start selection are unexercised. Real gap; blast radius is cosmetic rope geometry."
+  },
+  {
+    "id": "R.run1.037",
+    "fingerprint": "R.run1.037",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "test-adequacy",
+    "notes": "No test references computeCycleProgressRopeGeometry; the only integration test uses family:'circle', for which radiusFactor short-circuits to 1 (L33) and polygonFactor is never called. The polygon (lobe selection L38-40, polygonFactor L18-22), spiky_circle (L34-37), outerMaxRadius clamp, and radius<=0.5 empty guard (L57) branches have zero coverage. Real gap; cosmetic ring geometry."
+  }
+]

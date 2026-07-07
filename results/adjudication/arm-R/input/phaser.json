@@ -1,0 +1,162 @@
+[
+  {
+    "id": "R.run1.022",
+    "fingerprint": "R.run1.022",
+    "file": "src/engine/phaser/veins/graphBuilderEdges.ts",
+    "line": 26,
+    "title": "Routed demand edges emit a spurious sys_world->sys_world self-loop",
+    "detail": "addDemandRoute sets `current = sourceNode` (the worldNode, id 'sys_world') at line 22, then iterates `[...route, entityId]` where route = resolveAncestorPath(source, entityId).reverse(). resolveAncestorPath walks getParentId upward and returns ancestors nearest-first; for any entity transitively parented to the world the top ancestor is 'sys_world', so after .reverse() the FIRST element is 'sys_world'. On that first iteration nodeId==='sys_world'===current.id, and pushVeinEdge emits sourceId='sys_world' -> targetId='sys_world' before advancing current. The sibling nervous router (graphBuilderNervous.ts:35) guards this exact case with `if (nodeId === current.id) continue;`, which addDemandRoute omits. Verified by an isolated probe on a child->parent->sys_world hierarchy: it produces edges [sys_world->sys_world, sys_world->parent, parent->child]. The self-loop becomes a degenerate zero-length display edge and perturbs resolveTerminalChainTargetId flow attribution, every frame.",
+    "finder_severity": "medium",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.023",
+    "fingerprint": "R.run1.023",
+    "file": "src/engine/phaser/veins/graphBuilderSinkEdges.ts",
+    "line": 30,
+    "title": "Routed sink demand edges emit a spurious sys_world->sys_world self-loop",
+    "detail": "addSinkDemandEdge sets `current = worldNode` (id 'sys_world') at line 25, then iterates `[...route, entityId]` with route = resolveAncestorPath(source, entityId).reverse(). For any sink transitively parented to the world, the reversed route begins with 'sys_world', so the first iteration (nodeId==='sys_world'===current.id) calls pushVeinEdge at line 30 emitting sourceId='sys_world' -> targetId='sys_world'. This is the same missing `nodeId === current.id` guard that graphBuilderNervous.ts:35 has. Confirmed by reading the source (current=worldNode, route reversed begins with sys_world) and with a world/parent/child probe. Existing coverage misses it because graphBuilderUtils.test.ts exercises only unparented sinks and the parentRouting test asserts with toContainEqual, which tolerates the extra self-loop edge.",
+    "finder_severity": "medium",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.024",
+    "fingerprint": "R.run1.024",
+    "file": "src/engine/phaser/veins/graphBuilderEdges.ts",
+    "line": 43,
+    "title": "No test guards routed demand/sink chains against self-loops",
+    "detail": "The nervous router's self-loop avoidance is tested (GraphBuilder.nervousPassport.test.ts routes child<-parent<-sys_world), but no test covers the analogous resource-demand/sink routing through ancestors reaching sys_world. GraphBuilder.parentRouting.test.ts builds a parented hierarchy yet asserts only with toContainEqual (satisfied by a superset, never checks edge count or absence of sourceId===targetId), and graphBuilderUtils.test.ts uses only unparented sinks. The self-loop defect in addDemandRoute and addSinkDemandEdge is thus entirely uncaught. A test asserting no edge has sourceId===targetId on a world->parent->child demand/sink graph would fail and pin the behavior.",
+    "finder_severity": "low",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.025",
+    "fingerprint": "R.run1.025",
+    "file": "src/engine/phaser/veins/colorUtils.ts",
+    "line": 4,
+    "title": "parseHex mis-decodes 3-digit and malformed hex colors",
+    "detail": "parseHex does Number.parseInt(hex.replace('#',''),16) then extracts r/g/b via bit shifts, assuming a 6-digit hex. VeinConfig colors (base_body/base_mind/base_social/base_nervous/base_assignable/base_absorption) are declared in src/data/schemas/assets/veins.ts as bare z.string().default(...) with NO regex constraint, and the broader color schema accepts 3-digit shorthand. For '#fff', parseInt('fff',16)=4095 yields r=0,g=15,b=255 (a blue) instead of white (255,255,255) \u2014 verified by reading the code. A malformed value yields NaN, and (NaN>>16)&0xff=0, silently producing black. This function feeds vein colors in production (veinsDisplayBuilder.ts:58 -> resolveDisplayColors -> shiftHue/resolveHeartbeatBlobTint), so a standard 3-digit hex in vein config renders every vein the wrong color.",
+    "finder_severity": "medium",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.026",
+    "fingerprint": "R.run1.026",
+    "file": "src/engine/phaser/veins/veinDisplayColors.ts",
+    "line": 6,
+    "title": "parseHex mis-decodes 3-digit and malformed hex colors (primary path)",
+    "detail": "Same defect as colorUtils.parseHex, in the primary path: veinDisplayColors.parseHex does Number.parseInt(hex.replace('#',''),16) and treats the result as a 6-digit color. resolveDisplayColors (line 20) reads config.colors[`base_${veinType}`] (an unconstrained z.string()) and passes it here via applyFactor. A 3-digit hex like '#fff' decodes to (0,15,255) instead of white, and a non-hex string decodes to NaN -> (0,0,0) black with no error. This is the exact function that colors supply veins each frame, so authoring a valid shorthand hex silently produces wrong vein colors.",
+    "finder_severity": "medium",
+    "finder_class": "correctness"
+  },
+  {
+    "id": "R.run1.027",
+    "fingerprint": "R.run1.027",
+    "file": "src/engine/phaser/background/BiologicalFogBackground.ts",
+    "line": 70,
+    "title": "Background config Zod-parsed on every render frame",
+    "detail": "update() (called from GameScene.update every frame at scenes/GameScene.ts:97) calls refreshConfig(runtime) at line 22, which at lines 69-70 unconditionally runs parseBackgroundConfig(runtime.getCartridge().assets) -> BackgroundConfigSchema.parse(...). A full Zod parse/validate of the background config thus runs ~60x/sec even though the cartridge config only changes on load. The correct pattern is already used elsewhere: VeinsSystem.refreshConfig (veins/VeinsSystem.ts:58-63) caches the raw reference and skips re-parsing when raw === this.lastSeenRawConfig. BiologicalFogBackground has no such guard, so it repeatedly allocates and validates each frame.",
+    "finder_severity": "medium",
+    "finder_class": "performance"
+  },
+  {
+    "id": "R.run1.028",
+    "fingerprint": "R.run1.028",
+    "file": "src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts",
+    "line": 9,
+    "title": "Presentation cache never invalidated on epoch/seed change; grows unbounded and can return stale avatars",
+    "detail": "The module-level `const cache = new Map<string, BodyAvatarPresentation>()` (line 9) is read/written at lines 26/29 keyed only by appearance.appearanceKey. buildAppearanceKey (display/avatar/AvatarAppearanceRegistry.ts) encodes only appearance fields (face/hair/eye indices, offsets, blink), NOT the epoch seed. AvatarAppearanceRegistry.resolve seeds its PRNG with this.currentEpochSeed, so the same subject yields a DIFFERENT appearance after a run/epoch seed change; the registry clears its own cache in syncEpoch() (called here at line 20), but this parallel module cache has no invalidation hook and is never cleared. Consequences: (a) entries accumulate for the whole process lifetime across every run/restart, each retaining three base64 PNG data-URL strings; (b) if two epochs produce appearances that fingerprint to the same key, the first epoch's cached presentation is returned for the second.",
+    "finder_severity": "medium",
+    "finder_class": "resource"
+  },
+  {
+    "id": "R.run1.029",
+    "fingerprint": "R.run1.029",
+    "file": "src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts",
+    "line": 31,
+    "title": "Empty catch swallows real avatar-build failures with no logging",
+    "detail": "Lines 31-33 wrap the whole body in `catch { return null; }`, discarding the error with no logging. This masks actionable failures and makes them indistinguishable from the benign no-runtime/no-entity null: avatarRegistry.resolve() throws Error('[AvatarAppearanceRegistry] Empty subject seed') when the resolved seed trims empty, and buildBodyAvatarPresentation() throws Error('[BodyAvatarPresentation] Missing canvas 2d context.') when canvas.getContext('2d') returns null (context loss/headless). Both become a silent null identical to 'entity not found', so a genuine rendering/config fault is undiagnosable.",
+    "finder_severity": "low",
+    "finder_class": "silent-failure"
+  },
+  {
+    "id": "R.run1.030",
+    "fingerprint": "R.run1.030",
+    "file": "src/engine/phaser/scenes/GameScene.pointer.ts",
+    "line": 27,
+    "title": "Scene 'update' listener registered but never removed on teardown",
+    "detail": "attachPointerSceneSystems registers scene.events.on('update', update) at line 27 and stores the update closure in the WeakMap at line 28, but destroyPointerSceneSystems (lines 31-37) only calls controller.destroy() and preview.destroy() and never calls scene.events.off('update', update). The closure was captured expressly so it could be removed, yet it isn't. Every other listener in this subsystem has a matching .off, making this a teardown asymmetry: in Phaser the scene events emitter is cleared on DESTROY but not on SHUTDOWN, so after a scene shutdown/restart/sleep the stale update keeps firing each frame and calls preview.update(...) on an already-destroyed PointerPreviewSystem, and repeated attach without removal accumulates listeners.",
+    "finder_severity": "medium",
+    "finder_class": "resource"
+  },
+  {
+    "id": "R.run1.031",
+    "fingerprint": "R.run1.031",
+    "file": "src/engine/phaser/scenes/GameScene.pointer.ts",
+    "line": 31,
+    "title": "Pointer scene-system bind/teardown has no test coverage",
+    "detail": "No test references attachPointerSceneSystems or destroyPointerSceneSystems (grep finds only the source file). This is core scene wiring: it constructs and binds the PointerInputController, wires the per-frame preview update loop, and is the sole teardown path for those resources. Because it is untested, the listener-teardown asymmetry at line 27/31 (the update listener that destroyPointerSceneSystems never removes) is uncaught; a test that binds then tears down and asserts every registered listener is removed would fail today.",
+    "finder_severity": "low",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.032",
+    "fingerprint": "R.run1.032",
+    "file": "src/engine/phaser/display-export/drawTintedTexture.ts",
+    "line": 20,
+    "title": "Core avatar tint-compositing math has no executing test",
+    "detail": "drawTintedTexture is the load-bearing avatar compositing routine: it sizes an offscreen canvas from src.width/height (lines 14-15, with a `?? 128` fallback that does NOT catch a 0 width since ?? only guards null/undefined), draws the source, applies a source-in tint fill formatted via params.tint.toString(16).padStart(6,'0') (line 22), then scales/centers onto the target (lines 28-30). The only test referencing it (renderBodyAvatarImage.test.ts) mocks the entire module (vi.mock('./drawTintedTexture')) and asserts only that it was called 3 times. The compositing, tint-hex formatting, dimension fallback, and scale/centre math are never actually executed under test, so a regression in any of them ships uncaught.",
+    "finder_severity": "medium",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.033",
+    "fingerprint": "R.run1.033",
+    "file": "src/engine/phaser/display-export/renderAttributeDisplayImage.ts",
+    "line": 36,
+    "title": "Attribute-display renderer logic never executed in tests",
+    "detail": "renderAttributeDisplayImage resolves the attribute pool key and power shape, fetches a shape texture, and sizes the output canvas from the texture (lines 36-39: canvas.width = image.width ?? 128; drawImage(image,0,0,width,height)). Its only appearance in the suite is DisplayImageExportService.test.ts, which mocks the whole module (vi.mock('./renderAttributeDisplayImage')) and checks call counts. None of the real behaviour runs in a test: the unsupported-key / missing-textureManager / missing-2d-context guards, and the dimension math. The `?? 128` fallbacks coalesce only null/undefined, so a 0-width texture would produce a 0x0 canvas and a blank data URL, with nothing pinning any of this.",
+    "finder_severity": "medium",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.034",
+    "fingerprint": "R.run1.034",
+    "file": "src/engine/phaser/display-export/buildDisplayImageRequest.ts",
+    "line": 114,
+    "title": "buildDisplayImageRequest swallows all errors from source resolution",
+    "detail": "The source loop wraps buildRequestFromModule in `try { ... } catch { continue; }` with no logging (line 114). Skipping a source that legitimately cannot resolve the key is intended, but this also swallows genuine defects \u2014 a TypeError from malformed blueprint/display data or a throw out of resolveDisplaySource/resolveDisplaySpec \u2014 and silently falls through to the next source or returns null (line 118). The caller then renders a placeholder/fallback image with no signal that a real error occurred, turning corrupt module data into a silently wrong image instead of a diagnosable failure.",
+    "finder_severity": "low",
+    "finder_class": "silent-failure"
+  },
+  {
+    "id": "R.run1.035",
+    "fingerprint": "R.run1.035",
+    "file": "src/engine/phaser/display/visual-instance/EntityVisualInstanceHelpers.ts",
+    "line": 7,
+    "title": "Per-entity pool acquire/release lifecycle (acquireAnchors/releaseAnchors) is untested",
+    "detail": "acquireAnchors (line 7) acquires 4 pooled Containers per entity (rootPool/backgroundAnchorPool/effectsAnchorPool/overlayAnchorPool) and adds each to a specific layer; releaseAnchors (line 40) is its mirror that detaches from parent and returns each to the matching pool. This acquire/release symmetry determines whether pooled Phaser GameObjects leak as entities are added/removed each tick. grep confirms no test references acquireAnchors, releaseAnchors, EntityVisualInstanceHelpers, or constructs an EntityVisualInstance. The pool tests exercise only the raw primitives, and DisplayInstanceManager.test.ts asserts only 'no throw' without inspecting pool in-use counts. A regression that released an anchor to the wrong pool, released only some anchors, or forgot to detach before release would not be caught.",
+    "finder_severity": "medium",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.036",
+    "fingerprint": "R.run1.036",
+    "file": "src/engine/phaser/display/modules/cycle-progress/cycleProgressPath.ts",
+    "line": 78,
+    "title": "Cycle-progress arc-length path resolution is untested",
+    "detail": "resolveCycleProgressPath (plus helpers findTopPathStart L45, measureClosedPathLength L36, orderedVertices L26, interpolate L11) implements the most intricate geometry in this scope: choosing the topmost start vertex of a closed polygon, walking ordered vertices by arc length, interpolating a partial segment, and special-casing fraction boundaries (clamped===0 returns [] at L85; clamped===1 drops the duplicated closing vertex at L94-97). No test imports resolveCycleProgressPath or findTopPathStart. The only coverage is cycleProgressVisual.test.ts, which asserts two things only for family:'circle' at fraction=1 plus family:'none'. Partial-fraction path length, the fraction=0 empty-path boundary, flat-top-edge start selection, and degenerate inputs are entirely unexercised.",
+    "finder_severity": "medium",
+    "finder_class": "test-adequacy"
+  },
+  {
+    "id": "R.run1.037",
+    "fingerprint": "R.run1.037",
+    "file": "src/engine/phaser/display/modules/cycle-progress/cycleProgressGeometry.ts",
+    "line": 49,
+    "title": "Cycle-progress ring geometry (polygon/spiky families) is untested",
+    "detail": "computeCycleProgressRopeGeometry and its shape math radiusFactor (L27), polygonFactor (L18), organicScale (L23) are imported only by cycleProgressVisual.ts, and no test references computeCycleProgressRopeGeometry. The single integration test uses only family:'circle', for which radiusFactor short-circuits to 1 (L33) and polygonFactor is never called. The triangle/square/hex branch (lobe selection L38-40, polygonFactor division by cos(local) L21), the spiky_circle branch (L34-37), the outerMaxRadius clamp (L74-88), and the radius<=0.5 empty-output guard (L57) all have zero coverage, so an error in the polygon radius factor or lobe count would ship undetected.",
+    "finder_severity": "low",
+    "finder_class": "test-adequacy"
+  }
+]
