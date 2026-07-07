@@ -1,0 +1,209 @@
+[
+  {
+    "id": "P.run1.004",
+    "fingerprint": "map:src/engine/compiler/abilities/cycleResourceCostRuleFactories.ts:22:15b5d9e7",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "The condition object carries both `tokens` (>= on raw value) and a `compiled` (> on value+1); JsonLogicAdapter.evaluate uses rule.compiled when present and only compiles tokens as fallback, so the tokens are dead and disagree with the runtime boundary. Genuine maintainer footgun, but cannot itself change behavior since compiled is authoritative."
+  },
+  {
+    "id": "P.run1.005",
+    "fingerprint": "map:src/engine/compiler/abilities/cycleResourceCostRuleFactories.ts:63:eebbb7cd",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "Same pattern as .004: the power-gate condition's tokens say `<` while the present `compiled` says `<=` on (value+1); compiled wins at runtime, so the visible `<` token is dead and misleading. Footgun, not a runtime defect."
+  },
+  {
+    "id": "P.run1.006",
+    "fingerprint": "map:src/engine/compiler/abilities/cycleCompiler.rules.ts:36:dbea9444",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "The is_active condition has NO compiled field, just a single ref token `self.state.cycle_active` (no `.value`); compileExpression turns it into `{var:'self.state.cycle_active'}`, which json-logic resolves to the whole state-entry object (truthy even when value is 0). The gate is effectively inert; every sibling condition uses the `.value` suffix. Live latent bug, masked only by conditional-activation zeroing throttle."
+  },
+  {
+    "id": "P.run1.007",
+    "fingerprint": "map:src/engine/compiler/conditions/compileStructuredConditions.ts:4:ba5915d8",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "The discriminated union has 9 kinds; toRefPath's switch handles only 4 and falls off the end returning undefined for the other 5, with no return-type annotation or exhaustiveness guard. Confirmed harmless today because those 5 kinds emit fixed tokens in toCompiledExpression and never call toRefPath, so the gap is latent."
+  },
+  {
+    "id": "P.run1.008",
+    "fingerprint": "map:src/engine/compiler/conditions/compileStructuredConditions.ts:41:4da4a2d3",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "The ternary `interaction === 'self_selected' ? '==' : '!='` maps any non-self_selected value to `!=`. UserInteractionStateSchema is a 2-value enum (self_selected/self_unselected), so behavior is currently correct; the footgun (future/malformed value silently taking the `!=` branch) is latent only."
+  },
+  {
+    "id": "P.run1.078",
+    "fingerprint": "map:src/engine/compiler/abilities/assignmentCompiler.ts:78:65a6a88c",
+    "verdict": "false",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "The premise 'nothing sets is_depleted to 1 (only the cycle reset rule)' is contradicted by the runtime: markAssignmentNodeDepleted (processingFinalization/absorptionBatchFinalization) sets state.is_depleted.value=1 when a body finishes processing at the station, and the one-off assignment compiler seeds is_depleted to 0 so its `if (state.is_depleted)` guard passes. The GC trigger therefore does fire for one-off-only assignments."
+  },
+  {
+    "id": "P.run1.079",
+    "fingerprint": "map:src/engine/compiler/abilities/conditionalActivationCompiler/compileConfig.ts:29:af062898",
+    "verdict": "false",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "The `if (!onGate || !offGate) return;` at line 29 is unreachable as a drop path: line 26 already returns when conditions is empty, and compileStructuredConditionAllGate/NotAllGate return null only for empty conditions. With conditions non-empty both gates are always non-null, so the described silent config drop cannot occur."
+  },
+  {
+    "id": "P.run1.080",
+    "fingerprint": "map:src/engine/compiler/conditions/appendRuleConditions.ts:16:283deb4b",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "On a failed compileConditionText the code only console.warns and skips pushing that gate while keeping sibling gates and the rule's actions, so an authored-but-unparseable gate silently downgrades the rule to fire more permissively (fail-open). Confirmed at lines 14-26."
+  },
+  {
+    "id": "P.run1.081",
+    "fingerprint": "map:src/engine/compiler/conditions/compileStructuredConditions.ts:4:29b96fab",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "Restates .007 as a latent risk: toRefPath returns undefined for 5 of 9 kinds with no compile-time exhaustiveness check, so a future ref-based kind wired into toCompiledExpression but not toRefPath would emit `{var: undefined}` with no type error. True property; inert in the current code."
+  },
+  {
+    "id": "P.run1.082",
+    "fingerprint": "map:src/engine/compiler/utils/scalableCompiler.ts:43:f839a3bd",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "setInitialValue is called only inside the `if (!hasAdd && !hasMult)` branch; when perBody/multPerBody scaling is present the static state key is not pre-seeded and the value comes from the pushed passiveEffects at runtime. Genuine asymmetry, narrow: a SET-to-base passive effect still runs, so the exposure is limited to callers that read the static field before passive-effect evaluation."
+  },
+  {
+    "id": "P.run1.163",
+    "fingerprint": "map:src/engine/compiler/conditions/appendRuleConditions.ts:25:a040761e",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "compileConditionText returns a discriminated {ok:false,error}; on failure line 25 only console.warns and does not push the gate, so the error return is effectively swallowed and a typo'd condition silently turns a gated rule into an always-firing one. Same code as .080."
+  },
+  {
+    "id": "P.run1.009",
+    "fingerprint": "map:src/engine/linker/linkerUtils.ts:32:71cdcab5",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "namespaceBlueprints namespaces only entries lacking an explicit `id`; a blueprint carrying a bare explicit id (line 28-32) is used verbatim and stays unnamespaced. The in-file duplicate guard does not span files, so two files with the same explicit id produce a global collision at registry merge."
+  },
+  {
+    "id": "P.run1.010",
+    "fingerprint": "map:src/engine/linker/Gatekeeper.ts:52:aef8bdaa",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "validatePayload guards with `typeof this.linker.linkProject === 'function'` at line 52 but never calls linkProject; validation runs entirely off the passed-in currentModules/payload. The capability check is unrelated to what the method does, so it is a misleading guard (footgun), not a behavioral defect."
+  },
+  {
+    "id": "P.run1.011",
+    "fingerprint": "map:src/engine/linker/semanticParser.ts:36:17af8172",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "The strict .cave schema accepts `swarm` and `understanding` (lines 36,39) which SysConfigSchema does not declare, and mergeSemanticFragment deep-merges the whole parsed object into runtime.config without re-validation, so those keys ride along inert. Note the finding also names `world`, but SysConfigSchema DOES declare `world` (config.ts:19), so that part is inaccurate; the footgun holds for swarm/understanding."
+  },
+  {
+    "id": "P.run1.012",
+    "fingerprint": "map:src/engine/linker/deepMerge.ts:12:a0dfbaeb",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "deepMergeObjects replaces arrays wholesale (line 15: `if (Array.isArray(override)) return clone(override)`), so an override array does not accumulate with the base. Given array-valued config sections (conditions/guidances/tutorials/knowledge) this means later values overwrite rather than merge."
+  },
+  {
+    "id": "P.run1.083",
+    "fingerprint": "map:src/engine/linker/moduleLinkerRuntime.ts:28:fb50d435",
+    "verdict": "real",
+    "judge_severity": "high",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Line 28 merges each .cave fragment via deepMergeObjects, which replaces arrays wholesale; conditions/guidances/tutorials/knowledge are all array-valued in SysConfigSchema, and there is no accumulation path anywhere in the linker. Since multi-file merge is the linker's stated purpose, entries from all but the last contributing file are silently lost."
+  },
+  {
+    "id": "P.run1.084",
+    "fingerprint": "map:src/engine/linker/registryMerge.ts:18:7870be0f",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "mergeRegistry overwrites on id collision after only invoking an optional onCollision callback (lines 17-20), and namespaceBlueprints keeps explicit bare ids un-namespaced, so two files sharing an explicit id produce a silent last-wins override wired only to logger.debug."
+  },
+  {
+    "id": "P.run1.085",
+    "fingerprint": "map:src/engine/linker/normalizeBpInput.ts:9:6c69e521",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "When a .bp input has both a top-level `id` and a `blueprints` map, lines 6-18 keep only `entries.find(key===raw.id)?.[1] ?? entries[0]?.[1]` and re-key it under raw.id; all other sibling blueprints in the wrapper are dropped with no error."
+  },
+  {
+    "id": "P.run1.086",
+    "fingerprint": "map:src/engine/linker/Gatekeeper.ts:62:81bc7645",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "existingIds (lines 62-70) is built from blueprint header ids and draftOptions ids only; draftPools ids are omitted. collectRefs flags any `::`-qualified string not in existingIds as a broken reference, so a valid FQ reference to a draftPool would fail an otherwise-valid save. The draftOptions-included / draftPools-excluded asymmetry is real."
+  },
+  {
+    "id": "P.run1.087",
+    "fingerprint": "map:src/engine/linker/moduleLinkerRuntime.ts:49:4a1e7a07",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "CompilerService.compile only early-returns when _editor is absent (CompilerService.ts:28) and otherwise returns the draft at line 102 without deleting draft._editor, so compileRuntimeBlueprints stores blueprints that retain the authoring-only _editor block. Real leakage of authoring state into the runtime cartridge; low impact."
+  },
+  {
+    "id": "P.run1.164",
+    "fingerprint": "map:src/engine/linker/registryMerge.ts:19:12794cc1",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "A blueprint id collision at line 17-20 is surfaced only through the optional onCollision callback (wired to logger.debug in mergeSemanticFragment); if omitted or a no-op the earlier blueprint is overwritten with no error and no operator-visible signal."
+  },
+  {
+    "id": "P.run1.165",
+    "fingerprint": "map:src/engine/linker/ModuleLinker.ts:72:6121529f",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "readFragment logs a logger.warn and returns null for any file whose extension is not in SEMANTIC_EXTENSIONS (lines 71-74), and linkProject skips null fragments (`if (!loaded) continue;`), so a manifest entry with a typo'd extension is silently excluded from the cartridge rather than failing the link. Benign but real."
+  },
+  {
+    "id": "P.run1.166",
+    "fingerprint": "map:src/engine/linker/semanticParser.ts:79:028655c4",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "On schema failure only `parsed.error.issues[0]?.message` is placed in the thrown LinkerValidationError (lines 77-81); all remaining zod issues for that file are discarded, so an author fixing errors one at a time never sees the rest at once. Real but low-impact reporting loss."
+  }
+]

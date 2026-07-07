@@ -1,0 +1,146 @@
+[
+  {
+    "id": "P.run1.000",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/balancing/transferLogic.ts:10:b432b7a0",
+    "file": "src/engine/balancing/transferLogic.ts",
+    "line": 10,
+    "title": "footgun: TransactionResult.clampedPayload reads as 'the payload that will be applied', implying it is meaningful only on success and empty otherwise.",
+    "detail": "On the failure paths at lines 82-87 (source has no state) and 100-105 (source entry invalid), the returned object has success:false but clampedPayload set to the capacity-clamped payload (non-empty), while the other two failures return {}. A caller that applies clampedPayload without checking success would move resources on a failed transaction; the field's population is inconsistent across failure branches.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "balancing",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.001",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/balancing/HeadlessRunner.utils.ts:74:f63a8675",
+    "file": "src/engine/balancing/HeadlessRunner.utils.ts",
+    "line": 74,
+    "title": "footgun: status is typed 'completed' | 'extinction' and readStateValue/isExtinct suggest any tick where population<=0 ends the run as extinction.",
+    "detail": "status only becomes 'extinction' (and the loop breaks) when isExtinct && i > 10 (line 93). If population reaches 0 at loop index <= 10 it is snapshotted but the run continues and, if population stays 0, still returns status:'completed'. Early extinction is silently reported as a completed run.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "balancing",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.002",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/balancing/Scanner.ts:52:b0a73d34",
+    "file": "src/engine/balancing/Scanner.ts",
+    "line": 52,
+    "title": "footgun: The variable is named blueprintSettings, implying it holds blueprint-level settings.",
+    "detail": "It is read from cartridge.config?.settings, and the if/else makes config.settings and assets.settings mutually exclusive: when config.settings is present, cartridge.assets?.settings is never walked, so any asset-defined setting levers are silently omitted whenever config settings also exist.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "balancing",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.003",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/balancing/HeadlessRunner.ts:45:1773f57d",
+    "file": "src/engine/balancing/HeadlessRunner.ts",
+    "line": 45,
+    "title": "footgun: InstantTransferHandler is registered like any typed handler via runtime.registerCommandHandler.",
+    "detail": "It is force-cast through `as unknown as CommandHandler<RuntimeCommand>` (it only implements CommandHandler<TransferAssetsCommand>), defeating the compiler check, and registerHandler stores handlers in a Map keyed by handler.type, so this registration silently overwrites any previously-registered TRANSFER_ASSETS handler rather than adding to it.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "balancing",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.074",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/balancing/InstantTransferHandler.ts:19:4c9bd081",
+    "file": "src/engine/balancing/InstantTransferHandler.ts",
+    "line": 19,
+    "title": "InstantTransferHandler reimplements creditResources instead of reusing the shared one",
+    "detail": "creditResources and ensureStateRecord here duplicate the semantics of transferResources.ts creditResources (lines 93-125), which the file already imports debitResources from. The two copies have already drifted (error strings 'Transfer failed:' vs 'Credit skipped:'), so a future fix to credit rules must be made in two places or the balancing path will diverge from the runtime path.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "balancing",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.075",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/balancing/transferLogic.ts:89:a03ec6a8",
+    "file": "src/engine/balancing/transferLogic.ts",
+    "line": 89,
+    "title": "Self-transfer bypasses the allowDeposit lock",
+    "detail": "findBlockedDeposit is only consulted when source.id !== target.id, so a transfer whose source and target are the same entity can credit a resource marked allowDeposit:false. If any code issues self-targeted transfers, deposit locks are silently ineffective for them.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "balancing",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.076",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/balancing/Scanner.ts:86:687aee19",
+    "file": "src/engine/balancing/Scanner.ts",
+    "line": 86,
+    "title": "Scanner iterates behavior-rule actions as untyped `any`",
+    "detail": "action is typed `any`, so action.type/action.value/action.target are unchecked. A schema change to actions (renamed field, non-numeric value shape) would not be caught by the compiler and would silently drop or misclassify behavior levers.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "balancing",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.077",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/balancing/HeadlessRunner.utils.ts:42:ad4ccd0d",
+    "file": "src/engine/balancing/HeadlessRunner.utils.ts",
+    "line": 42,
+    "title": "initializeWorldState silently no-ops when world blueprint/entity is absent",
+    "detail": "If the sys_world blueprint lacks components.state, or no sys_world entity exists, the function returns without initializing world state or the worldSeed, so the simulation runs against whatever default state existed with no signal that world configuration was skipped.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "balancing",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.162",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/balancing/HeadlessRunner.utils.ts:42:bf04e31b",
+    "file": "src/engine/balancing/HeadlessRunner.utils.ts",
+    "line": 42,
+    "title": "silent failure: ignored-return",
+    "detail": "initializeWorldState returns early on a missing world blueprint state or missing world entity without logging; a misconfigured cartridge produces a silently unseeded/unconfigured world rather than an error. Real gap for diagnosing bad cartridges.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "balancing",
+    "in_target_region": true
+  }
+]

@@ -1,0 +1,338 @@
+[
+  {
+    "id": "P.run1.048",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/PatchBlueprintHandler.ts:8:1ba0034b",
+    "file": "src/engine/runtime/handlers/PatchBlueprintHandler.ts",
+    "line": 8,
+    "title": "footgun: applyStatePatch on a handler whose class comment and payload name (PATCH_BLUEPRINT, 'patches live entities') imply patching updates component values on existing entities.",
+    "detail": "For the 'state' component it ADDS only keys the live entity does not already have (line 19: `if (state[key] !== undefined) continue`); a patched value for an EXISTING state key is silently dropped on live entities even though the blueprint definition itself is updated. The test asserts hp stays 10 after a patch to 1 (PatchBlueprintHandler.test.ts:127).",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.049",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/TransferHandler.ts:44:2bd6a34a",
+    "file": "src/engine/runtime/handlers/TransferHandler.ts",
+    "line": 44,
+    "title": "footgun: The `total <= 0` guard logs `Transfer failed: target '<id>' at capacity.`, presenting a zero total as a target-capacity condition.",
+    "detail": "`total` is the sum of `result.clampedPayload`, which calculateTransaction clamps to BOTH target capacity AND source availability (transferLogic.ts clampToAvailable). A total of 0 also occurs when the source has nothing to send, so the 'at capacity' message misattributes a source-empty (or all-non-positive) transfer to the target being full.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.050",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/capacityUtils.ts:46:8a8ab4df",
+    "file": "src/engine/runtime/handlers/capacityUtils.ts",
+    "line": 46,
+    "title": "footgun: clampPayloadToCapacity is named as if it constrains a transfer payload to the target's remaining capacity.",
+    "detail": "Only positive, finite amounts are clamped; a non-finite or non-positive amount is copied into the output UNCHANGED (lines 53-55), so a negative or NaN transfer amount bypasses capacity clamping entirely and flows downstream.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.051",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/mintSpawnId.ts:39:e0628935",
+    "file": "src/engine/runtime/handlers/mintSpawnId.ts",
+    "line": 39,
+    "title": "footgun: The `prefix` parameter (default \"spawn\", e.g. \"pending\") looks like it namespaces the id counter per prefix.",
+    "detail": "The serial is shared across all prefixes via the single sys_world.state.spawnSerial counter; the prefix is only a cosmetic label. Two different prefixes never produce the same numeric serial, but the counter does not restart per prefix (documented in the doc comment, contradicting the per-namespace impression the parameter gives).",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.052",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/systems/behavior/actionExecutorTraits.ts:43:722704fc",
+    "file": "src/engine/runtime/systems/behavior/actionExecutorTraits.ts",
+    "line": 43,
+    "title": "footgun: The comment 'Mutate in-place so concurrent systems in the same tick see the update' plus the enqueued UPDATE_TRAITS_BATCH command frame this as merely enqueuing a state change, and Snapshot.getEntities() is typed ReadonlyArray<Readonly<RuntimeEntity>>.",
+    "detail": "executeAddTraitAction/executeRemoveTraitAction cast the readonly snapshot entity to a mutable type and directly push/splice context.self.traits (and even assign self.traits=[] when absent), mutating the live entity object during the read-only behavior phase. The Readonly typing is compile-time only; the entity is aliased into the snapshot, so behavior emits a side effect before its command is applied, unlike every other executor which only enqueues.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.053",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/contention/ContentionResolver.ts:84:ab571b37",
+    "file": "src/engine/runtime/contention/ContentionResolver.ts",
+    "line": 84,
+    "title": "footgun: The name resolveContention and the ContentionRule framing suggest it only reorders transfer requests that compete for the same target resource.",
+    "detail": "It returns [...otherCommands, ...sortedTransfers], globally hoisting EVERY non-transfer command (KILL, SPAWN, MUTATE-derived, etc.) ahead of ALL transfer commands whenever the batch contains at least one transfer (see caller runtimeCollectCommands.ts line 20). Relative order between a non-transfer command and a transfer that preceded it in emission order is silently inverted.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.054",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/systems/AutomationSystem.ts:12:4752b972",
+    "file": "src/engine/runtime/systems/AutomationSystem.ts",
+    "line": 12,
+    "title": "footgun: getAutomationComponent's comment says 'We trust the data is valid because it was validated on Spawn/Input' and returns the raw object typed as AutomationComponent, implying schema invariants (AutomationComponentSchema enforces intervalMs>=1) hold.",
+    "detail": "It only checks typeof === 'object' and casts via `as any`; no Zod parse runs. Any code path that writes an automation component with intervalMs of 0 (or a non-integer/negative repeats) is accepted, and resolveNextTiming then computes nextRemaining % 0 = NaN before falling back to intervalMs (0).",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.055",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/systems/behavior/valueResolverEval.ts:17:d5538c9f",
+    "file": "src/engine/runtime/systems/behavior/valueResolverEval.ts",
+    "line": 17,
+    "title": "footgun: applyOperator implements '/' as a normal division operator.",
+    "detail": "Division by zero returns 0 rather than Infinity/NaN, so an expression like `x / y` silently yields 0 when y resolves to 0 instead of surfacing the degenerate case; downstream mutations treat that 0 as a real computed value.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.056",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/Ticker.ts:27:72e2822d",
+    "file": "src/engine/runtime/Ticker.ts",
+    "line": 27,
+    "title": "footgun: step() reads as a manual single-frame advance (a public sibling of start/stop that pushes the sim forward one step).",
+    "detail": "It invokes the callback with dt=0. The wired runtime callback (ui/runtime/state/runtimeFactory) forwards that to runtime.tick(0), and advanceRuntimeCoreTick treats dt<=0 as a no-op (normalizeDt(0)=0 -> returns null), so Ticker.step() advances nothing. The real single-step is RuntimeCore.stepOncePreservingPause(), which passes LOGIC_STEP_MS.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.057",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/runtimeReset.ts:15:c963e09a",
+    "file": "src/engine/runtime/runtimeReset.ts",
+    "line": 15,
+    "title": "footgun: The docstring says \"Resets ECS + physics state so game.init can re-spawn a fresh world\", implying a full clean-slate reset.",
+    "detail": "It resets tick to 0 but never touches state.status. A runtime that went \"fatal\" stays fatal across reset(): RuntimeCore.reset() then calls pause(), which is guarded by status !== \"fatal\" and so no-ops. Only destroy() clears fatal (to \"idle\"). Reset does not recover a wedged runtime.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.058",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/runtimeCoreAdvance.ts:30:1711404b",
+    "file": "src/engine/runtime/runtimeCoreAdvance.ts",
+    "line": 30,
+    "title": "footgun: advanceRuntimeCoreTick's parameter type RuntimeCoreTickState declares entityStore/systemPhaseBuffers/systemsRegistry as plain `object`, suggesting the type constrains what is passed.",
+    "detail": "Those fields are immediately cast to `never` before use (core.entityStore as never, etc.), so the declared `object` type provides no checking; the real contract is whatever tickRuntimeCore requires, enforced nowhere at this boundary.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.059",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/persistence/types.ts:29:47355ecf",
+    "file": "src/engine/runtime/persistence/types.ts",
+    "line": 29,
+    "title": "footgun: SaveGameState.timeScale:number is a required field, implying the runtime's time scale is captured and restored across a save/load cycle.",
+    "detail": "The value is never derived from the live runtime and never read on load. serialize() writes a hardcoded 1 (RuntimeSerializer.ts:40) regardless of the actual RuntimeAccessors timeScale, and hydrateRuntime() never restores it. The field is inert on both ends.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.060",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/persistence/types.ts:32:03446fbe",
+    "file": "src/engine/runtime/persistence/types.ts",
+    "line": 32,
+    "title": "footgun: SaveGameState.systems.automation:AutomationSnapshot advertises that automation-system state is part of the persisted save and round-trips.",
+    "detail": "serialize() writes runtime.getAutomationSnapshot() (RuntimeSerializer.ts:44) but the sole load path hydrateRuntime() never calls setAutomationSnapshot, so the snapshot is silently discarded on every load and automation state does not round-trip.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.061",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/persistence/physicsBodyPersistence.ts:16:e2c63b2c",
+    "file": "src/engine/runtime/persistence/physicsBodyPersistence.ts",
+    "line": 16,
+    "title": "footgun: SerializedPhysicsBody.velocity and the code path body.position.x - body.prevPosition.x read as a physical velocity in units per second.",
+    "detail": "It is a per-tick position delta (Verlet integration), not a units/second velocity; syncPhysicsBody consumes it by reconstructing prevPosition = position - velocity, and it is intentionally never assigned to the body's separate optional velocity field (which the integrator treats as a one-shot units/second seed). Treating this delta as a real velocity elsewhere would be scaled by the tick rate.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.130",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/ResolveTransferHandler.ts:127:ea7bc9ac",
+    "file": "src/engine/runtime/handlers/ResolveTransferHandler.ts",
+    "line": 127,
+    "title": "RESOLVE_TRANSFER credits receiver with no capacity (max) clamp",
+    "detail": "An existing state entry is incremented by `entry.value += amount` with no reference to `entry.max`. Capacity is only enforced at TRANSFER time (calculateTransaction); if the receiver's max shrinks between initiation and resolution, or for a 'returning' transfer whose source capacity was never checked, resolve overflows the entry above its max. Every other write path (UpdateStateHandler/clampNumeric) clamps to max.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.131",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/TransferHandler.ts:51:86628d9f",
+    "file": "src/engine/runtime/handlers/TransferHandler.ts",
+    "line": 51,
+    "title": "Dead unreachable MIN_TRANSFER_THRESHOLD guard",
+    "detail": "`MIN_TRANSFER_THRESHOLD` is 0 and the preceding guard already returns when `total <= 0`, so `total < MIN_TRANSFER_THRESHOLD` (total < 0) can never be true. The guard is dead code that reads as a configurable minimum-transfer floor but enforces nothing; a future edit to the constant would still be defeated by the `<` (should be `<=`) and the earlier guard.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.132",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/SpawnHandler.ts:86:bdce079f",
+    "file": "src/engine/runtime/handlers/SpawnHandler.ts",
+    "line": 86,
+    "title": "deepMerge of sys_world respawn can accumulate stale array/object state",
+    "detail": "Re-spawning `sys_world` deep-merges the freshly-built entity into the existing one rather than replacing it. Depending on deepMerge's array/object semantics, previously-accumulated sys_world state (e.g. assignment.assignedIds, serial counters) can persist or blend with blueprint defaults, so a 'respawn to reset' of the world entity does not fully reset it.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.133",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/spawnCollisionPlacement.ts:33:f996c4ee",
+    "file": "src/engine/runtime/handlers/spawnCollisionPlacement.ts",
+    "line": 33,
+    "title": "resolveSpawnOverlap only de-overlaps against the first colliding body",
+    "detail": "The function returns after resolving the first overlap found in world-iteration order; the pushed-out position is not re-checked against other bodies, so a body spawned into a dense cluster can be relocated onto (still overlapping) a different existing body. Placement quality depends on entity iteration order.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.134",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/systems/AutomationSystem.ts:74:9a74dac2",
+    "file": "src/engine/runtime/systems/AutomationSystem.ts",
+    "line": 74,
+    "title": "AutomationSystem has zero test coverage despite emitting KILL/EXECUTE/UPDATE commands with non-trivial timing math",
+    "detail": "The repeats-decrement, rollover (nextRemaining % intervalMs), negative-remaining, and repeats===0 kill paths are wired into the runtime tick (RuntimeSystemsRegistry/runtimeSystemPhase) but pinned by no test anywhere in the repo, so a regression in interval/repeat/kill behavior ships undetected.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.135",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/systems/AutomationSystem.ts:136:a6dc5398",
+    "file": "src/engine/runtime/systems/AutomationSystem.ts",
+    "line": 136,
+    "title": "resolveNextTiming decrements repeats by exactly one and enqueues a single EXECUTE regardless of how many intervals a large dt spans",
+    "detail": "When dt exceeds intervalMs (lag spike, large fixed step, or small interval), the automation fires only once and only loses one repeat that tick; scheduled executions are dropped and the repeat countdown runs slower than wall-clock, diverging from the intended cadence.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.136",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/systems/AutomationSystem.ts:115:e8571586",
+    "file": "src/engine/runtime/systems/AutomationSystem.ts",
+    "line": 115,
+    "title": "AutomationSystem contributes soon-to-be-killed automations to the snapshot's nextEventMs/nextCommand",
+    "detail": "updateSnapshot runs before the repeats===0 kill check, so an automation being killed this tick can still set the reported nextCommand/nextEventMs, making the AutomationSnapshot advertise an event that will never execute.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  }
+]

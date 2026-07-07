@@ -1,0 +1,308 @@
+[
+  {
+    "id": "P.run1.016",
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsPulseLifecycle.ts:37:611b7f6c",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "resolvePulseScale computes (widthPx - PULSE_DIAMETER_MARGIN_PX)/imageWidth (fit-to-width), but line 37 then multiplies by variance.sizeMultiplier * 3, so blobs render ~3x vein width and the margin subtraction is cosmetic. Name/margin genuinely misrepresent runtime; behavior itself is not buggy."
+  },
+  {
+    "id": "P.run1.017",
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsModuleTypes.ts:41:e3807f71",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "lastIntensity01 is seeded (veinsEdgeState.ts:37) and reassigned (veinsEdgeTick.ts:117) but grep finds no reader in non-test code; it is write-only dead state that influences no rendering."
+  },
+  {
+    "id": "P.run1.018",
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/VeinsModule.ts:45:ce8a3cde",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "Observation is technically true (color:'#ffffff' is a tintable placeholder; real color comes from setTint(variance.tint) in spawnPulse), but a white base for a tinted texture is a standard idiom with no behavioral or realistic misread risk."
+  },
+  {
+    "id": "P.run1.019",
+    "fingerprint": "map:src/engine/phaser/display/modules/cycle-progress/CycleProgressModule.ts:50:06e20688",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "performance",
+    "oracle_match": null,
+    "notes": "ropeSignature payload includes timeMs and pulseValue (cycleProgressVisual.ts:44-45), which change every animated frame, so the lastSignature guard almost never matches during play; the cache appears to skip re-sync but buys nothing except when the node is paused/static."
+  },
+  {
+    "id": "P.run1.020",
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsVisualMath.ts:93:6a3ee6af",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "grep confirms countBlobsThatFitSourceGap and resolveBlobSpacing have no non-test caller; live spawn logic in veinsPulseTick.ts computes spacing/gap inline, so these tested exports are a parallel/abandoned implementation that green tests make look load-bearing."
+  },
+  {
+    "id": "P.run1.021",
+    "fingerprint": "map:src/engine/phaser/display/modules/avatar/avatarStackRender.ts:37:3e04d344",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "blend:1 (glow/eyes) and blend:0 (silhouette) are passed as bare numbers via setBlendMode(style.blend as Phaser.BlendModes); per blendModes.ts these are ADD=1/NORMAL=0. Behavior is correct but the named constants are bypassed with magic numbers that read as arbitrary flags."
+  },
+  {
+    "id": "P.run1.022",
+    "fingerprint": "map:src/engine/phaser/display/modules/cave/CaveEyesModule.ts:20:25b40d8c",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "resolveBlink returns eye OPENNESS: 1 when window>durationMs (not blinking), dipping toward 0 at the blink midpoint, and is consumed as openness=Math.max(0.04, blink). The name is inverted relative to the value it returns."
+  },
+  {
+    "id": "P.run1.023",
+    "fingerprint": "map:src/engine/phaser/display/glyph/GlyphTextureGen.ts:29:06f1cf17",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "normalizeThickness returns 0 for the ignore-set shapes, that 0 is baked into the cache key (lines 49-55) so different requested thicknesses share one texture, and the draw call falls back to thickness||10. Correct for shapes that ignore stroke width, but the name hides that thickness is discarded."
+  },
+  {
+    "id": "P.run1.024",
+    "fingerprint": "map:src/engine/phaser/display/glyph/glyphPlacementColor.ts:12:e0d88f39",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "resolveGlyphPlacementColor returns paletteColor || placement.colorHex, so a palette key that resolves to an empty string (or any falsy value) is silently treated as absent and falls through to colorHex even though the palette key is present."
+  },
+  {
+    "id": "P.run1.025",
+    "fingerprint": "map:src/engine/phaser/display/glyph/glyphShapeDrawFnsRings.ts:49:5f54f32a",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "Only GLYPH_TEXTURE_SIZE is imported (by GlyphTextureGen.ts:5); grep finds no consumer of drawCircle/drawRing/drawHexRing/drawOctRing/drawSquareRing/drawPixel. Live ring rendering is elsewhere, so the module name and exported draw fns misrepresent what is used."
+  },
+  {
+    "id": "P.run1.026",
+    "fingerprint": "map:src/engine/phaser/display/avatar/AvatarTextureSupport.ts:60:cf68cdf9",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "assertAvatarAppearance only checks appearance.appearanceKey is truthy and throws otherwise; every other field (indices, scales, blink timing) is unvalidated, so a malformed appearance with a set key passes the 'assert'."
+  },
+  {
+    "id": "P.run1.027",
+    "fingerprint": "map:src/engine/phaser/display/visual-instance/EntityVisualInstanceHelpers.ts:59:2949fec6",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "validateScratchSlots collects leaked slot names and only console.errors; it does not clear or destroy the leaked objects, so the leak proceeds and anchors are released regardless. The 'validate' name implies blocking it does not do."
+  },
+  {
+    "id": "P.run1.028",
+    "fingerprint": "map:src/engine/phaser/display/visual-instance/EntityVisualInstanceRuntime.ts:32:d1fefbc6",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "setScratchAlpha sets alpha on exactly one object ((backgroundImage ?? root)), leaving the other anchors untouched; the name reads as if it dims the whole instance."
+  },
+  {
+    "id": "P.run1.029",
+    "fingerprint": "map:src/engine/phaser/display/avatar/AvatarSeedResolver.ts:11:9cff9056",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "readNonEmptyString tests value.trim() for emptiness but returns the ORIGINAL untrimmed value, so ' abc ' is returned with its whitespace; trimming only happens later in AvatarAppearanceRegistry.resolve."
+  },
+  {
+    "id": "P.run1.030",
+    "fingerprint": "map:src/engine/phaser/display/pooling/DisplayObjectPool.ts:53:d1b67565",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "acquire runs (acquireFn ?? resetFn); DisplayTypePool always supplies acquire=activatePooledObject, which only re-adds to the scene and does NOT call resetFn, so reused objects are reset only on release. The resetFn-in-acquire fallback never fires for the real pools."
+  },
+  {
+    "id": "P.run1.031",
+    "fingerprint": "map:src/engine/phaser/veins/nervousVeinFlow.ts:13:ed059cfc",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "resolveNervousDeliveredRate ignores all three underscore-prefixed params and returns 0; it is called at veinFlowProjection.ts:41 to set edge.deliveredRate for every nervous edge, so nervous edges get deliveredRate=0. It is a permanent stub typed as a computation."
+  },
+  {
+    "id": "P.run1.032",
+    "fingerprint": "map:src/engine/phaser/veins/veinGeometry.ts:49:0533895e",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "resolveDemandWidth (and the resolvePulsedWidth it wraps) have no caller anywhere; demand edges get width from resolveThrottleWidth in veinsDisplayBuilder.ts:38, which ignores sourceRadius/drawFraction. The doc comment's 'consistent structural logic as supply edges' describes dead code."
+  },
+  {
+    "id": "P.run1.033",
+    "fingerprint": "map:src/engine/phaser/display-export/DisplayImageExportService.ts:20:5b2a6e43",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "The try/catch at getImageUrl guards only the synchronous resolveDisplayImageSpec + buildDisplayCacheKey; the render runs later inside resolveCached's Promise.resolve().then(...), whose own error handler (line 86) rejects render failures. The outer catch is dead for render-time throws."
+  },
+  {
+    "id": "P.run1.034",
+    "fingerprint": "map:src/engine/phaser/display-export/buildBodyAvatarImageRequest.ts:9:2b76e0ca",
+    "verdict": "false",
+    "judge_severity": "low",
+    "judge_class": "resource",
+    "oracle_match": null,
+    "notes": "The module-level registry IS distinct from the scene registry, but the load-bearing claim (cache never cleared, unbounded across the tab) is contradicted: AvatarAppearanceRegistry.resolve caches by seed and syncEpoch clears the whole cache on epoch change, and buildBodyAvatarImageRequest calls syncEpoch(seed) before resolve. Within an epoch it is bounded by distinct subjects."
+  },
+  {
+    "id": "P.run1.035",
+    "fingerprint": "map:src/engine/phaser/display-export/renderResolvedDisplayImage.ts:37:1facb74a",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "When scene.textureManager is undefined, getGlyphTexture is undefined and textureKey ?? '' yields ''; Phaser TextureManager.get('') returns the __MISSING placeholder (verified in phaser source), which has a source image, so readPhaserTextureSource does not throw and the checkerboard is painted. Contingent on an undefined textureManager."
+  },
+  {
+    "id": "P.run1.036",
+    "fingerprint": "map:src/engine/phaser/utils/SolidStripTextureGen.ts:4:6bbbf290",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "LINEAR_FILTER is the string 'LINEAR' cast to FilterMode, but the enum LINEAR is 0; Phaser WebGLRenderer.setTextureFilter uses (filter === 0) ? LINEAR : NEAREST (verified in source), so the string fails strict-equals and the strip is filtered NEAREST. Sibling files use the real enum. Visual impact on a solid strip is negligible but the name asserts the opposite of runtime."
+  },
+  {
+    "id": "P.run1.037",
+    "fingerprint": "map:src/engine/phaser/background/biologicalFogShaderSource.ts:4:d0248f0f",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "main() never references uResolution or uCameraZoom (confirmed in the GLSL), yet applyBiologicalFogUniforms sets both (lines 27,33) and the resize handler re-pushes uResolution (BiologicalFogBackground.ts:92-93). The GLSL compiler strips unused uniforms, so those setUniform calls are no-ops against nonexistent locations."
+  },
+  {
+    "id": "P.run1.038",
+    "fingerprint": "map:src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts:13:f5c8ec8b",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "_textureManager and _scene are accepted but never referenced in the body; presentation is built purely from the registry appearance and canvas. The signature advertises a scene/texture dependency the code does not have."
+  },
+  {
+    "id": "P.run1.092",
+    "fingerprint": "map:src/engine/phaser/display/modules/transfer/TransferGlyphModule.ts:55:80692fd7",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "createNodeOverlayDisplayBoundsFromRadius returns null when radius <= 0 (nodeOverlayDisplayBounds.ts:47), and the `if (bounds)` guard at line 55 leaves scratch.nodeOverlayDisplayBounds pointing at the previous frame's bounds. TransferModule.ts:65 assigns unconditionally (radius clamped to MIN), so this module is the inconsistent one and can retain stale bounds when the glyph shrinks out of view."
+  },
+  {
+    "id": "P.run1.093",
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsSimplexNoise.ts:12:7873c231",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "resource",
+    "oracle_match": null,
+    "notes": "getPerm memoizes a 512-byte Uint8Array per distinct seed in a module-level Map that is never cleared or capped (line 36). Over a long session with many distinct vein seeds this accumulates for the life of the module; a slow, bounded-by-seed-count leak."
+  },
+  {
+    "id": "P.run1.094",
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsEdgePhase.ts:13:501e92ce",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "advanceWavePhase decrements state.wavePhaseRad every frame with no modulo/wrap (lines 13-20), so magnitude grows unbounded for long-lived nervous veins and eventually loses float precision when fed to Math.sin. The forced per-frame recompute is largely inherent to animation; the precision degradation is real but only at extreme runtimes."
+  },
+  {
+    "id": "P.run1.095",
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsPulseTick.ts:73:4e9338f9",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Inside while(spawnCarry >= 1), the `const pulse = state.pulses.at(-1); if (!pulse) continue;` path loops back without decrementing spawnCarry or advancing the ordinal. It is safe only because spawnPulse unconditionally pushes (veinsPulseLifecycle.ts:42); if spawnPulse ever early-returns this becomes an infinite loop. Latent, does not manifest today."
+  },
+  {
+    "id": "P.run1.096",
+    "fingerprint": "map:src/engine/phaser/display/modules/light/lightModuleBaseState.ts:16:88407e5c",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "readProducerResource scores state entries (restricted to keys in PRODUCER_LIGHTS) by ad-hoc shape heuristics (allowWithdraw/allowDeposit/visible/max), and ties resolve to the first-seen key via strict > and Object.entries order. Any change to state-entry shape could silently reassign the resource color; latent coupling risk, only bites when multiple producer keys coexist."
+  },
+  {
+    "id": "P.run1.097",
+    "fingerprint": "map:src/engine/phaser/display/modules/distress/DistressModule.ts:89:3f7bdac3",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "On active distress the tick force-shows scratch.root and repositions/shows overlayAnchor (lines 89-91), but hideHalos() only kills tweens and hides the three halo images; it never restores overlayAnchor visibility/position or root visibility, so distress state can leak into later frames after recovery or loss of target."
+  },
+  {
+    "id": "P.run1.098",
+    "fingerprint": "map:src/engine/phaser/display/modules/progress-bar/progressBarSlots.ts:36:ef356182",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "createProgressBarSlots hardcodes Array.from({length:4}) while progressBarTick.ts:34-35 iterates RESOURCE_PROGRESS_BAR_POSITIONS (currently 4) and indexes slots[index] with no undefined guard. The count invariant is unenforced: a 5th position makes slots[4] undefined and hideProgressBarSlot(undefined) throws. Latent, requires editing the constant."
+  },
+  {
+    "id": "P.run1.099",
+    "fingerprint": "map:src/engine/phaser/display/modules/glyph/glyphModuleRuntime.ts:68:7fad83c6",
+    "verdict": "false",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "The NaN premise is contradicted by the Zod schema: glyphs.ts validates position with z.number().int().min(0).max(8) and delayMsByPosition with z.array(...).length(9), so position 0..8 always indexes into a length-9 array for schema-valid cartridges. The TS type number[] looks loose but the runtime schema guarantees the length, so the out-of-bounds/NaN path cannot occur."
+  },
+  {
+    "id": "P.run1.100",
+    "fingerprint": "map:src/engine/phaser/display/modules/avatar/AvatarGlyphModule.ts:44:9d0c2d84",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "resource",
+    "oracle_match": null,
+    "notes": "destroy() calls runtime.destroy (glyphModuleRuntime.destroyGlyphImages sets scratch.mainImage=null) then unconditionally reassigns dCtx.scratch.mainImage = preservedMain (line 44). If the AvatarModule that owned that silhouette was already destroyed and released it to the pool, this writes a stale/released reference back, defeating the null-out; order-dependent dangling reference."
+  },
+  {
+    "id": "P.run1.101",
+    "fingerprint": "map:src/engine/phaser/display/glyph/glyphTextureDrawCore.ts:54:29d719af",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "The star6 core case calls starPoints(3, outer) with inner radius equal to outer (so points are not a true star) and mirrors the second triangle with `128 - point.y + 10`, an asymmetric +10px offset. Since star6 is in normalizeThickness's ignore-set and the core path is tried first (returns true), this asymmetric texture is what actually renders."
+  },
+  {
+    "id": "P.run1.102",
+    "fingerprint": "map:src/engine/phaser/display/glyph/glyphShapeDrawFns.ts:10:a00901a1",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "grep finds no importer of glyphShapeDrawFns.ts and only GLYPH_TEXTURE_SIZE imported from glyphShapeDrawFnsRings.ts. These define an alternate shape set (e.g. drawStar6 as a symmetric Star of David, T=10) that renders nothing; they present as the shape source of truth but are dead and diverge from the live core/stroke paths."
+  }
+]

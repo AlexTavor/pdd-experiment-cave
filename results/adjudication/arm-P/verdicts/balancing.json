@@ -1,0 +1,83 @@
+[
+  {
+    "id": "P.run1.000",
+    "fingerprint": "map:src/engine/balancing/transferLogic.ts:10:b432b7a0",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Confirmed: at lines 82-87 and 100-105 clampedPayload is set to the non-empty clampPayloadToCapacity result on success:false, while lines 69-76 and 89-98 return {}; population is genuinely inconsistent. The only caller (InstantTransferHandler line 69) checks !success first, so no current caller misapplies it, hence low severity."
+  },
+  {
+    "id": "P.run1.001",
+    "fingerprint": "map:src/engine/balancing/HeadlessRunner.utils.ts:74:f63a8675",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Line 93 gates the break/status on isExtinct && i > 10 while status defaults to 'completed' (line 74); a population<=0 at i<=10 is snapshotted (line 83) but the run continues and can still return status:'completed', so early extinction is silently mislabeled."
+  },
+  {
+    "id": "P.run1.002",
+    "fingerprint": "map:src/engine/balancing/Scanner.ts:52:b0a73d34",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Lines 52-57: the if/else makes config.settings and assets.settings mutually exclusive; when cartridge.config.settings exists, cartridge.assets.settings is never walked, so asset-defined setting levers are silently dropped."
+  },
+  {
+    "id": "P.run1.003",
+    "fingerprint": "map:src/engine/balancing/HeadlessRunner.ts:45:1773f57d",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "HeadlessRunner line 45 force-casts via 'as unknown as CommandHandler<RuntimeCommand>' defeating the type check, and CommandsManager.registerHandler (lines 17-20) sets into a Map keyed by handler.type, so it overwrites any prior TRANSFER_ASSETS handler. Both claims are accurate; severity low because the overwrite is the intended headless substitution."
+  },
+  {
+    "id": "P.run1.074",
+    "fingerprint": "map:src/engine/balancing/InstantTransferHandler.ts:19:4c9bd081",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "InstantTransferHandler lines 10-51 duplicate ensureStateRecord/creditResources from transferResources.ts lines 93-125 (the file imports debitResources from transferUtils but not creditResources), and they have already drifted in log strings ('Transfer failed:' vs 'Credit skipped:'). Real duplication/divergence; low severity as only log text differs today."
+  },
+  {
+    "id": "P.run1.075",
+    "fingerprint": "map:src/engine/balancing/transferLogic.ts:89:a03ec6a8",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Line 89 guards findBlockedDeposit with source.id !== target.id, so a self-targeted transfer skips the allowDeposit lock. The bypass genuinely exists; contingent on self-targeted transfers being issued, hence low."
+  },
+  {
+    "id": "P.run1.076",
+    "fingerprint": "map:src/engine/balancing/Scanner.ts:86:687aee19",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "action is typed 'any' at line 86, but runtime is guarded (action?.type !== 'MUTATE' return; isNumber(action.value) return), so behavior is safe today. The concern is compile-time type hygiene only and cannot affect current behavior."
+  },
+  {
+    "id": "P.run1.077",
+    "fingerprint": "map:src/engine/balancing/HeadlessRunner.utils.ts:42:ad4ccd0d",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Lines 42-44 return early with no log when worldBlueprint.components.state is absent or no sys_world entity exists, so world state and worldSeed are left uninitialized with no signal. Real diagnostics gap; low severity."
+  },
+  {
+    "id": "P.run1.162",
+    "fingerprint": "map:src/engine/balancing/HeadlessRunner.utils.ts:42:bf04e31b",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Same early returns at lines 42-44 with no logging on missing world blueprint state or missing world entity; a misconfigured cartridge yields a silently unseeded/unconfigured world. Real but a diagnostics gap rather than wrong results, so low."
+  }
+]

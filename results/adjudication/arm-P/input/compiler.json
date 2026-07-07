@@ -1,0 +1,178 @@
+[
+  {
+    "id": "P.run1.004",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/abilities/cycleResourceCostRuleFactories.ts:22:15b5d9e7",
+    "file": "src/engine/compiler/abilities/cycleResourceCostRuleFactories.ts",
+    "line": 22,
+    "title": "footgun: createCycleCostCondition carries a token form `self.state.<resource>.value >= amountRef`, i.e. the has-enough-resource check reads as a plain >= on the raw resource value.",
+    "detail": "The runtime evaluator (JsonLogicAdapter.evaluate) uses rule.compiled when present and only compiles from tokens as a fallback, so the authoritative predicate is the compiled `>` on `(resource.value + 1)` vs amountRef (a +1 grace unit), not the token's `>=`. The tokens are dead for evaluation and encode a different boundary; editing the visible token `>=` has zero runtime effect.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.005",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/abilities/cycleResourceCostRuleFactories.ts:63:eebbb7cd",
+    "file": "src/engine/compiler/abilities/cycleResourceCostRuleFactories.ts",
+    "line": 63,
+    "title": "footgun: createCycleCostPowerGateRule's condition token form is `self.state.<resource>.value < amountRef` (gate power when resource is below the cost).",
+    "detail": "The compiled form actually evaluated is `(resource.value + 1) <= amountRef` (a +1 grace unit and a <= boundary), so the token `<` is dead and disagrees with the runtime boundary; a maintainer reading or editing the tokens sees the wrong predicate.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.006",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/abilities/cycleCompiler.rules.ts:36:dbea9444",
+    "file": "src/engine/compiler/abilities/cycleCompiler.rules.ts",
+    "line": 36,
+    "title": "footgun: createCycleRule's is_active gate condition is `{ t: 'ref', v: 'self.state.cycle_active' }`, reading like a boolean check that the cycle is active (cycle_active is a state entry `{value:1|0}`).",
+    "detail": "The ref omits `.value`, so it compiles to `{var:'self.state.cycle_active'}` which json-logic-js resolves to the whole state-entry OBJECT (not its numeric value). A non-null object is always truthy, so this gate is truthy even when cycle_active.value is 0; every other compiled condition in the subsystem uses the `.value` suffix. The intended gating is effectively inert here (masked only because conditional-activation also zeroes powerSink.throttle, which zeroes the accumulated allocatedDraw*dt_s).",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.007",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/conditions/compileStructuredConditions.ts:4:ba5915d8",
+    "file": "src/engine/compiler/conditions/compileStructuredConditions.ts",
+    "line": 4,
+    "title": "footgun: `toRefPath` is a `switch (condition.kind)` that reads as a total mapping from any structured condition to its state var path.",
+    "detail": "The union has 9 kinds but the switch only handles 4 (`fact_threshold`, `world_state_threshold`, `world_state_boolean`, `user_interaction`); for the other 5 (`entity_tag_present`, `bodies_assigned`, `body_in_pointer`, `carriers_orbiting`, `destructive_assignment_has_all_bodies`) it falls off the end and returns `undefined`. There is no return-type annotation and no exhaustiveness guard, so this is silent. It is currently harmless only because those 5 kinds return fixed tokens in `toCompiledExpression` and never call `toRefPath`.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.008",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/conditions/compileStructuredConditions.ts:41:4da4a2d3",
+    "file": "src/engine/compiler/conditions/compileStructuredConditions.ts",
+    "line": 41,
+    "title": "footgun: The `user_interaction` compiled expression selects `==` vs `!=` via `interaction === \"self_selected\" ? \"==\" : \"!=\"`, reading as a two-value toggle between the two documented interaction states.",
+    "detail": "The ternary is not a match on `\"self_unselected\"` \u2014 any interaction value other than the exact string `\"self_selected\"` yields `!=`. The schema currently constrains it to those two enums, but the lowering silently treats every non-`self_selected` value (including any future or malformed interaction state) as the unselected/`!=` branch rather than erroring.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.078",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/abilities/assignmentCompiler.ts:78:65a6a88c",
+    "file": "src/engine/compiler/abilities/assignmentCompiler.ts",
+    "line": 78,
+    "title": "Assignment one-off installs a GC rule whose trigger it never fires",
+    "detail": "For a one-off assignment without a cycle ability, the pushed sys_cycle_gc rule is gated on is_depleted==1, but the assignment path only seeds is_depleted to 0 and nothing sets it to 1 (only the cycle reset rule in cycleCompiler.rules.ts flips it). The entity is therefore never garbage-collected on depletion unless a cycle ability is also present, so a one-off-only assignment silently leaks.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.079",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/abilities/conditionalActivationCompiler/compileConfig.ts:29:af062898",
+    "file": "src/engine/compiler/abilities/conditionalActivationCompiler/compileConfig.ts",
+    "line": 29,
+    "title": "Conditional-activation config silently dropped when a gate fails to compile",
+    "detail": "compileConditionalActivationConfig does `if (!onGate || !offGate) return;` with no warning, so if the structured conditions fail to produce both gates the entire config (its active-state key and both on/off rules) is emitted as nothing. Any ability targeting that conditional-activation slot then references an active-state flag that is never toggled, and the misconfiguration produces no diagnostic.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.080",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/conditions/appendRuleConditions.ts:16:283deb4b",
+    "file": "src/engine/compiler/conditions/appendRuleConditions.ts",
+    "line": 16,
+    "title": "appendRuleConditions drops a malformed gate, leaving the rule ungated",
+    "detail": "A single unparseable condition string is skipped while its sibling gates and the rule's actions are kept, so a rule that was meant to be gated compiles to one that fires unconditionally (fail-open). The only signal is a console.warn; the compiled blueprint is silently more permissive than authored.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.081",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/conditions/compileStructuredConditions.ts:4:29b96fab",
+    "file": "src/engine/compiler/conditions/compileStructuredConditions.ts",
+    "line": 4,
+    "title": "toRefPath returns undefined for 5 of 9 condition kinds with no compile-time guard",
+    "detail": "Latent defect: if a future ref-based condition kind is added to the union and to `toCompiledExpression` (calling `toRefPath`) but the `toRefPath` switch is not extended, it emits `{ var: undefined }` with no type error and no runtime throw, producing a compiled rule that references an undefined var. The missing exhaustiveness check makes this failure invisible at build time.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.082",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/utils/scalableCompiler.ts:43:f839a3bd",
+    "file": "src/engine/compiler/utils/scalableCompiler.ts",
+    "line": 43,
+    "title": "scalableCompiler seeds initial state value only when no per-body scaling is configured",
+    "detail": "`setInitialValue` (which writes `components.state[key].value|max`) runs only in the no-scaling branch; when perBody/multPerBody scaling is present the initial static field is left untouched and the value is expected to be produced by passiveEffects at runtime. Callers that do not independently declare the target state key (unlike storageCompiler, which pre-creates it) would get a target whose static initial value/max is never seeded, relying entirely on passive-effect evaluation order.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.163",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/conditions/appendRuleConditions.ts:25:a040761e",
+    "file": "src/engine/compiler/conditions/appendRuleConditions.ts",
+    "line": 25,
+    "title": "silent failure: ignored-return",
+    "detail": "Real. `compileConditionText` returns a discriminated `{ok:false,error}` result; on failure the code logs `console.warn` and does not push the gate, so the error return is effectively swallowed. The rule is still emitted without the intended gate, so a typo in an author's condition text silently downgrades a gated rule to an always-firing one rather than failing the compile.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "compiler",
+    "in_target_region": false
+  }
+]

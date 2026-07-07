@@ -1,0 +1,546 @@
+[
+  {
+    "id": "P.run1.016",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsPulseLifecycle.ts:37:611b7f6c",
+    "file": "src/engine/phaser/display/modules/veins/veinsPulseLifecycle.ts",
+    "line": 37,
+    "title": "footgun: resolvePulseScale is documented by its name and by PULSE_DIAMETER_MARGIN_PX to size a pulse blob to fit inside the vein width (widthPx - margin), implying the blob renders at roughly the vein's thickness.",
+    "detail": "The fit-to-width scale is immediately multiplied by an unexplained `* 3` (plus the variance multiplier), so blobs render about 3x the vein width. The margin subtraction is effectively cosmetic; the 'fit the stroke' intent the helper name and margin constant imply does not hold at runtime.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.017",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsModuleTypes.ts:41:e3807f71",
+    "file": "src/engine/phaser/display/modules/veins/veinsModuleTypes.ts",
+    "line": 41,
+    "title": "footgun: VeinEdgeVisualState.lastIntensity01 (seeded from edge.intensity01 in createEdgeState and reassigned every tick) reads as edge animation state that drives rendering, e.g. a rising/falling-intensity effect.",
+    "detail": "lastIntensity01 is write-only: it is assigned in veinsEdgeTick.ts:117 and seeded in veinsEdgeState.ts:37 but never read by any non-test code. It influences nothing on screen; intensity01 is dead as far as this render path is concerned.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.018",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/VeinsModule.ts:45:ce8a3cde",
+    "file": "src/engine/phaser/display/modules/veins/VeinsModule.ts",
+    "line": 45,
+    "title": "footgun: getShapeTexture is called with color:\"#ffffff\", suggesting the pulse shape texture is generated white and the vein's actual color is baked into the texture here.",
+    "detail": "The color argument is a placeholder only; the real pulse color comes later from setTint(variance.tint) in spawnPulse (veinsPulseLifecycle.ts:38). The white here exists solely so the texture is tintable; reading this line as 'pulses are white' is wrong.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.019",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/cycle-progress/CycleProgressModule.ts:50:06e20688",
+    "file": "src/engine/phaser/display/modules/cycle-progress/CycleProgressModule.ts",
+    "line": 50,
+    "title": "footgun: The `if (visual.ropeSignature !== lastSignature)` guard presents as a cache that skips the expensive rope re-sync on frames where nothing changed.",
+    "detail": "resolveCycleProgressVisual builds the signature from a payload that includes timeMs and pulseValue (cycleProgressVisual.ts:42-47), both of which change every animated frame, so the signature almost never matches lastSignature. The guard skips work only when the node is paused/static; in normal play syncCycleProgressRope runs every frame and the cache buys nothing.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.020",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsVisualMath.ts:93:6a3ee6af",
+    "file": "src/engine/phaser/display/modules/veins/veinsVisualMath.ts",
+    "line": 93,
+    "title": "footgun: countBlobsThatFitSourceGap and resolveBlobSpacing (veinsVisualMath.ts:85) read as the vein pulse-spawning algorithm and are covered by tests, implying they run in production.",
+    "detail": "Neither has any non-test caller. The live spawn logic in veinsPulseTick.ts computes spacing and gap fitting inline with different code; these exports are an abandoned/parallel implementation that green tests make look load-bearing.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.021",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/avatar/avatarStackRender.ts:37:3e04d344",
+    "file": "src/engine/phaser/display/modules/avatar/avatarStackRender.ts",
+    "line": 37,
+    "title": "footgun: styleImage assigns blend as a plain AvatarImageStyle.blend number, and renderAvatarStack passes literal blend: 1 (glow/eyes) and blend: 0 (silhouette), reading like arbitrary flags.",
+    "detail": "These integers are Phaser blend-mode enum values: 0 is NORMAL and 1 is ADD (per display/blendModes BLEND_MODE_NORMAL=0 / BLEND_MODE_ADD=1). The glow and eyes are additively blended and the silhouette is normal; the named constants exist but are bypassed with magic numbers.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.022",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/cave/CaveEyesModule.ts:20:25b40d8c",
+    "file": "src/engine/phaser/display/modules/cave/CaveEyesModule.ts",
+    "line": 20,
+    "title": "footgun: resolveBlink reads as returning a blink amount (higher = more blinking).",
+    "detail": "It returns eye OPENNESS: 1 means fully open / not blinking (window > durationMs branch), and it dips toward 0 at the midpoint of the blink window. It is consumed as openness (openness = Math.max(0.04, blink)); the name is inverted relative to the value.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.023",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/glyph/GlyphTextureGen.ts:29:06f1cf17",
+    "file": "src/engine/phaser/display/glyph/GlyphTextureGen.ts",
+    "line": 29,
+    "title": "footgun: normalizeThickness(shape, thickness) reads as clamping/rounding a stroke width to a valid value for every shape.",
+    "detail": "For shapes in its ignore-set (crescent, hole, triangle, star5, star6, circle, pixel, triple_circle) it returns 0, discarding the caller's requested thickness entirely; that 0 is then baked into the texture cache key (line 49-55), so different requested thicknesses for those shapes silently share one cached texture, while the draw call falls back to 10 via `thickness || 10`.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.024",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/glyph/glyphPlacementColor.ts:12:e0d88f39",
+    "file": "src/engine/phaser/display/glyph/glyphPlacementColor.ts",
+    "line": 12,
+    "title": "footgun: resolveGlyphPlacementColor prefers the palette-keyed color when a paletteColorKey is set.",
+    "detail": "It uses `paletteColor || placement.colorHex`, so a palette entry resolving to an empty string (or any falsy value) is treated as absent and silently falls through to the literal colorHex, even though the palette key is present.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.025",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/glyph/glyphShapeDrawFnsRings.ts:49:5f54f32a",
+    "file": "src/engine/phaser/display/glyph/glyphShapeDrawFnsRings.ts",
+    "line": 49,
+    "title": "footgun: A module named glyphShapeDrawFnsRings exporting drawCircle/drawRing/drawHexRing/drawOctRing/drawSquareRing/drawPixel, implying these ring draw functions are the ring-rendering implementation.",
+    "detail": "Only the trailing GLYPH_TEXTURE_SIZE constant is imported anywhere; none of the exported draw functions have a consumer. Live ring rendering is done by glyphTextureDrawStroke.ts. The file's name and its exported functions misrepresent what is actually used.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.026",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/avatar/AvatarTextureSupport.ts:60:cf68cdf9",
+    "file": "src/engine/phaser/display/avatar/AvatarTextureSupport.ts",
+    "line": 60,
+    "title": "footgun: assertAvatarAppearance(appearance) reads as a full validation of the AvatarAppearance record.",
+    "detail": "It only checks that appearanceKey is a non-empty string and returns; every other field (indices, scales, blink timing) is unvalidated, so a malformed appearance with a set key passes the 'assert' unchecked.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.027",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/visual-instance/EntityVisualInstanceHelpers.ts:59:2949fec6",
+    "file": "src/engine/phaser/display/visual-instance/EntityVisualInstanceHelpers.ts",
+    "line": 59,
+    "title": "footgun: validateScratchSlots reads as a validation that throws or blocks on leaked per-instance scratch objects at destroy time.",
+    "detail": "On finding leaked slots (backgroundImage/mainImage/particlesManager/rope/graphics still set) it only console.errors and returns; it does not clear or destroy them, so the leak proceeds and the anchors are released anyway.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.028",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/visual-instance/EntityVisualInstanceRuntime.ts:32:d1fefbc6",
+    "file": "src/engine/phaser/display/visual-instance/EntityVisualInstanceRuntime.ts",
+    "line": 32,
+    "title": "footgun: setScratchAlpha(scratch, alpha) named as if it sets the whole instance's alpha.",
+    "detail": "It sets alpha on exactly one object, backgroundImage if present otherwise root, leaving the other four anchors (effects/overlay/background container, etc.) untouched; full-instance dimming only happens because a separate 5-anchor setter is paired with it in the tutorial-attention path.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.029",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/avatar/AvatarSeedResolver.ts:11:9cff9056",
+    "file": "src/engine/phaser/display/avatar/AvatarSeedResolver.ts",
+    "line": 11,
+    "title": "footgun: readNonEmptyString(value) reads as returning a trimmed non-empty string.",
+    "detail": "It tests value.trim() for emptiness but returns the ORIGINAL untrimmed value; a seed like ' abc ' is returned with its whitespace, and only gets trimmed later inside AvatarAppearanceRegistry.resolve.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.030",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/pooling/DisplayObjectPool.ts:53:d1b67565",
+    "file": "src/engine/phaser/display/pooling/DisplayObjectPool.ts",
+    "line": 53,
+    "title": "footgun: release(obj) paired with acquire() suggests symmetric in-use accounting.",
+    "detail": "acquire optionally runs a custom acquireFn (which for pools is activatePooledObject and does NOT call resetFn), so a reused object is reset only on release; the resetFn fallback inside acquire only runs when no acquireFn was supplied, which is never the case for the real container/image/rope/graphics pools.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.031",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/veins/nervousVeinFlow.ts:13:ed059cfc",
+    "file": "src/engine/phaser/veins/nervousVeinFlow.ts",
+    "line": 13,
+    "title": "footgun: resolveNervousDeliveredRate(edge, entityById, graph) is named and typed as if it computes a nervous edge's delivered flow rate from the edge, the entity map, and the graph.",
+    "detail": "All three parameters are prefixed with _ and ignored; the body unconditionally returns 0. Every nervous edge therefore gets deliveredRate=0, so blobSpawnRateHz is 0 and nervous veins never emit flow blobs \u2014 the function is a permanent stub, not a computation.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.032",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/veins/veinGeometry.ts:49:0533895e",
+    "file": "src/engine/phaser/veins/veinGeometry.ts",
+    "line": 49,
+    "title": "footgun: resolveDemandWidth's doc comment says demand edges 'Consistently uses the same structural logic as supply edges' via sourceRadius*drawFraction pulsed width.",
+    "detail": "resolveDemandWidth (and the resolvePulsedWidth it wraps) is dead \u2014 no production or test caller. Demand (resource-demand) edges actually get their width from resolveThrottleWidth in veinsDisplayBuilder.ts, which ignores sourceRadius and drawFraction entirely, so the documented 'consistent' width model is not the one in effect.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.033",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display-export/DisplayImageExportService.ts:20:5b2a6e43",
+    "file": "src/engine/phaser/display-export/DisplayImageExportService.ts",
+    "line": 20,
+    "title": "footgun: getImageUrl wraps its body in a try/catch, suggesting all failures are converted to a rejected promise there.",
+    "detail": "The try/catch only guards the synchronous resolveDisplayImageSpec + buildDisplayCacheKey. The actual render runs later inside Promise.resolve().then(...) via resolveCached; render-time throws never reach this catch. They still reject the returned promise (through resolveCached's error handler at line 86), so the catch at line 62 is effectively dead for render failures and only ever fires for spec/key errors.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.034",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display-export/buildBodyAvatarImageRequest.ts:9:2b76e0ca",
+    "file": "src/engine/phaser/display-export/buildBodyAvatarImageRequest.ts",
+    "line": 9,
+    "title": "footgun: A module-level `const avatarRegistry = new AvatarAppearanceRegistry()` reads like an incidental helper, and DisplayImageExportService separately syncs `this.scene.avatarRegistry` at render time.",
+    "detail": "This is a process-wide singleton distinct from the scene registry. The request's appearance is resolved from THIS registry (line 52), while the render re-derives from the scene registry; they only agree because resolve() is a pure PRNG of (epochSeed, subjectSeed). The singleton's cache is never cleared and grows unbounded across every avatar built for the life of the tab.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.035",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display-export/renderResolvedDisplayImage.ts:37:1facb74a",
+    "file": "src/engine/phaser/display-export/renderResolvedDisplayImage.ts",
+    "line": 37,
+    "title": "footgun: drawGlyphs looks like it always draws a real glyph texture; `textureKey ?? \"\"` reads as a harmless default.",
+    "detail": "When scene.textureManager is undefined, getGlyphTexture returns undefined and the key becomes the empty string; readPhaserTextureSource then does scene.textures.get(\"\"), which in Phaser returns the __MISSING placeholder texture rather than throwing, so a missing texture manager silently paints Phaser's checkerboard instead of erroring or the intended glyph.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.036",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/utils/SolidStripTextureGen.ts:4:6bbbf290",
+    "file": "src/engine/phaser/utils/SolidStripTextureGen.ts",
+    "line": 4,
+    "title": "footgun: const LINEAR_FILTER = \"LINEAR\" as unknown as Phaser.Textures.FilterMode; named LINEAR_FILTER and passed to setFilter, implying the strip gets LINEAR (smooth) filtering like every sibling texture.",
+    "detail": "The runtime value is the string \"LINEAR\", not the enum member (which is the number 0). WebGLRenderer.setTextureFilter branches on `filter === 0 ? gl.LINEAR : gl.NEAREST`; the string fails strict-equals, so the texture is actually filtered NEAREST. The name asserts the opposite of the runtime effect.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.037",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/background/biologicalFogShaderSource.ts:4:d0248f0f",
+    "file": "src/engine/phaser/background/biologicalFogShaderSource.ts",
+    "line": 4,
+    "title": "footgun: uniform vec2 uResolution and uniform float uCameraZoom are declared, populated every frame by applyBiologicalFogUniforms, and uResolution is even specially re-pushed in the resize handler, implying the fog reacts to viewport resolution and zoom.",
+    "detail": "main() never reads uResolution or uCameraZoom (the shader anchors fog purely via uCameraScroll + fragCoord, with zoom baked into the game-object size). The GLSL compiler strips both unused uniforms, so all their setUniform calls target uniforms that do not exist in the linked program; the resize handler's uResolution writes are no-ops.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.038",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts:13:f5c8ec8b",
+    "file": "src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts",
+    "line": 13,
+    "title": "footgun: Parameters _textureManager and _scene are accepted (underscore-prefixed) as if resolution needs the Phaser scene/texture manager.",
+    "detail": "Both are entirely unused inside the function body; presentation is built purely from the registry appearance and canvas. The signature advertises a scene/texture dependency the code does not have.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.092",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/transfer/TransferGlyphModule.ts:55:80692fd7",
+    "file": "src/engine/phaser/display/modules/transfer/TransferGlyphModule.ts",
+    "line": 55,
+    "title": "Stale node-overlay bounds retained when a pretty transfer glyph shrinks out of view",
+    "detail": "createNodeOverlayDisplayBoundsFromRadius returns null when the resolved radius is <= 0 (radius can collapse as payload/scale drops), and the `if (bounds)` guard then leaves tickCtx.scratch.nodeOverlayDisplayBounds pointing at the previous frame's bounds instead of clearing it. Overlays/hit-testing that key off these bounds keep targeting a location the glyph no longer occupies. TransformModule (line 26) and TransferModule (line 65) both null/replace bounds unconditionally, so this module is the inconsistent one.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.093",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsSimplexNoise.ts:12:7873c231",
+    "file": "src/engine/phaser/display/modules/veins/veinsSimplexNoise.ts",
+    "line": 12,
+    "title": "Simplex permutation cache grows unbounded across many seeds",
+    "detail": "getPerm memoizes a 512-byte Uint8Array per distinct seed in a module-level Map that is never cleared or size-capped. compileVeinGuidePath calls createSimplex2D(edge.seed) and edge seeds vary per edge/regeneration, so over a long session with many distinct vein seeds the cache accumulates entries for the lifetime of the module, a slow memory leak.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.094",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsEdgePhase.ts:13:501e92ce",
+    "file": "src/engine/phaser/display/modules/veins/veinsEdgePhase.ts",
+    "line": 13,
+    "title": "Unbounded wave-phase accumulation for nervous veins",
+    "detail": "advanceWavePhase decrements state.wavePhaseRad every frame with no modulo/wrap. Over a long-running scene the magnitude grows without bound; once it is large the value fed into Math.sin (veinsRopePath.ts:88-93) loses floating-point precision, so the animated waviness of long-lived nervous veins can visibly quantize or jitter. Also forces a full-path recompute every frame (veinsEdgeTick.ts:63-66) because fullPathResolvedForPhaseRad never re-matches.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.095",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/veins/veinsPulseTick.ts:73:4e9338f9",
+    "file": "src/engine/phaser/display/modules/veins/veinsPulseTick.ts",
+    "line": 73,
+    "title": "Spawn loop relies on spawnPulse always pushing to avoid a hang",
+    "detail": "Inside `while (state.spawnCarry >= 1)`, spawnCarry is only decremented after a successful spawn; the `const pulse = state.pulses.at(-1); if (!pulse) continue;` path loops back without decrementing spawnCarry or advancing the ordinal. It is safe only because spawnPulse unconditionally pushes, so .at(-1) is never undefined. If spawnPulse ever early-returns (e.g. pool exhaustion added later), this becomes an infinite loop that freezes the frame.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.096",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/light/lightModuleBaseState.ts:16:88407e5c",
+    "file": "src/engine/phaser/display/modules/light/lightModuleBaseState.ts",
+    "line": 16,
+    "title": "Producer-resource light picked by a fragile duck-typing score",
+    "detail": "readProducerResource chooses the light color by scoring each state entry on ad-hoc shape heuristics (allowWithdraw/allowDeposit/visible/max presence) rather than an explicit resource marker. Ties resolve to the first-seen key via Object.entries order, and any change to state-entry shape silently reassigns which resource color a node shows, with no error. Latent correctness/coupling risk in the vein/producer visuals.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.097",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/distress/DistressModule.ts:89:3f7bdac3",
+    "file": "src/engine/phaser/display/modules/distress/DistressModule.ts",
+    "line": 89,
+    "title": "Distress non-physics path makes root/overlay anchor visible with no inverse on recovery",
+    "detail": "When distress becomes active the tick calls scratch.root.setVisible(true), overlayAnchor.setPosition(target.x,target.y) and overlayAnchor.setVisible(true). On recovery (ratio >= DISTRESS_THRESHOLD) or loss of body/target it calls hideHalos(), which only kills tweens and hides the three halo images (distressHaloHelpers.hideDistressHalos); it never restores overlayAnchor visibility/position or the root visibility. The entity's overlay anchor is left visible and repositioned, and root is left force-shown, leaking distress state into later frames.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.098",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/progress-bar/progressBarSlots.ts:36:ef356182",
+    "file": "src/engine/phaser/display/modules/progress-bar/progressBarSlots.ts",
+    "line": 36,
+    "title": "Progress-bar slot count is a magic 4 duplicating RESOURCE_PROGRESS_BAR_POSITIONS length",
+    "detail": "createProgressBarSlots hardcodes Array.from({ length: 4 }), while tickProgressBars iterates RESOURCE_PROGRESS_BAR_POSITIONS (currently 4 entries) and indexes input.slots[index]. The invariant that these two counts match is unenforced: adding a 5th position to the constant makes slots[4] undefined, so hideProgressBarSlot(undefined) / tickActiveProgressBarSlot with an undefined slot throws at runtime.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.099",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/glyph/glyphModuleRuntime.ts:68:7fad83c6",
+    "file": "src/engine/phaser/display/modules/glyph/glyphModuleRuntime.ts",
+    "line": 68,
+    "title": "Glyph pulse delay lookup can index past delayMsByPosition and propagate NaN",
+    "detail": "readPulseValue computes ctx.timeMs - glyph.pulse.delayMsByPosition[placement.position]. GlyphPlacement.position is typed 0..8 but GlyphPulseConfig.delayMsByPosition is an unbounded number[] with no length guarantee. If a cartridge supplies a placement whose position exceeds the delay array length, the lookup is undefined, timeMs - undefined is NaN, and getDemandPulse(entityId, NaN) returns NaN (clampPulse(NaN,0,1) === NaN). That NaN survives clamp01 in resolveGlyphPlacementRenderModel and flows into the glyph transform (position/scale/rotation), silently corrupting rendering with no error.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.100",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/modules/avatar/AvatarGlyphModule.ts:44:9d0c2d84",
+    "file": "src/engine/phaser/display/modules/avatar/AvatarGlyphModule.ts",
+    "line": 44,
+    "title": "AvatarGlyphModule restores scratch.mainImage AFTER destroying the wrapped glyph module",
+    "detail": "destroy() calls runtime.destroy(...) (glyphModuleRuntime.destroyGlyphImages sets scratch.mainImage = null and releases the glyph images) and then unconditionally reassigns dCtx.scratch.mainImage = preservedMain, the silhouette captured at create time. If the AvatarModule that owned that silhouette has already been destroyed (which nulls mainImage and releases the silhouette to the pool), this writes a released/stale image reference back into scratch.mainImage, defeating the null-out and creating a dangling pooled-object reference dependent on module destroy order.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.101",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/glyph/glyphTextureDrawCore.ts:54:29d719af",
+    "file": "src/engine/phaser/display/glyph/glyphTextureDrawCore.ts",
+    "line": 54,
+    "title": "star6 core/fill glyph is not a symmetric 6-point star",
+    "detail": "The 'star6' case builds two triangles via starPoints(3, outer) (inner radius passed equal to the outer radius, so the points are not a true star) and mirrors the second with `128 - point.y + 10` \u2014 an asymmetric +10px vertical offset. The rendered star6 is lopsided and does not match the geometry of the stroke-path drawStar6, producing an off-center/asymmetric glyph texture.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "phaser",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.102",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/phaser/display/glyph/glyphShapeDrawFns.ts:10:a00901a1",
+    "file": "src/engine/phaser/display/glyph/glyphShapeDrawFns.ts",
+    "line": 10,
+    "title": "Dead draw-function modules diverge from the live rendering path",
+    "detail": "glyphShapeDrawFns.ts has no importers, and glyphShapeDrawFnsRings.ts contributes only its size constant. These modules define an entire alternate set of shape geometries (e.g. drawStar6 as a Star of David, T=6/10 stroke widths) that no longer render anything. They present as the shape source of truth but are unmaintained; edits here have no effect and they mislead anyone modifying glyph appearance.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "phaser",
+    "in_target_region": true
+  }
+]

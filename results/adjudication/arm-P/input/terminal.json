@@ -1,0 +1,290 @@
+[
+  {
+    "id": "P.run1.062",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/catCommand.ts:14:76ceb9c8",
+    "file": "src/engine/terminal/catCommand.ts",
+    "line": 14,
+    "title": "footgun: 'cat' claims to 'Display file contents' for any file and the fs layer treats .cvs as a supported semantic file stored as text.",
+    "detail": "vfs.readFile returns ModuleCartridge|null and discards any string value (FileSystem.base.ts:57 requires typeof!=='string', line 66 returns null for disk text), so `cat <file>.cvs` always reports 'not found' even when the .cvs file exists in the VFS. cat can never show a .cvs (text) file.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.063",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/rmCommand.ts:16:0669f812",
+    "file": "src/engine/terminal/rmCommand.ts",
+    "line": 16,
+    "title": "footgun: 'rm' confirms existence with `const exists = await vfs.readFile(filename)` before deleting, implying it works for any file.",
+    "detail": "vfs.readFile returns null for text (.cvs) files (FileSystem.base.ts:66), so `rm <file>.cvs` returns 'File not found' and refuses to delete a .cvs file that actually exists in the VFS.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.064",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/saveCommand.ts:16:8dd93d8f",
+    "file": "src/engine/terminal/saveCommand.ts",
+    "line": 16,
+    "title": "footgun: Success message 'Successfully saved to source' and description 'Dump a VFS file to disk' present save as a generally-available persistence action.",
+    "detail": "vfs.saveToDisk POSTs to the /__editor/save dev middleware and reads via getDiskWritePath; that endpoint only exists under the Vite dev editor plugin. In a production build the fetch hits a non-existent route and save throws / fails; the operation is dev-only, not a real 'save to source'.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.065",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/commands/makeCommands.ts:107:31668d9c",
+    "file": "src/engine/terminal/commands/makeCommands.ts",
+    "line": 107,
+    "title": "footgun: handleMakeFile builds a `.cvs` template as the string '# Cave script\\n' (line 63) and writes it, and the value is cast `template as ModuleCartridge`.",
+    "detail": "vfs.writeFile is typed for ModuleCartridge objects; the .cvs string is persisted, but because readFile never returns strings, the just-created .cvs file is subsequently invisible to cat/rm and is dropped by fs-save. The `as ModuleCartridge` cast hides that a string is being stored under an object-typed API.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.066",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/smartPathUtils.ts:110:47271996",
+    "file": "src/engine/terminal/smartPathUtils.ts",
+    "line": 110,
+    "title": "footgun: smartPathUtils imports getFileSuggestions from ./fileUtils (line 2) and getMultipartSuggestions appears to delegate depth-0 completion to it.",
+    "detail": "A local function getFileSuggestions(token, context) is declared at line 110 and shadows the import; the fileUtils import is unused, and the local one takes (string, context) whereas the imported one takes (string[]). The imported symbol is dead and the two same-named functions have incompatible signatures.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.067",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/commands/projectCommandSuggestions.ts:6:48e9754d",
+    "file": "src/engine/terminal/commands/projectCommandSuggestions.ts",
+    "line": 6,
+    "title": "footgun: projectRoots() derives project roots by scanning fileCache for manifest paths.",
+    "detail": "fileCache is populated by refreshFileCache which strips /.cave-dir directory markers but keeps 'manifest.json' entries; however fileCache is only asynchronously refreshed and is clobbered with raw, unfiltered keys by `ls` (lsCommand.ts:14), so project-load/create autocomplete silently reflects a stale or marker-polluted view depending on prior commands.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.147",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/commands/fsCommands.ts:116:64d0f4a5",
+    "file": "src/engine/terminal/commands/fsCommands.ts",
+    "line": 116,
+    "title": "fs-save silently drops every .cvs file",
+    "detail": "handleFsSave reads each VFS file with `vfs.readFile(file)` then `if (data == null) continue;`. readFile returns null for .cvs (text) files, so .cvs scripts are never written back to disk. fs-load writes .cvs as text (line 77-79) but fs-save cannot round-trip them: cave-script edits made in the VFS are lost on save with no error.",
+    "finder_severity": "high",
+    "finder_class": "risk",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.148",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/lsCommand.ts:13:9567765b",
+    "file": "src/engine/terminal/lsCommand.ts",
+    "line": 13,
+    "title": "ls pollutes and desynchronizes the autocomplete cache with directory markers",
+    "detail": "vfs.listFiles() returns all keys including '.cave-dir' directory markers (FileSystem.base.listFiles = db.getAllKeys, no filtering). ls overwrites fileCache with these raw files, whereas refreshFileCache deliberately filters markers (fileUtils.ts:33). After `ls`, file autocomplete for cat/rm/save offers '.cave-dir' marker entries until the next refreshFileCache, and ls output itself lists the internal markers to the user.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.149",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/commands/projectDuplicateCommand.ts:44:a1e649dd",
+    "file": "src/engine/terminal/commands/projectDuplicateCommand.ts",
+    "line": 44,
+    "title": "project-duplicate targets a raw folder named after arbitrary project-name text",
+    "detail": "targetRoot is set to the trimmed new-name string verbatim (`const targetRoot = newName`) and used directly as a path prefix for writeFile(`${targetRoot}/manifest.json`). A name containing spaces, slashes, or '..' becomes part of VFS keys unsanitized, producing malformed or path-traversing keys; unlike other commands here the target is never run through normalize().",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.150",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/commands/projectServices.ts:6:c07af6f1",
+    "file": "src/engine/terminal/commands/projectServices.ts",
+    "line": 6,
+    "title": "Shared workspace/linker/gatekeeper singletons created at module load",
+    "detail": "ModuleLinker, WorkspaceService, RefactorService and Gatekeeper are instantiated once at import time bound to the global vfs. All project commands share this mutable state (moduleCache, activeCartridge). Concurrent or interleaved project-load/close operations race on shared state, and there is no reset path other than closeProject; a failed load can leave activeCartridge/moduleCache inconsistent for later commands.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.151",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/smartPathUtils.ts:58:79fb21aa",
+    "file": "src/engine/terminal/smartPathUtils.ts",
+    "line": 58,
+    "title": "getMultipartSuggestions depth dispatch indexes an array that omits depth 0",
+    "detail": "depthHandlers has undefined at index 0 and handlers for indices 1-3; `depthHandlers[segments.length]?.(...)` returns [] for any path deeper than 3 segments (index >= 4 is undefined). Combined with the module having no non-test importer, this rich virtual-path completion is dead code whose deepest levels silently no-op.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.152",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/commands/projectSaveCommand.ts:68:12ae9793",
+    "file": "src/engine/terminal/commands/projectSaveCommand.ts",
+    "line": 68,
+    "title": "project-save-blueprint version bump can silently no-op",
+    "detail": "After a successful write, `if (manifestPath)` guards stageProjectVersionInVfs. workspaceService.getManifestPath() returning falsy (no active/loaded project) skips the version bump entirely with a success result, so a saved blueprint can persist without its project version being incremented, breaking the assumption that every save stages a patch.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.195",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/fileUtils.ts:37:3e6a7ffc",
+    "file": "src/engine/terminal/fileUtils.ts",
+    "line": 37,
+    "title": "silent failure: empty-catch",
+    "detail": "Benign-by-intent but undeclared: refreshFileCache().catch swallows any VFS listFiles rejection with only a comment 'Silent failure for autocomplete cache'. If the VFS is persistently broken, autocomplete silently shows a stale/empty list with no user signal; no pdd-ignore marker.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.196",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/commands/fsCommands.ts:76:7cc30c71",
+    "file": "src/engine/terminal/commands/fsCommands.ts",
+    "line": 76,
+    "title": "silent failure: ignored-return",
+    "detail": "Real: inside handleFsLoad's Promise.all, each per-file read does `if (!res.ok) return;` \u2014 a failed read of an individual file is skipped silently, yet the command still reports `Loaded ${files.length} file(s)` counting files that were never actually written. Partial loads masquerade as full success.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.197",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/commands/vfsHardReloadCommand.ts:42:d8c91506",
+    "file": "src/engine/terminal/commands/vfsHardReloadCommand.ts",
+    "line": 42,
+    "title": "silent failure: ignored-return",
+    "detail": "Real: same pattern as fs-load \u2014 `if (!res.ok) return;` per file, then reports `Hard-reloaded ${files.length} file(s)`. After destructively wiping the entire VFS (line 20), any file that fails to re-read is silently missing while the success message claims the full count, so data loss is reported as success.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.198",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/rmCommand.ts:32:95d5f396",
+    "file": "src/engine/terminal/rmCommand.ts",
+    "line": 32,
+    "title": "silent failure: fire-and-forget",
+    "detail": "Mostly benign: refreshFileCache() is invoked without await (it returns a promise resolved internally). rm returns success before the autocomplete cache is actually rebuilt; a rejection is swallowed by refreshFileCache's own catch, so the deleted file can linger in autocomplete briefly. Same fire-and-forget pattern in makeCommands.ts:108/130 and bootstrapLoadCommand.ts:18.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.199",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/commands/projectCommands.ts:117:d71176ea",
+    "file": "src/engine/terminal/commands/projectCommands.ts",
+    "line": 117,
+    "title": "silent failure: unchecked-exit",
+    "detail": "Real: handleProjectClose calls `await workspaceService.closeProject()` with no try/catch; if closeProject rejects, the registry's outer catch reports a generic 'Execution failed', but context.runtime?.unload() and ui?.closeWorkspace() (lines 118-119) are then never reached, leaving runtime/UI in a half-open state. Unlike the other project handlers, close has no local error handling.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "terminal",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.200",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/terminal/commands/fsCommands.ts:124:006479d9",
+    "file": "src/engine/terminal/commands/fsCommands.ts",
+    "line": 124,
+    "title": "silent failure: ignored-return",
+    "detail": "Partial: handleFsSave returns an error on the first failed /__editor/save (line 124-128) but files already written before the failure remain on disk, and any file whose VFS data is null (all .cvs) is skipped via `continue` (line 117) and excluded from the reported saved count \u2014 a half-completed save reported without indicating which files were skipped.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "terminal",
+    "in_target_region": true
+  }
+]

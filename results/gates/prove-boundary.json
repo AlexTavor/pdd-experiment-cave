@@ -1,0 +1,126 @@
+{
+  "version": 2,
+  "source": "prove",
+  "runId": null,
+  "generatedAt": "2026-07-06T22:46:24.240Z",
+  "scope": {
+    "root": "src/engine",
+    "target": "."
+  },
+  "engine": "builtin",
+  "operators": [
+    "cmp-boundary"
+  ],
+  "verdict": "fail",
+  "stats": {
+    "verified": 4,
+    "killed": 1,
+    "survived": 3,
+    "uncovered": 0,
+    "stale": 0
+  },
+  "findings": [
+    {
+      "source": "prove",
+      "kind": "cmp-boundary",
+      "severity": "high",
+      "title": "DISTRESS_THRESHOLD  (>=\u2192>)",
+      "subject": "DISTRESS_THRESHOLD",
+      "locus": {
+        "kind": "code",
+        "file": "src/engine/phaser/display/modules/distress/DistressModule.ts",
+        "line": 70,
+        "offset": 2401
+      },
+      "detail": "named in tests but the == boundary is not pinned",
+      "status": "survived",
+      "classification": "pending",
+      "extra": {
+        "operator": "cmp-boundary",
+        "original": ">=",
+        "replacement": ">",
+        "snippet": "DISTRESS_THRESHOLD: >= \u2192 >",
+        "offset": 2401,
+        "relevantTests": [
+          "phaser/visuals/distressTarget.test.ts"
+        ],
+        "ranTests": [
+          "phaser/visuals/distressTarget.test.ts"
+        ],
+        "exitCode": 0,
+        "meta": {
+          "constant": "DISTRESS_THRESHOLD"
+        }
+      },
+      "fingerprint": "src/engine/phaser/display/modules/distress/DistressModule.ts:2401:cmp-boundary"
+    },
+    {
+      "source": "prove",
+      "kind": "cmp-boundary",
+      "severity": "high",
+      "title": "GOLD_RING_DURATION_MS  (>\u2192>=)",
+      "subject": "GOLD_RING_DURATION_MS",
+      "locus": {
+        "kind": "code",
+        "file": "src/engine/phaser/effects/PersistentAttentionRings.ts",
+        "line": 47,
+        "offset": 1823
+      },
+      "detail": "named in tests but the == boundary is not pinned",
+      "status": "survived",
+      "classification": "pending",
+      "extra": {
+        "operator": "cmp-boundary",
+        "original": ">",
+        "replacement": ">=",
+        "snippet": "GOLD_RING_DURATION_MS: > \u2192 >=",
+        "offset": 1823,
+        "relevantTests": [
+          "phaser/effects/PersistentAttentionRings.test.ts"
+        ],
+        "ranTests": [
+          "phaser/effects/PersistentAttentionRings.test.ts"
+        ],
+        "exitCode": 0,
+        "meta": {
+          "constant": "GOLD_RING_DURATION_MS"
+        }
+      },
+      "fingerprint": "src/engine/phaser/effects/PersistentAttentionRings.ts:1823:cmp-boundary"
+    },
+    {
+      "source": "prove",
+      "kind": "cmp-boundary",
+      "severity": "high",
+      "title": "MAX_COMMANDS_PER_TICK  (>\u2192>=)",
+      "subject": "MAX_COMMANDS_PER_TICK",
+      "locus": {
+        "kind": "code",
+        "file": "src/engine/runtime/runtimeSystemBatch.ts",
+        "line": 19,
+        "offset": 687
+      },
+      "detail": "named in tests but the == boundary is not pinned",
+      "status": "survived",
+      "classification": "pending",
+      "extra": {
+        "operator": "cmp-boundary",
+        "original": ">",
+        "replacement": ">=",
+        "snippet": "MAX_COMMANDS_PER_TICK: > \u2192 >=",
+        "offset": 687,
+        "relevantTests": [
+          "runtime/runtimeSystemRunner.test.ts"
+        ],
+        "ranTests": [
+          "runtime/runtimeSystemRunner.test.ts"
+        ],
+        "exitCode": 0,
+        "meta": {
+          "constant": "MAX_COMMANDS_PER_TICK"
+        }
+      },
+      "fingerprint": "src/engine/runtime/runtimeSystemBatch.ts:687:cmp-boundary"
+    }
+  ]
+}

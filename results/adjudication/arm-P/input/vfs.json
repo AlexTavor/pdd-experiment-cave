@@ -1,0 +1,114 @@
+[
+  {
+    "id": "P.run1.068",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/vfs/FileSystem.ts:62:2ca0b182",
+    "file": "src/engine/vfs/FileSystem.ts",
+    "line": 62,
+    "title": "footgun: scan(glob) with a parameter named `glob` implies standard glob semantics where `*` matches within a single path segment and does not cross `/`.",
+    "detail": "The glob is compiled to an anchored, case-insensitive regex where `*` becomes `.*`, which crosses `/` boundaries. So scan(\"src/*.json\") also matches deeply-nested keys like src/a/b.json, and matching is case-insensitive. Same behavior in the batch path (indexedDbBatch.ts scan, line 79).",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "vfs",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.069",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/vfs/version.ts:5:48acd875",
+    "file": "src/engine/vfs/version.ts",
+    "line": 5,
+    "title": "footgun: Doc comment says \"Compare two semantic version strings (e.g. \\\"1.0.0\\\" vs \\\"1.0.1\\\")\", implying real semver comparison.",
+    "detail": "It only parses dot-separated numeric components with `Number(p) || 0`. Pre-release/build suffixes are not handled: \"1.0.0-beta\" parses its third component as Number(\"0-beta\")=NaN\u21920, so \"1.0.0-beta\" compares equal to \"1.0.0\"; any non-numeric component silently degrades to 0, and \"1.2\" vs \"1.2.0\" are treated as equal (not newer). Drives hydration overwrite decisions (bootstrapHydration.ts:43) and bootstrap manifest selection.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "vfs",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.070",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/vfs/bootstrapSnapshot.ts:18:1b41c57e",
+    "file": "src/engine/vfs/bootstrapSnapshot.ts",
+    "line": 18,
+    "title": "footgun: assertValidBootstrapSnapshot is named as if it validates that the data is a valid bootstrap snapshot (i.e. a map of file paths to cartridges).",
+    "detail": "It only asserts the value is a non-null, non-array plain object that is JSON-serializable. It does not validate keys as paths or values as ModuleCartridge shape, so arbitrary object payloads pass and are later written verbatim into the store by importAll.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "vfs",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.153",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/vfs/FileSystem.ts:31:3b5b2851",
+    "file": "src/engine/vfs/FileSystem.ts",
+    "line": 31,
+    "title": "deletePaths and movePaths bypass dirty-file tracking, leaving stale/lost dirty state",
+    "detail": "deleteFile clears dirtyFiles, but deletePaths (line 31) and movePaths (line 42) do not touch dirtyFiles. Deleting a dirty file via deletePaths leaves its path permanently in dirtyFiles (getDirtyFiles reports a file that no longer exists); moving a dirty file leaves the OLD path marked dirty and the NEW path unmarked, so a subsequent saveToDisk of the new path is not tracked and the phantom old path lingers. getDirtyFiles consumers see an inaccurate change set.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "vfs",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.154",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/vfs/indexedDbBatch.ts:52:940329ad",
+    "file": "src/engine/vfs/indexedDbBatch.ts",
+    "line": 52,
+    "title": "moveMany applies all writes before all deletes over a single key snapshot, so overlapping moves can delete a just-written value",
+    "detail": "allKeys is captured once; writes (moved targets) are flushed first, then every matched source key is deleted. When a move target collides with another move's source (e.g. moving a/b\u2192a while a/b/c also exists, or two moves whose target equals another's source), the delete phase removes a key that the write phase just populated, silently dropping data. The write/delete sets are computed independently with no collision guard.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "vfs",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.155",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/vfs/IndexedDBPersistence.ts:70:159dc658",
+    "file": "src/engine/vfs/IndexedDBPersistence.ts",
+    "line": 70,
+    "title": "importAll clears the entire store before writing, with no shape validation of entries",
+    "detail": "importAll opens a readwrite tx, clears the store, then puts every top-level key of the (only structurally-validated) snapshot as a file value. A snapshot that passes assertValidBootstrapSnapshot but contains non-cartridge or non-path entries wipes existing data and repopulates the store with garbage; the pre-clear means a malformed-but-JSON-serializable import destroys the prior VFS contents irrecoverably.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "vfs",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.201",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/vfs/fileSystemBaseDisk.ts:43:04a43419",
+    "file": "src/engine/vfs/fileSystemBaseDisk.ts",
+    "line": 43,
+    "title": "silent failure: empty-catch",
+    "detail": "Real: the try/catch around the disk fetch swallows every error (network failure, CORS, malformed JSON from response.json()) and returns null with no logging or pdd-ignore marker. Callers readFile/readText interpret null identically to \"file absent\", so a transient fetch/parse failure is indistinguishable from a missing file and can silently yield an empty read or trigger create_empty hydration, masking real I/O errors.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "vfs",
+    "in_target_region": true
+  }
+]

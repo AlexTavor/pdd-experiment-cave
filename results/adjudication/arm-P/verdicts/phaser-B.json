@@ -1,0 +1,308 @@
+[
+  {
+    "id": "P.run1.103",
+    "fingerprint": "map:src/engine/phaser/display/glyph/GlyphRegistry.ts:29:3e306ac7",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "syncEpoch line 29 genuinely uses `presetsRaw === this.lastPresetsRaw` reference identity; an in-place mutation of the same object is missed and a rebuilt equal object forces a full reparse. Latent contract issue; current caller passes the stable cartridge object so no active break, hence low."
+  },
+  {
+    "id": "P.run1.104",
+    "fingerprint": "map:src/engine/phaser/display/glyph/GlyphRegistry.ts:107:008db571",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "findNextAvailableOrdinal throws at line 111 on exhaustion, and get()->allocateProcedural is on the resolve path, so an exhausted registry throws rather than degrading. Requires ~4^9 distinct procedural keys to reach, so realistically unreachable; real but low."
+  },
+  {
+    "id": "P.run1.105",
+    "fingerprint": "map:src/engine/phaser/display/placeholder/PlaceholderVariantRegistry.ts:37:006f9d4c",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "The `if (!this.exhaustionLogged)` block (lines 37-39) only sets the flag with no logging inside; console.warn at lines 40-43 sits after it and fires unconditionally on every get() once exhausted. Dead store plus per-call warn spam, exactly as claimed."
+  },
+  {
+    "id": "P.run1.106",
+    "fingerprint": "map:src/engine/phaser/display/visual-instance/EntityVisualInstanceContexts.ts:20:e9b665e0",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "performance",
+    "oracle_match": null,
+    "notes": "resolveTickEntity returns `{...entity, __attentionLightSuppressed:true}` (lines 20-24), a fresh object per tick for each non-focused entity during focus, breaking any reference-identity cache and allocating per frame. Real; impact bounded to focus periods, so low."
+  },
+  {
+    "id": "P.run1.107",
+    "fingerprint": "map:src/engine/phaser/display/instance-manager/DisplayInstanceManager.structural.ts:56:aa3430c1",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "syncFullRebuild uses `entity.id ?? ''` as the records map key (line 56); two id-less entities collide on '' and overwrite each other so only one gets a visual instance. Real wrong behavior, contingent on id-less entities existing."
+  },
+  {
+    "id": "P.run1.108",
+    "fingerprint": "map:src/engine/phaser/display/instance-manager/DisplayInstanceManager.structural.ts:90:9fdaedf9",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "The incremental branch (line 90) only runs when !fullRebuild and mutationRevision is then overwritten, but syncFullRebuild reprocesses ALL entities, so a full rebuild genuinely supersedes per-entity mutations. The unstated assumption holds; immaterial."
+  },
+  {
+    "id": "P.run1.109",
+    "fingerprint": "map:src/engine/phaser/display/avatar/AvatarTextureGen.ts:33:cd4b0113",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "assertAvatarAppearance (AvatarTextureSupport.ts:60-63) checks only appearanceKey; getAvatarPart throws on out-of-range index (line 24). A keyed-but-corrupt appearance with a bad shape index throws inside texture generation rather than at the guard, as claimed."
+  },
+  {
+    "id": "P.run1.110",
+    "fingerprint": "map:src/engine/phaser/effects/consumeRuntimeVisualEffectBursts.ts:63:df59d7b2",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "The dispatcher has four explicit `if (event.kind === ...)` cases then falls through to spawnSmokePuff (lines 63-70) with event.x/y/radius; any new/unknown kind or one lacking those fields spawns an unintended puff at undefined coords. Real latent fragility; low as no such kind exists today."
+  },
+  {
+    "id": "P.run1.111",
+    "fingerprint": "map:src/engine/phaser/veins/nervousVeinFlow.ts:17:5edc4ecb",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "resolveNervousDeliveredRate returns 0 (line 17); veinFlowProjection sets nervous edges' deliveredRate to it (line 41) and veinsDisplayBuilder computes blobSpawnRateHz = deliveredRate/energy_per_blob (line 64), so nervous flow never animates. Real; may be intentional-placeholder, cosmetic, hence low."
+  },
+  {
+    "id": "P.run1.112",
+    "fingerprint": "map:src/engine/phaser/veins/veinsDisplayBuilder.ts:36:9367a995",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "widthPx = resolveBaseWidth(...) at line 36 is unconditionally overwritten for both edge kinds (lines 37-41), and VeinEdgeKind is exactly 'resource-demand'|'nervous' (types.ts:2), so the base-width call can never affect output. Dead computation with a live-looking doc comment."
+  },
+  {
+    "id": "P.run1.113",
+    "fingerprint": "map:src/engine/phaser/veins/veinGeometry.ts:53:31be40a6",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "grep confirms resolveDemandWidth, resolvePulsedWidth, groupEdges, resolveOffsetStep and colorUtils resolveVeinColor have no references outside their own definition files (not even tests). Dead exports carrying authoritative-sounding comments, as claimed."
+  },
+  {
+    "id": "P.run1.114",
+    "fingerprint": "map:src/engine/phaser/veins/veinFlowTerminalTarget.ts:8:aa78b979",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "performance",
+    "oracle_match": null,
+    "notes": "projectVeinEdgeFlow calls resolveTerminalChainTargetId per resource-demand edge, and each call scans forward via findNextEdgeIndex (line 8) per hop, giving O(n^2) over edges each frame. Real but small-graph-bounded, so low."
+  },
+  {
+    "id": "P.run1.115",
+    "fingerprint": "map:src/engine/phaser/scenes/GameScene.pointer.ts:27:ba43a8dd",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "resource",
+    "oracle_match": null,
+    "notes": "scene.events.on('update', update) at line 27 is never matched by an .off in destroyPointerSceneSystems (lines 31-37), which only destroys controller/preview and deletes the WeakMap entry. The closure stays subscribed holding the destroyed preview; on scene-instance reuse it fires preview.update() on torn-down state."
+  },
+  {
+    "id": "P.run1.116",
+    "fingerprint": "map:src/engine/phaser/display-export/resolveBodyAvatarExportInputs.ts:24:6ba362da",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "grep confirms resolveBodyAvatarExportInputs is imported only by its own .test.ts; the live avatar path uses buildBodyAvatarImageRequest. Dead production code duplicating spec/seed/appearance resolution with a maintained test for an unreachable path, as claimed."
+  },
+  {
+    "id": "P.run1.117",
+    "fingerprint": "map:src/engine/phaser/scenes/entityDragController.testUtils.ts:2:45939cce",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "The file imports vitest (line 2) and is not named *.test.ts, but grep shows it is imported only by test files; nothing in the product graph references it, so the bundler never pulls vitest into a production build. A naming/hygiene latency, not an active defect."
+  },
+  {
+    "id": "P.run1.118",
+    "fingerprint": "map:src/engine/phaser/scenes/entityDragController.assignment.ts:42:bfb189ca",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "resolveDragReleaseUpdate returns { bodyId, ownerId } on accept (line 43) with no expectedCurrentOwnerId, while the restore path pins expectedCurrentOwnerId:'sys_pointer' (line 48). If sys_pointer ownership changed between pickup and release the accept applies with no concurrency guard. Real but narrow."
+  },
+  {
+    "id": "P.run1.119",
+    "fingerprint": "map:src/engine/phaser/scenes/publishGameSceneDebugSnapshot.ts:16:4426fa06",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "previousSnapshot (line 16) and veinsSystem.graph.edges (line 17) are read through `as any`, so a rename silently degrades to false/0 with no compile error. Debug-panel only, so low; the reach-in would misreport health without signal, as claimed."
+  },
+  {
+    "id": "P.run1.120",
+    "fingerprint": "map:src/engine/phaser/background/backgroundRuntimeHelpers.ts:14:c5d3b7e7",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "parseBackgroundConfig uses BackgroundConfigSchema.parse (line 14, throws), called from refreshConfig->update every frame (BiologicalFogBackground.ts:22,70) with no try/catch. Schema enforces intensity>=0 and threshold_low<threshold_high (background.ts superRefine), and the camera path uses safeParse; a malformed background config throws the frame loop."
+  },
+  {
+    "id": "P.run1.121",
+    "fingerprint": "map:src/engine/phaser/background/resolveBiologicalFogUniforms.ts:36:abf462b3",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "base_color/lift_color are z.string().default(...) with no hex validation (background.ts:29-30), yet normalizeHexColor throws 'Invalid biological fog color' on non-hex (line 36), and it runs per frame in BiologicalFogBackground.update (line 32). A value like 'purple' passes config parse then hard-fails the render loop."
+  },
+  {
+    "id": "P.run1.122",
+    "fingerprint": "map:src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts:9:0186ca61",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "resource",
+    "oracle_match": null,
+    "notes": "Module-global cache (line 9) is only written (line 29) and read (line 26), never cleared or bounded; BodyAvatarPresentation holds three data-URL strings (bodyAvatarBridge.ts). Each new appearanceKey adds a permanent entry, leaking monotonically over re-rolled seeds. Slow leak, so low."
+  },
+  {
+    "id": "P.run1.123",
+    "fingerprint": "map:src/engine/phaser/background/biologicalFogShaderSource.ts:29:40b53348",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "The shader is GLSL ES 1.00 (precision/varying/gl_FragColor at lines 2,20,56) and declares `vec2 smooth` (line 29); `smooth` is a reserved interpolation qualifier in ES 1.00, so strict WebGL1 drivers reject it and the fog silently never renders. Works on permissive drivers (ANGLE); cosmetic + driver-dependent, hence low."
+  },
+  {
+    "id": "P.run1.124",
+    "fingerprint": "map:src/engine/phaser/camera/CameraController.ts:76:5d570b55",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "resource",
+    "oracle_match": null,
+    "notes": "bindInput() calls scene.input.addPointer(1) when fewer than 2 pointers exist (line 81), but destroy() only toggles handlers off (line 115) and never releases the added pointer. Repeated create/destroy cycles accrete pointers on the shared input plugin, as claimed."
+  },
+  {
+    "id": "P.run1.170",
+    "fingerprint": "map:src/engine/phaser/display/instance-manager/DisplayInstanceManagerTick.ts:37:bc701dd5",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "tickInstanceSafe wraps instance.tick in try/catch that only console.errors and swallows (lines 37-42). A module throwing mid-tick is silently skipped every frame, so a persistently broken display renders nothing/stale while the frame loop keeps running as healthy."
+  },
+  {
+    "id": "P.run1.171",
+    "fingerprint": "map:src/engine/phaser/display/visual-instance/EntityVisualInstanceHelpers.ts:72:8031853a",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "resource",
+    "oracle_match": null,
+    "notes": "validateScratchSlots collects leaked scratch objects and only console.errors them (lines 72-77); it neither destroys nor clears them, and releaseAnchors releases the anchors regardless. A genuine leak is surfaced only as a log, not remediated. Detected (not fully silent) and diagnostic-only, so low."
+  },
+  {
+    "id": "P.run1.172",
+    "fingerprint": "map:src/engine/phaser/display/instance-manager/DisplayInstanceManager.tutorialAttention.ts:34:db4cafc0",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "setInstanceInteractionBlocked reaches line 34 (target.disableInteractive?.()) only when target.input is falsy (line 30 returns otherwise); a target with no input is not interactive to begin with, so the optional-chain no-op cannot leave a blockable entity interactive. Immaterial."
+  },
+  {
+    "id": "P.run1.173",
+    "fingerprint": "map:src/engine/phaser/veins/veinsPresetResolver.ts:29:87edb358",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "resolveVeinsPreset calls resolveHeartbeatPreset (line 29) with no try/catch; heartbeatRules.ts calls adapter.evaluate (line 31) which runs compileExpression + jsonLogic.apply (JsonLogicAdapter.ts:25,42), both able to throw on a malformed operator-authored rule. The exception then propagates through VeinsSystem.update every frame instead of degrading to default."
+  },
+  {
+    "id": "P.run1.174",
+    "fingerprint": "map:src/engine/phaser/effects/runtimeVisualEffectBursts.ts:77:4932711f",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "resource",
+    "oracle_match": null,
+    "notes": "spawnGoldRings releases the pooled ring only in the tween onComplete (lines 85-88); the tween handle (line 77) is discarded with no cancellation hook. If the scene/tween manager is torn down before completion, onComplete never runs and the ring is never released to the pool. Real across teardown, benign steady-state."
+  },
+  {
+    "id": "P.run1.175",
+    "fingerprint": "map:src/engine/phaser/effects/runtimeVisualEffectBursts.ts:117:7374fbfc",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "resource",
+    "oracle_match": null,
+    "notes": "spawnSmokePuff schedules emitter.destroy() via scene.time.delayedCall(420, ...) (line 117) and ignores the timer handle; on abrupt teardown before 420ms the emitter may be left undestroyed. Largely covered by Phaser's normal scene child/timer cleanup, so low."
+  },
+  {
+    "id": "P.run1.176",
+    "fingerprint": "map:src/engine/phaser/display-export/buildDisplayImageRequest.ts:114:76948f5e",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "The per-source loop uses a bare `catch { continue; }` (lines 111-116) with no logging or reason comment, so a genuinely malformed asset that throws for every source is indistinguishable from a legitimately-absent key; both yield a silent null and missing icon. Cosmetic impact, so low."
+  },
+  {
+    "id": "P.run1.177",
+    "fingerprint": "map:src/engine/phaser/scenes/GameScene.pointer.ts:27:209d98b5",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "resource",
+    "oracle_match": null,
+    "notes": "Same defect as P.run1.115 from the fire-and-forget angle: the 'update' listener attached at line 27 is never detached in destroyPointerSceneSystems (lines 31-37), so the subscription outlives the systems it drives, retaining the destroyed preview and invoking preview.update() on torn-down state under scene reuse."
+  },
+  {
+    "id": "P.run1.178",
+    "fingerprint": "map:src/engine/phaser/display-export/renderResolvedDisplayImage.ts:116:a4524113",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "drawPlaceholder returns false when the variant or texture source is missing (lines 56,58) else true (line 65); at line 116 the caller discards it, so a missing placeholder texture draws nothing and the render returns a blank data-URL (line 117) with no error or fallback. Cosmetic empty-icon, so low."
+  },
+  {
+    "id": "P.run1.179",
+    "fingerprint": "map:src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts:31:99aa25b7",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "The try (lines 18-33) wraps registry resolution, seed resolution and buildBodyAvatarPresentation (which throws on a missing 2d context) and the catch bare-returns null with zero logging and no pdd-ignore marker. Any genuine defect there silently renders no avatar with no diagnostics."
+  },
+  {
+    "id": "P.run1.180",
+    "fingerprint": "map:src/engine/phaser/debug/phaserDebugToggle.ts:22:527128a3",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "store() swallows localStorage.setItem failures with an empty catch (line 22); this is a debug-toggle persistence best-effort that cannot affect product behavior, only whether the debug flag persists. Style/hygiene (unmarked swallow) only, immaterial."
+  },
+  {
+    "id": "P.run1.181",
+    "fingerprint": "map:src/engine/phaser/debug/phaserDebugToggle.ts:7:4c75d955",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "readStored() catches localStorage access errors and defaults to false (lines 6-8), a reasonable debug-only fallback the finding itself calls benign; only the missing pdd-ignore reason comment distinguishes it. Immaterial to product behavior."
+  }
+]

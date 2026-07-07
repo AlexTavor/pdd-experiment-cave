@@ -1,0 +1,191 @@
+[
+  {
+    "id": "P.run1.048",
+    "fingerprint": "map:src/engine/runtime/handlers/PatchBlueprintHandler.ts:8:1ba0034b",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "applyStatePatch line 19 `if (state[key] !== undefined) continue` skips keys the live entity already has, so a patched value for an existing state key is silently dropped on live entities while the blueprint definition is updated; PatchBlueprintHandler.test.ts pins hp staying 10 after a patch to 1."
+  },
+  {
+    "id": "P.run1.049",
+    "fingerprint": "map:src/engine/runtime/handlers/TransferHandler.ts:44:2bd6a34a",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "total is the sum of finalPayload (clampToAvailable in transferLogic.ts), so a source with nothing to send also yields total===0, yet the guard logs \"target '<id>' at capacity\", misattributing a source-empty transfer to target fullness. Message-only, no state corruption."
+  },
+  {
+    "id": "P.run1.050",
+    "fingerprint": "map:src/engine/runtime/handlers/capacityUtils.ts:46:8a8ab4df",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Lines 53-55 do copy non-finite/non-positive amounts through unchanged, but the downstream transfer path (validateSourceEntry in transferLogic.ts) rejects amount<=0, so such values cannot actually flow through a transfer; the 'bypasses clamping and flows downstream' consequence does not hold."
+  },
+  {
+    "id": "P.run1.051",
+    "fingerprint": "map:src/engine/runtime/handlers/mintSpawnId.ts:39:e0628935",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "The shared-serial behavior is exactly what the doc comment (lines 36-37) states; ids remain globally unique and per-prefix restart was never promised, so this is an immaterial naming observation, not a defect."
+  },
+  {
+    "id": "P.run1.052",
+    "fingerprint": "map:src/engine/runtime/systems/behavior/actionExecutorTraits.ts:43:722704fc",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Snapshot.reset (Snapshot.ts:33) aliases the live entity array via a cast, not a clone, and getEntities() returns Readonly only at compile time; executeAddTraitAction/executeRemoveTraitAction cast self and push/splice/assign self.traits directly, mutating the live entity during the read-only behavior phase, unlike sibling executors that only enqueue."
+  },
+  {
+    "id": "P.run1.053",
+    "fingerprint": "map:src/engine/runtime/contention/ContentionResolver.ts:84:ab571b37",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "resolveContention returns [...otherCommands, ...sortedTransfers], and the caller runtimeCollectCommands.ts:20 invokes it whenever any TRANSFER_ASSETS is present, so every non-transfer command is globally hoisted ahead of all transfers, inverting relative emission order between a non-transfer command and any transfer that preceded it."
+  },
+  {
+    "id": "P.run1.054",
+    "fingerprint": "map:src/engine/runtime/systems/AutomationSystem.ts:12:4752b972",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "getAutomationComponent only checks typeof==='object' and casts via `as any`, no Zod parse; AutomationComponentSchema.intervalMs.min(1) is thus not enforced at read time, and with intervalMs=0 resolveNextTiming computes nextRemaining % 0 = NaN then falls back to intervalMs=0 (lines 81-85)."
+  },
+  {
+    "id": "P.run1.055",
+    "fingerprint": "map:src/engine/runtime/systems/behavior/valueResolverEval.ts:17:d5538c9f",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Line 17 returns 0 for division by zero rather than Infinity/NaN, so `x / 0` silently yields 0 and downstream mutations consume that 0 as a real computed value with no signal of the degenerate case."
+  },
+  {
+    "id": "P.run1.056",
+    "fingerprint": "map:src/engine/runtime/Ticker.ts:27:72e2822d",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "step() calls callback(0); runtimeFactory.ts:64-65 wires the callback to runtime.tick(dt), and advanceRuntimeCoreTick returns null when normalizeDt(0)<=0, so Ticker.step() advances nothing. The real single-step is RuntimeCore.stepOncePreservingPause() which passes LOGIC_STEP_MS."
+  },
+  {
+    "id": "P.run1.057",
+    "fingerprint": "map:src/engine/runtime/runtimeReset.ts:15:c963e09a",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "resetRuntimeState sets state.tick=0 but never state.status; RuntimeCore.reset() then calls pause(), which is guarded `if (status !== \"fatal\")` (RuntimeCoreBase.ts:74), so a fatal runtime stays fatal across reset(). Only destroy() clears it to 'idle' (runtimeCoreState.ts:31)."
+  },
+  {
+    "id": "P.run1.058",
+    "fingerprint": "map:src/engine/runtime/runtimeCoreAdvance.ts:30:1711404b",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "entityStore/systemPhaseBuffers/systemsRegistry are typed `object` then cast to `never` at use (lines 52,55,56), so the declared type provides no checking. True but purely a compile-time typing observation with no runtime effect."
+  },
+  {
+    "id": "P.run1.059",
+    "fingerprint": "map:src/engine/runtime/persistence/types.ts:29:47355ecf",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "serialize() writes a hardcoded `timeScale: 1` (RuntimeSerializer.ts:40) regardless of the live time scale, and hydrateRuntime() never reads timeScale, so the required SaveGameState.timeScale field is inert on both ends and does not round-trip."
+  },
+  {
+    "id": "P.run1.060",
+    "fingerprint": "map:src/engine/runtime/persistence/types.ts:32:03446fbe",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "serialize() writes runtime.getAutomationSnapshot() (RuntimeSerializer.ts:44) but hydrateRuntime() never calls setAutomationSnapshot (which exists and is used only in the live tick, runtimeCoreTick.ts:49), so the automation snapshot is silently discarded on every load."
+  },
+  {
+    "id": "P.run1.061",
+    "fingerprint": "map:src/engine/runtime/persistence/physicsBodyPersistence.ts:16:e2c63b2c",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "The serialized `velocity` is indeed a per-tick Verlet position delta, not units/second, but serializePhysicsBody and syncPhysicsBody are internally consistent (reconstruct prevPosition = position - delta) and it is never assigned to body.velocity, so within the repo it round-trips correctly; this is a naming caveat with no actual defect."
+  },
+  {
+    "id": "P.run1.130",
+    "fingerprint": "map:src/engine/runtime/handlers/ResolveTransferHandler.ts:127:ea7bc9ac",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Line 127 `entry.value += amount` credits an existing receiver entry with no reference to entry.max; capacity is only checked at TRANSFER time (calculateTransaction), so a shrunk max or a returning transfer can push value above max, whereas other write paths clamp to max."
+  },
+  {
+    "id": "P.run1.131",
+    "fingerprint": "map:src/engine/runtime/handlers/TransferHandler.ts:51:86628d9f",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "MIN_TRANSFER_THRESHOLD is 0 (line 10) and the preceding guard returns on total<=0 (line 44), so `total < MIN_TRANSFER_THRESHOLD` (total<0) at line 51 is unreachable dead code that reads as a configurable floor but enforces nothing."
+  },
+  {
+    "id": "P.run1.132",
+    "fingerprint": "map:src/engine/runtime/handlers/SpawnHandler.ts:86:bdce079f",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "SpawnHandler.ts:86 deep-merges the freshly-built sys_world into the existing one; deepMerge (objectUtils.ts) preserves target keys absent from the source, and the freshly-built entity only clones blueprint components, so runtime-accumulated sys_world.state (e.g. spawnSerial/assignedIds not in the blueprint) persists, so respawn does not fully reset the world entity."
+  },
+  {
+    "id": "P.run1.133",
+    "fingerprint": "map:src/engine/runtime/handlers/spawnCollisionPlacement.ts:33:f996c4ee",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "resolveSpawnOverlap returns after resolving the first overlapping body in world-iteration order (line 33) and never re-checks the pushed-out position against other bodies, so a spawn into a dense cluster can be relocated onto another existing body; placement depends on entity iteration order."
+  },
+  {
+    "id": "P.run1.134",
+    "fingerprint": "map:src/engine/runtime/systems/AutomationSystem.ts:74:9a74dac2",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "test-adequacy",
+    "oracle_match": null,
+    "notes": "AutomationSystem is instantiated and driven by the tick (RuntimeSystemsRegistry.ts:15, runtimeSystemPhase.ts:61) but no *.test.ts references it anywhere in src, so the repeats-decrement, rollover, negative-remaining, and repeats===0 kill paths are pinned by no test."
+  },
+  {
+    "id": "P.run1.135",
+    "fingerprint": "map:src/engine/runtime/systems/AutomationSystem.ts:136:a6dc5398",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "On fire, tick enqueues a single EXECUTE (line 136) and resolveNextTiming decrements repeats by exactly one (line 79) regardless of dt span, so when dt exceeds intervalMs the automation fires once and loses one repeat that tick, dropping scheduled executions and running the countdown slower than wall-clock."
+  },
+  {
+    "id": "P.run1.136",
+    "fingerprint": "map:src/engine/runtime/systems/AutomationSystem.ts:115:e8571586",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "updateSnapshot is called at line 115, before the repeats===0 kill check at line 121, so an automation being killed this tick still sets the reported nextCommand/nextEventMs, making the snapshot advertise an event that will never execute."
+  }
+]

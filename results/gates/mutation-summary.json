@@ -1,0 +1,101 @@
+{
+  "source": ".pdd/.run/grade-status.json + units/*/mutation.json",
+  "engine": "builtin",
+  "global": {
+    "units": 11,
+    "mutantsRun": 10187,
+    "survivors": 7227,
+    "weighted_killrate": 0.2906
+  },
+  "units": [
+    {
+      "id": "src-engine-phaser",
+      "loc": 14735,
+      "mutantsRun": 5220,
+      "survivors": 4103,
+      "score": 0.2139846743295019,
+      "in_target_region": true
+    },
+    {
+      "id": "src-engine-runtime",
+      "loc": 9140,
+      "mutantsRun": 2103,
+      "survivors": 1487,
+      "score": 0.29291488349976225,
+      "in_target_region": true
+    },
+    {
+      "id": "src-engine-physics",
+      "loc": 1540,
+      "mutantsRun": 814,
+      "survivors": 593,
+      "score": 0.2714987714987715,
+      "in_target_region": true
+    },
+    {
+      "id": "src-engine-terminal",
+      "loc": 1676,
+      "mutantsRun": 471,
+      "survivors": 313,
+      "score": 0.3354564755838641,
+      "in_target_region": true
+    },
+    {
+      "id": "src-engine-vfs",
+      "loc": 797,
+      "mutantsRun": 207,
+      "survivors": 161,
+      "score": 0.2222222222222222,
+      "in_target_region": true
+    },
+    {
+      "id": "src-engine-logic",
+      "loc": 317,
+      "mutantsRun": 141,
+      "survivors": 138,
+      "score": 0.02127659574468085,
+      "in_target_region": true
+    },
+    {
+      "id": "src-engine-compiler",
+      "loc": 4134,
+      "mutantsRun": 736,
+      "survivors": 126,
+      "score": 0.8288043478260869,
+      "in_target_region": false
+    },
+    {
+      "id": "src-engine-balancing",
+      "loc": 471,
+      "mutantsRun": 157,
+      "survivors": 112,
+      "score": 0.28662420382165604,
+      "in_target_region": true
+    },
+    {
+      "id": "src-engine-linker",
+      "loc": 677,
+      "mutantsRun": 180,
+      "survivors": 88,
+      "score": 0.5111111111111111,
+      "in_target_region": false
+    },
+    {
+      "id": "src-engine-workspace",
+      "loc": 523,
+      "mutantsRun": 130,
+      "survivors": 79,
+      "score": 0.3923076923076923,
+      "in_target_region": true
+    },
+    {
+      "id": "src-engine-registry",
+      "loc": 204,
+      "mutantsRun": 28,
+      "survivors": 27,
+      "score": 0.03571428571428571,
+      "in_target_region": true
+    }
+  ],
+  "note": "Full survivor lists live in cave-public/.pdd/units/<id>/mutation.json. killable/equivalent/dead triage and cross-ref against finder findings are PENDING."
+}

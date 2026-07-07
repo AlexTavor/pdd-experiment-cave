@@ -1,0 +1,191 @@
+[
+  {
+    "id": "P.run1.137",
+    "fingerprint": "map:src/engine/runtime/contention/ContentionResolver.ts:12:c8cb3c5a",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "getPrimaryResource takes Object.keys(payload.payload)[0] as claimed, but executeTransferAction always emits payload:{[action.resource]:amount} (single key), so grouping/sorting is correct today. Purely latent for a hypothetical multi-resource transfer; no current misbehavior."
+  },
+  {
+    "id": "P.run1.138",
+    "fingerprint": "map:src/engine/runtime/systems/behavior/valueResolverPath.ts:53:c09d55a1",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "resolveFromEntity walks current[segment] with current typed any and no allowlist, but the null guard prevents crashes and non-numeric/exotic landings fall through to result=0 by design. Valid paths resolve correctly; this is a robustness/no-feedback observation, not a defect."
+  },
+  {
+    "id": "P.run1.139",
+    "fingerprint": "map:src/engine/runtime/RuntimeEntityStore.ts:76:241d5140",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "determinism",
+    "oracle_match": null,
+    "notes": "getSortedEntities orders ids via localeCompare (line 76) with no locale arg, and this ordering feeds every Snapshot/iteration order. localeCompare is ICU/locale-dependent, so identical id sets can collate differently across environments, a real determinism hazard on a path the codebase gates for determinism; an in-process test cannot detect it."
+  },
+  {
+    "id": "P.run1.140",
+    "fingerprint": "map:src/engine/runtime/runtimePhases.ts:67:40114ad6",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "flushCommands/stepOncePreservingPause/play/pause all guard status!=='fatal', but the public tick() path (advanceRuntimeCoreTick has no fatal guard, runRuntimeTick checks only 'paused') reaches advancePhase which sets status='running' unconditionally (line 67). A subsequent tick() on a fatal runtime silently clears the terminal state; tick() is called from many production paths."
+  },
+  {
+    "id": "P.run1.141",
+    "fingerprint": "map:src/engine/runtime/CommandsManager.ts:53:665e4295",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "process() logs to 'errors' and continues when no handler is registered (lines 53-59), dropping the command. buildTelemetryContext defaults to NOOP_ADAPTER, so if unwired the drop is fully silent. Real but low: all enum command types have registered handlers, so this only bites a new/mistyped type."
+  },
+  {
+    "id": "P.run1.142",
+    "fingerprint": "map:src/engine/runtime/runtimePauseState.ts:25:d94b7cf5",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "isBlockingOverlayActive reads world?.tutorial?.attention.pauseGame with no optional chain on attention (line 25), inconsistent with the sibling ?.active guards. TutorialComponent schema makes attention required, so this only throws on partial/hand-built state that bypasses validation: a real but latent, low-impact robustness gap."
+  },
+  {
+    "id": "P.run1.143",
+    "fingerprint": "map:src/engine/runtime/runtimeTick.ts:96:08058153",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "At line 96, hitting MAX_RUNTIME_SUBSTEPS returns 0 instead of the still-positive remainingTime, discarding accumulated time. This is a deliberate spiral-of-death guard, so simulated time is intentionally dropped under sustained slow frames; real time-non-conservation but bounded and by-design, low severity."
+  },
+  {
+    "id": "P.run1.144",
+    "fingerprint": "map:src/engine/runtime/persistence/hydrateRuntime.ts:41:df6a67cf",
+    "verdict": "false",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "serialize writes state.systems.automation = getAutomationSnapshot(), which is the derived read-model {activeCount,nextEventMs,nextCommand} recomputed every tick by AutomationSystem. The actual in-flight automation lives in each entity's 'automation' component, which is in STATEFUL_KEYS and IS saved/restored via the flyweight entity path. Claim that automation state is lost on load is unsupported."
+  },
+  {
+    "id": "P.run1.145",
+    "fingerprint": "map:src/engine/runtime/persistence/hydrateRawSystemWorld.ts:42:f2cc1bd7",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "hydrateRuntime clears the world (line 48) then hydrates entities; the sys_world raw path calls SysConfigSchema.parse (line 42, throws not safeParse). A config failing the schema throws mid-loop, leaving a wiped, partially-repopulated world with no rollback. Requires an already-invalid cartridge config but the non-atomic partial-state outcome is real."
+  },
+  {
+    "id": "P.run1.146",
+    "fingerprint": "map:src/engine/runtime/persistence/passportPermanentCarryoverRestore.ts:61:de776cf9",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "restorePhysicsBody returns false for entity-absent or physics-parse-failure, and restoreEntry attributes any false to invalid_target_physics_component (line 62). Since the entity was just added and blueprint physics was validated at line 48-53, this branch is near-unreachable; only the diagnostic label could mislead if hit. Immaterial."
+  },
+  {
+    "id": "P.run1.161",
+    "fingerprint": "map:src/engine/runtime/handlers/transferResources.ts:77:01630b72",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "debitResources skips any key whose entry is missing (if(entry), line 77) with no log. In TransferHandler the payload is calculateTransaction's clampedPayload, which only names available keys, so it is benign there; the untraced skip is a genuine reuse hazard, low severity."
+  },
+  {
+    "id": "P.run1.185",
+    "fingerprint": "map:src/engine/runtime/handlers/SpawnHandler.ts:104:a1612337",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "When assignTo is set but context.commands is undefined, the ASSIGN_BODIES_BATCH enqueue is guarded by 'if (assignTo && context.commands)' (line 104) and silently skipped, while the sibling enqueuePendingBodyHabitiUpdate logs an 'errors' message on the same missing-commands condition. Real inconsistency, low impact."
+  },
+  {
+    "id": "P.run1.186",
+    "fingerprint": "map:src/engine/runtime/handlers/AdjustStateHandler.ts:12:a8aa1459",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "ensureStateEntry returns silently when state is absent or the key is missing/non-numeric (lines 11-14, 24-30); the outer handle only logs on entity-not-found. UpdateStateHandler creates the entry instead, so the asymmetric silent no-op is real. Delta-on-missing-baseline is defensible, so low."
+  },
+  {
+    "id": "P.run1.187",
+    "fingerprint": "map:src/engine/runtime/handlers/ResolveTransferHandler.ts:67:98c16a26",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "When the pending entity is not found the handler does a bare 'return' with no telemetry (line 67), whereas the sibling missing-transfer and missing-receiver paths both log to 'errors' (lines 71-74, 86-90). A resolve on an already-removed pending id vanishes untraced; real inconsistency, low impact."
+  },
+  {
+    "id": "P.run1.188",
+    "fingerprint": "map:src/engine/runtime/handlers/PatchBlueprintHandler.ts:19:7e28b6c5",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "applyStatePatch does 'if (state[key] !== undefined) continue' (line 19), skipping any patch key that already exists on the live entity with no log. The blueprint components are still overwritten (line 78-85), but existing live-entity state values are silently not updated; real untraced drop, low severity."
+  },
+  {
+    "id": "P.run1.189",
+    "fingerprint": "map:src/engine/runtime/systems/behavior/valueResolverEval.ts:16:9ea06e95",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "applyOperator returns 'right===0 ? 0 : left/right' (line 17), swallowing division-by-zero to 0 with no signal. The result flows into MUTATE/TRANSFER amounts, so an expression dividing by a state value that reaches 0 yields a silently-wrong 0 rather than an error; real silent-wrong-value in a narrow authored case."
+  },
+  {
+    "id": "P.run1.190",
+    "fingerprint": "map:src/engine/runtime/systems/AutomationSystem.ts:82:37e22cc6",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "resolveNextTiming falls back to automation.intervalMs when rollover is non-finite/non-positive (lines 80-85); with intervalMs===0 this yields remainingMs 0 and re-fires each tick. But AutomationComponent schema sets intervalMs: z.number().min(1) and the component is validated on spawn/input, so 0 requires bypassing validation. Latent-only."
+  },
+  {
+    "id": "P.run1.191",
+    "fingerprint": "map:src/engine/runtime/systems/behavior/ActionExecutor.ts:39:9a3a1bb0",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "The action-type switch (lines 39-98) has no default branch, so an unrecognized type is silently dropped. The BehaviorAction TS union constrains authored actions, so this only fires on schema-drifted/runtime-constructed actions that cannot occur through validated data. Immaterial today."
+  },
+  {
+    "id": "P.run1.192",
+    "fingerprint": "map:src/engine/runtime/CommandsManager.ts:53:82c3e64e",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Same site as P.run1.141: unhandled command type logs to 'errors' and continues (lines 53-59), and the default NOOP_ADAPTER telemetry makes the drop silent when unwired. Real but low: every enum command type has a registered handler, so only a new/mistyped type triggers it."
+  },
+  {
+    "id": "P.run1.193",
+    "fingerprint": "map:src/engine/runtime/persistence/hydrateRuntime.ts:45:b58ab091",
+    "verdict": "false",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Duplicate of P.run1.144. state.systems.automation is the derived AutomationSnapshot (activeCount/nextEventMs/nextCommand), recomputed every tick; the real automation state is the per-entity 'automation' component in STATEFUL_KEYS, which is saved and restored via the entity path. No automation state is lost on load."
+  },
+  {
+    "id": "P.run1.194",
+    "fingerprint": "map:src/engine/runtime/persistence/passportPermanentCarryoverRestore.ts:31:fb4908a4",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "resolveRestoredParents does 'delete entity.parent' (line 34) when a target-spec parent cannot be resolved, with no issue recorded. It is intended fallback for an unresolvable parent, but the linkage loss is untraced; real, low-severity diagnostic gap."
+  }
+]

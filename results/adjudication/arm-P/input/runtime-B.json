@@ -1,0 +1,338 @@
+[
+  {
+    "id": "P.run1.137",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/contention/ContentionResolver.ts:12:c8cb3c5a",
+    "file": "src/engine/runtime/contention/ContentionResolver.ts",
+    "line": 12,
+    "title": "Contention grouping/sorting keys off only the first resource key of a transfer payload",
+    "detail": "getPrimaryResource takes Object.keys(payload.payload)[0]; a multi-resource transfer would be grouped and rule-matched by an arbitrary single resource. Currently benign because executeTransferAction always emits single-resource payloads, but the resolver silently mishandles any future multi-resource transfer.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.138",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/systems/behavior/valueResolverPath.ts:53:c09d55a1",
+    "file": "src/engine/runtime/systems/behavior/valueResolverPath.ts",
+    "line": 53,
+    "title": "resolveFromEntity walks arbitrary attacker/author-controlled dotted paths with `any` and no depth bound",
+    "detail": "A path expression descends entity properties via current[segment] with current typed any; a path landing on a function or exotic property is coerced to 0 silently, and there is no allowlist of readable fields, so state reads depend entirely on blueprint author paths being correct with no validation feedback.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.139",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/RuntimeEntityStore.ts:76:241d5140",
+    "file": "src/engine/runtime/RuntimeEntityStore.ts",
+    "line": 76,
+    "title": "Entity sort uses locale-dependent localeCompare on the sim path",
+    "detail": "getSortedEntities orders entities by id via String.prototype.localeCompare, and this ordering feeds every per-tick Snapshot and thus system iteration order. localeCompare is ICU/locale-dependent, so identical inputs can sort differently across environments/locales, breaking deterministic replay and byte-identical re-carve for any id set where locale collation diverges from code-point order. The in-process determinism test cannot catch this because collation is stable within one process.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.140",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/runtimePhases.ts:67:40114ad6",
+    "file": "src/engine/runtime/runtimePhases.ts",
+    "line": 67,
+    "title": "\"fatal\" status is not latched against the main tick loop and gets silently cleared",
+    "detail": "flushCommands/stepOncePreservingPause treat status===\"fatal\" as terminal (early return), but the main tick path does not: neither advanceRuntimeCoreTick nor runRuntimeTick checks fatal (runRuntimeTick only short-circuits on \"paused\"). If a fatal runtime is ticked with dt>0 and the substep body completes without re-throwing, advancePhase unconditionally sets status back to \"running\", clearing the fatal state. The terminal-error invariant is inconsistent across entry points.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.141",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/CommandsManager.ts:53:665e4295",
+    "file": "src/engine/runtime/CommandsManager.ts",
+    "line": 53,
+    "title": "Command with no registered handler is dropped after only a NOOP-defaulted log",
+    "detail": "When no handler is registered for a command type, process() logs to the \"errors\" telemetry channel and continues, discarding the command's intended effect. The command-context telemetry defaults to NOOP_ADAPTER (runtimeTelemetryContext), so if no telemetry adapter is wired the drop is completely silent: a mis-typed or unregistered command vanishes with zero observable trace and no state change.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.142",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/runtimePauseState.ts:25:d94b7cf5",
+    "file": "src/engine/runtime/runtimePauseState.ts",
+    "line": 25,
+    "title": "Asymmetric optional-chaining on tutorial.attention can throw",
+    "detail": "isBlockingOverlayActive guards draft/thought/announcement/guidance with `?.active` but reads `world?.tutorial?.attention.pauseGame` with no optional chain on `attention`. If a sys_world ever carries a tutorial component whose `attention` is missing (partial/hand-built state that bypasses the schema default), this throws a TypeError inside the tick's system phase. A validated TutorialComponent always has attention, so this is latent, but the guarding is inconsistent with the sibling checks and unprotected against malformed state.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.143",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/runtimeTick.ts:96:08058153",
+    "file": "src/engine/runtime/runtimeTick.ts",
+    "line": 96,
+    "title": "Substep cap silently discards accumulated time",
+    "detail": "When the loop hits MAX_RUNTIME_SUBSTEPS, runRuntimeTick returns 0 instead of the still-positive remainingTime, throwing away the unspent accumulator. Under sustained slow frames (accumulator persistently above 10 * LOGIC_STEP_MS) the sim silently drops simulated time rather than falling further behind; time is not conserved, which can desync anything comparing wall-clock to sim time. This is a deliberate spiral-of-death guard but the discard is unannounced.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.144",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/persistence/hydrateRuntime.ts:41:df6a67cf",
+    "file": "src/engine/runtime/persistence/hydrateRuntime.ts",
+    "line": 41,
+    "title": "Automation snapshot serialized but silently dropped on load",
+    "detail": "Every save records automation-system state (pending automation timers/commands) via serialize(), but hydrateRuntime never restores it, so loading a save resets all automation to empty. Players/tests lose in-flight automation with no error, and the save format carries dead payload.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.145",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/persistence/hydrateRawSystemWorld.ts:42:f2cc1bd7",
+    "file": "src/engine/runtime/persistence/hydrateRawSystemWorld.ts",
+    "line": 42,
+    "title": "Malformed cartridge config throws mid-hydrate after the world is already cleared",
+    "detail": "hydrateRuntime clears the world first (hydrateRuntime.ts:48), then hydrates the raw sys_world entity, which calls SysConfigSchema.parse (throwing, not safeParse). Any config that fails the schema throws inside the entity loop, leaving the runtime with a wiped world and only the entities processed before sys_world - a corrupted partial state with no rollback.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.146",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/persistence/passportPermanentCarryoverRestore.ts:61:de776cf9",
+    "file": "src/engine/runtime/persistence/passportPermanentCarryoverRestore.ts",
+    "line": 61,
+    "title": "restorePhysicsBody failure is mislabeled invalid_target_physics_component",
+    "detail": "restorePhysicsBody returns false for two distinct causes (entity absent, or physics schema parse failure), but restoreEntry attributes any false to invalid_target_physics_component. Since the entity was just added and the physics schema was already validated at line 48, this branch is a near-unreachable duplicate check whose issue reason would misdescribe the real cause if ever hit, misleading diagnostics.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.161",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/transferResources.ts:77:01630b72",
+    "file": "src/engine/runtime/handlers/transferResources.ts",
+    "line": 77,
+    "title": "silent failure: ignored-return",
+    "detail": "debitResources skips any key whose entry is missing on the source (`if (entry)`), silently dropping that portion of the debit with no log. Benign for the InstantTransferHandler path because clampToAvailable already filters keys with no numeric source value, but the helper itself gives no trace if reused where the payload can name absent keys.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.185",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/SpawnHandler.ts:104:a1612337",
+    "file": "src/engine/runtime/handlers/SpawnHandler.ts",
+    "line": 104,
+    "title": "silent failure: ignored-return",
+    "detail": "Real: when `assignTo` is set but `context.commands` is undefined, the deferred ASSIGN_BODIES_BATCH is silently dropped with no telemetry, so a body spawns unassigned without any error. The sibling call enqueuePendingBodyHabitiUpdate logs an error on the same missing-commands condition, so this omission is an inconsistency, not a deliberate no-op.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.186",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/AdjustStateHandler.ts:12:a8aa1459",
+    "file": "src/engine/runtime/handlers/AdjustStateHandler.ts",
+    "line": 12,
+    "title": "silent failure: ignored-return",
+    "detail": "Mostly benign but trace-losing: ensureStateEntry returns silently when the entity exists but has no state object, or the target key is absent/non-numeric (lines 12-14, 24-30). The command reports no error (the outer handle only logs on entity-not-found), so an ADJUST_STATE that hits a missing/invalid entry no-ops invisibly, unlike UpdateStateHandler which creates the entry. Diagnostically silent.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.187",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/ResolveTransferHandler.ts:67:98c16a26",
+    "file": "src/engine/runtime/handlers/ResolveTransferHandler.ts",
+    "line": 67,
+    "title": "silent failure: ignored-return",
+    "detail": "Benign-by-design but undiagnosed: when the pending entity referenced by RESOLVE_TRANSFER is not found, the handler returns with NO telemetry (bare `return`), unlike every other not-found path in the partition which logs to 'errors'. A resolve targeting an already-removed/duplicated pending id vanishes without a trace.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.188",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/handlers/PatchBlueprintHandler.ts:19:7e28b6c5",
+    "file": "src/engine/runtime/handlers/PatchBlueprintHandler.ts",
+    "line": 19,
+    "title": "silent failure: ignored-return",
+    "detail": "Real silent drop: applyStatePatch skips (continues past) any incoming state key that already exists on the live entity, discarding the patched value with no log. A caller patching an existing state value on live entities gets no signal that the update was ignored.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.189",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/systems/behavior/valueResolverEval.ts:16:9ea06e95",
+    "file": "src/engine/runtime/systems/behavior/valueResolverEval.ts",
+    "line": 16,
+    "title": "silent failure: ignored-return",
+    "detail": "Division by zero is swallowed to 0 (right===0 ? 0 : left/right) with no signal. A misconfigured expression dividing by a resolved-zero denominator produces a silent 0 that flows into MUTATE/TRANSFER amounts; looks healthy, wrong value. Real if any authored expression can divide by a state value that reaches 0.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.190",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/systems/AutomationSystem.ts:82:37e22cc6",
+    "file": "src/engine/runtime/systems/AutomationSystem.ts",
+    "line": 82,
+    "title": "silent failure: ignored-return",
+    "detail": "resolveNextTiming guards a non-finite/non-positive rollover by falling back to automation.intervalMs, but if intervalMs itself is 0 (schema not re-validated here) the fallback is 0, yielding an UPDATE_AUTOMATION with remainingMs 0 that re-fires every tick with no error. Benign only while every writer honors intervalMs>=1; nothing in this system enforces it.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.191",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/systems/behavior/ActionExecutor.ts:39:9a3a1bb0",
+    "file": "src/engine/runtime/systems/behavior/ActionExecutor.ts",
+    "line": 39,
+    "title": "silent failure: ignored-return",
+    "detail": "The action-type switch has no default branch; an unrecognized BehaviorAction.type (e.g. a new/typo'd action) falls through and is silently dropped with no command emitted and no warning. Mostly benign because the TS union constrains authored actions, but any runtime-constructed or schema-drifted action is a no-op that looks like it ran.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.192",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/CommandsManager.ts:53:82c3e64e",
+    "file": "src/engine/runtime/CommandsManager.ts",
+    "line": 53,
+    "title": "silent failure: ignored-return",
+    "detail": "Real when unwired: an unhandled command type is dropped in process() with only a telemetry.log to the \"errors\" channel; because the default command-context telemetry is NOOP_ADAPTER (runtimeTelemetryContext), absent an injected adapter the dropped command produces no state effect and no trace. Benign only if a real telemetry adapter is always wired and monitored.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.193",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/persistence/hydrateRuntime.ts:45:b58ab091",
+    "file": "src/engine/runtime/persistence/hydrateRuntime.ts",
+    "line": 45,
+    "title": "silent failure: ignored-return",
+    "detail": "REAL: data.state.systems.automation is present in every SaveGameData (written by serialize) but hydrateRuntime consumes only tick/entities/physics and never restores the automation snapshot; the automation portion of the save is silently ignored, so automation state is lost on load without any warning.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "runtime",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.194",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/runtime/persistence/passportPermanentCarryoverRestore.ts:31:fb4908a4",
+    "file": "src/engine/runtime/persistence/passportPermanentCarryoverRestore.ts",
+    "line": 31,
+    "title": "silent failure: ignored-return",
+    "detail": "MOSTLY BENIGN: resolveRestoredParents silently deletes an entity's parent (delete entity.parent) when a target-spec parent cannot be resolved to an existing entity. This is intended fallback (an unresolvable parent is dropped rather than left dangling), but it happens with no issue recorded, so a carryover entity that loses its parent linkage does so invisibly.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "runtime",
+    "in_target_region": true
+  }
+]

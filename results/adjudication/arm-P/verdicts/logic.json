@@ -1,0 +1,92 @@
+[
+  {
+    "id": "P.run1.013",
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.compile.ts:29:02b8bebe",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "Line 29 strips 'self.' (length 5) via slice(5) and re-prepends the identical 'self.', and line 31 does the same for 'globals.' (length 8) — both are pure no-ops, as claimed. Only line 30 ('global.'->'globals.') actually rewrites. Technically accurate but the no-op branches still return the correct unchanged ref, so behavior is unaffected; this is misleading-code clarity only."
+  },
+  {
+    "id": "P.run1.014",
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.entityFacade.ts:13:f89698be",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "RuntimeEntity extends Record<string, unknown> and entities genuinely carry a structured 'assignment' field used throughout the codebase (entity.assignment.assignedIds/.filter/.minimums). The proxy get trap at line 13 unconditionally returns the synthesized { parentId } for prop==='assignment', so any real assignment data (e.g. self.assignment.assignedIds) is unreachable through the facade."
+  },
+  {
+    "id": "P.run1.015",
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.ops.ts:12:de2e6053",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "Mechanism described is accurate: the module-level opsRegistered flag (line 7,13) makes every call after the first a no-op and jsonLogic.add_operation mutates the shared singleton import, so QUERY/QUERY_COUNT/SLOT/SUM register once and globally rather than per instance. But these are engine-generic ops registered idempotently and json-logic-js is only consumed via this adapter, so per-instance vs once yields identical behavior — a real footgun with no behavioral impact."
+  },
+  {
+    "id": "P.run1.088",
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.compile.ts:71:6f3adaf3",
+    "verdict": "real",
+    "judge_severity": "high",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "The token loop (line 71+) applies every op/keyword in source order with no precedence: current is folded left-to-right so {op:[current, right]} means '1 + 2 * 3' compiles to *(+(1,2),3)=9 and 'a AND b OR c' to or(and(a,b),c). Tokens are produced by plain whitespace-splitting (logicTokenService.parseTokensFromInput) with no precedence structure, and this compiler is the sole grammar, so rules authored assuming standard precedence silently evaluate to wrong numbers/booleans."
+  },
+  {
+    "id": "P.run1.089",
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.entityFacade.ts:30:8d636221",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "createLogicDataFacade (line 30) resolves any unknown top-level var as an entity id via context.snapshot.getEntity with NO mode check, while QUERY/QUERY_COUNT throw for tier2_entity (ops.ts:19,33). json-logic-js var splits on '.' and walks the first segment against data, so tier2 rules can read arbitrary entities/fields via {var:'<entityId>.<field>'}. Tier2 is reachable with a snapshot (BehaviorSystem.ts:113, draftConditionFilter.ts:94), so the intended tier-2 sandbox is bypassed for by-id entity access."
+  },
+  {
+    "id": "P.run1.090",
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.compile.ts:90:0de8babe",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "For an op token the RHS is read via tokenToAtom(requireToken(index)) at line 90, which only handles 'val'/'ref' and throws \"Unexpected token 'keyword'\" for NOT — whereas NOT is accepted at expression start and as an AND/OR operand via consumeAtom (line 58). So 'x == NOT y' throws while the negation is legal elsewhere; the grammar is asymmetric and rejects comparisons against a negated value."
+  },
+  {
+    "id": "P.run1.091",
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.ts:12:e262d54f",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "EMPTY_SELF = {} (line 12) is a shared module-level object reused as the facade target when context.self is nullish, and having no id it makes assignmentMap lookups collapse to assignmentMap[''] (createEntityFacade uses target.id ?? ''). The claim is accurate, but the facade is read-only so no state leaks and self.assignment still yields {parentId:null} correctly — the finder itself notes it is benign today; no current behavioral defect."
+  },
+  {
+    "id": "P.run1.167",
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.ops.ts:23:d22e8c3a",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Line 23: QUERY returns [] when __snapshot is absent OR typeof tag !== 'string'. A non-string tag is indistinguishable from a genuinely empty query result, so a wrong-typed tag silently evaluates as 'no matching entities' instead of erroring, which can make a rule silently mis-evaluate."
+  },
+  {
+    "id": "P.run1.168",
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.ops.ts:39:065e138d",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Line 39: QUERY_COUNT returns 0 when __snapshot is absent OR typeof tag !== 'string', conflating a non-string tag with a legitimate count of zero. A rule gated on QUERY_COUNT(badTag) > 0 silently never fires rather than surfacing the authoring error."
+  },
+  {
+    "id": "P.run1.169",
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.ops.ts:58:7e227b76",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Line 58: SLOT returns [] when typeof slotName !== 'string' (and slots[slotName] ?? [] returns [] for a missing slot), so a mistyped/non-string slot reference yields an empty list rather than an error. Combined with SUM returning 0 for non-arrays (ops.ts:83), a broken SLOT path silently produces 0 downstream."
+  }
+]

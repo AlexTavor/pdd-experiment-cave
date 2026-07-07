@@ -1,0 +1,101 @@
+[
+  {
+    "id": "P.run1.039",
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseEngine.ts:73:3709d1af",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Algebra confirmed: subSteps=min(max(1,requiredSteps), effectiveLimit) reduces to min(requiredSteps,48) for all inputs; configMax (from maxSubSteps) never binds because effectiveLimit=max(configMax, min(requiredSteps,48)) is always >= requiredSteps when it would matter. The schema-capped maxSubSteps knob is genuinely inert; only ABSOLUTE_MAX_SUBSTEPS=48 caps. Real but low: physics still runs correctly under the hardcoded cap."
+  },
+  {
+    "id": "P.run1.040",
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseEngine.ts:78:cc108aea",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "schema (impulseConfig.ts:25-31) exposes subSteps as a ui:slider with tooltip 'Physics sub-steps per frame' default 1; grep shows config.subSteps is never read in the engine (only in a test and defaults). tick() derives subSteps from dt and the 48-cap, so the slider has no simulation effect. Real inert-control footgun, low impact."
+  },
+  {
+    "id": "P.run1.041",
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseObstacleAvoidance.ts:89:fb5f1a3c",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "Line 89 'if (!neighbor.isStatic) continue;' confirmed inside findClosestObstacle; the buffer passed in (ImpulseSteeringForces.ts:42-49) is the full spatial query, yet only static bodies are ever considered obstacles. Dynamic bodies are handled by computeSeparation instead. Accurate name-vs-behavior footgun; behavior itself is by-design, so low."
+  },
+  {
+    "id": "P.run1.042",
+    "fingerprint": "map:src/engine/physics/quadtree/Quadtree.ts:230:589557c8",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "queryRadius (line 230) doc says 'all bodies that *might* collide with the given circle', but it delegates to queryRaw with half-extent=radius (a square) and queryRaw (lines 199-208) tests only each neighbor's center against the box, ignoring neighbor radius. A large body whose center sits just outside the box but whose disc overlaps the query circle is missed; not collision-complete. Real edge-case gap, low."
+  },
+  {
+    "id": "P.run1.043",
+    "fingerprint": "map:src/engine/physics/impulse/Steering.ts:35:100174c4",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "applySeek defined at Steering.ts:35; grep -rn 'applySeek' src/ returns only the definition, no callers. computeSeek is the live path. Dead exported code that reads as a live force API. Real footgun, low (cannot affect runtime, purely maintainability)."
+  },
+  {
+    "id": "P.run1.044",
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseSeparation.ts:56:0780455b",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "applySeparation (quadtree-taking wrapper) defined at ImpulseSeparation.ts:56; grep -rn 'applySeparation' src/ returns only the definition, no callers. Live separation path is computeSeparation via ImpulseSteeringForces.ts:53. Dead exported code presenting as the entry point. Real footgun, low."
+  },
+  {
+    "id": "P.run1.125",
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseEngineIntegration.ts:22:bf36e8ab",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "clampToBounds (line 22) does 'body.position = { x, y }', reassigning the object, whereas every other path (e.g. lines 48-51, stepVerlet) mutates position.x/y in place. Any held reference to the prior Vector2 would go stale. No proven live aliaser in this file, so the concrete blast radius depends on an external holder; real inconsistency, low."
+  },
+  {
+    "id": "P.run1.126",
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseSeparation.ts:36:f71812c3",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Lines 35-38: for distance < 0.0001 the code sets 'dx += 1; distance = 1;' and never touches dy, so exactly-coincident bodies are always pushed along +X. Perfectly-stacked clusters disperse with a directional bias instead of isotropically. Real but minor visual/behavioral quirk, low."
+  },
+  {
+    "id": "P.run1.127",
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseSteeringForces.ts:16:44c65548",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "computeWobbleForce returns the module-level shared zeroVector (line 79); ImpulseSteeringHelpers.ts:7 and ImpulseAnchor.ts:4 do the same. The claim is accurate, but the finding itself concedes current callers only read the value and consumers accumulate via '+=' rather than mutating the returned object, so it cannot affect behavior today. Latent future risk only -> trivial."
+  },
+  {
+    "id": "P.run1.182",
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseEngine.ts:42:aabac847",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "setWorldBounds (lines 42-48) returns void and silently no-ops for non-finite width/height or sizes below config.minWorldSize, giving the caller no error or return signal. Bounds then stay null/previous, and clampToBounds (Integration.ts:13) early-returns on null world, leaving the sim unbounded. Real silent-failure on invalid input (NaN / sub-minWorldSize); manifests only for abnormal input so medium."
+  },
+  {
+    "id": "P.run1.183",
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseEngine.ts:37:d57ae7d9",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "setTarget (line 37) does 'if (!body) return', silently dropping a target assignment for a bodyId not (yet) in the map with no error or return value; the seek simply never engages. Real ignored-condition, but narrow timing case and no data loss (finding concedes mostly benign), so low."
+  }
+]

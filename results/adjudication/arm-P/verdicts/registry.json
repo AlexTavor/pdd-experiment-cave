@@ -1,0 +1,56 @@
+[
+  {
+    "id": "P.run1.045",
+    "fingerprint": "map:src/engine/registry/referenceIndex.walk.ts:3:370ca7ed",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "walk.ts:3 defines /\\bentity_[a-z0-9]+\\b/i and line 52 only pushes to broken when a value matches it; real module ids in src/data/raw are slugs (butcher, newbody) and nanoids (ztVe0xjtZLd1ph5twD3mV, 0HNjKctJ5pN7Zwr6gV2ay), none entity_-prefixed, and the tests use synthetic entity_* ids. Broken detection genuinely only fires for test-shaped ids; medium because the only consumer is a devtools issues panel, not a data gate."
+  },
+  {
+    "id": "P.run1.046",
+    "fingerprint": "map:src/engine/registry/referenceIndex.walk.ts:52:589560f9",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "The pattern at line 3 is anchored only by \\b (no ^...$), so test() is a substring match, and lines 53-59 push missingId: value (the whole string); the filter in referenceIndex.ts:65 then checks existingIds.has on that whole string. Code-accurate, but only manifests for free-text containing an entity_ token, which does not occur in real data, so impact is narrow."
+  },
+  {
+    "id": "P.run1.047",
+    "fingerprint": "map:src/engine/registry/referenceIndex.walk.ts:41:ccfb007a",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "existingIds.has(value) at line 41 is a case-sensitive JS Set lookup while ENTITY_ID_PATTERN carries the i flag, so a case-variant reference (entity_A vs key entity_a) misses the Set, matches the pattern, and is reported broken. The sequence holds against the code, but only affects entity_-prefixed ids that exist solely in tests, so it is real but very narrow."
+  },
+  {
+    "id": "P.run1.128",
+    "fingerprint": "map:src/engine/registry/referenceIndex.walk.ts:52:10ff916b",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Because line 52 gates broken.push on the entity_ pattern, a reference to a real but missing nanoid/slug id yields an empty broken list; the sole consumer useIssuesPanel.ts:33 surfaces refs.broken as the module's dangling-reference report, so it shows a permanent false all-clear on production data. Severity medium not high: this feeds an author-facing devtools diagnostic, not a save/runtime path, so no data loss or crash results."
+  },
+  {
+    "id": "P.run1.129",
+    "fingerprint": "map:src/engine/registry/referenceIndex.ts:65:1d1a1b3e",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Confirmed a no-op: walk.ts returns early at line 41 when existingIds.has(value), so every broken entry's missingId is guaranteed absent from existingIds and the filter at referenceIndex.ts:65 can never remove an element. Technically true but cannot affect current behavior, hence trivial; it is latent-only redundancy, not a live defect."
+  },
+  {
+    "id": "P.run1.184",
+    "fingerprint": "map:src/engine/registry/referenceIndex.walk.ts:61:4d7eb3bd",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Line 61 is a bare return reached when a non-existing string value fails the entity_ pattern, so a dangling reference to a real missing id (e.g. a payload blueprintId or pool optionId) produces no incoming and no broken entry and is dropped untraced. Real silent-failure; impact is confined to the completeness of the devtools issues panel rather than runtime state, so medium."
+  }
+]

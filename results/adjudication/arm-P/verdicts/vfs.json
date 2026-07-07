@@ -1,0 +1,65 @@
+[
+  {
+    "id": "P.run1.068",
+    "fingerprint": "map:src/engine/vfs/FileSystem.ts:62:2ca0b182",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "FileSystem.ts:62 compiles glob to an anchored case-insensitive regex where '*' becomes '.*' (line 71) with the 'i' flag (line 76), so '.*' crosses '/' and scan('src/*.json') over-matches nested keys like src/a/b.json; the batch path in indexedDbBatch.ts (line 69-70, 79) behaves identically. Name 'glob' implies segment-bounded, case-sensitive semantics it does not provide."
+  },
+  {
+    "id": "P.run1.069",
+    "fingerprint": "map:src/engine/vfs/version.ts:5:48acd875",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "version.ts:6-7 parse dot components with Number(p)||0, so '1.0.0-beta' yields Number('0-beta')=NaN->0 and compares equal to '1.0.0', and '1.2' equals '1.2.0'; the doc comment claims real semver comparison. Feeds the overwrite_db_with_disk decision at bootstrapHydration.ts:43, so a pre-release-vs-release tie silently keeps the wrong cartridge."
+  },
+  {
+    "id": "P.run1.070",
+    "fingerprint": "map:src/engine/vfs/bootstrapSnapshot.ts:18:1b41c57e",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "bootstrapSnapshot.ts:18-30 only asserts a non-null, non-array, JSON-serializable object; it never validates keys as paths or values as ModuleCartridge shape. This is the function importAll and importState actually invoke (re-exported via bootstrap.ts:11), so arbitrary object payloads pass and are written verbatim, contrary to the 'assertValidBootstrapSnapshot' name."
+  },
+  {
+    "id": "P.run1.153",
+    "fingerprint": "map:src/engine/vfs/FileSystem.ts:31:3b5b2851",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "deleteFile clears dirtyFiles (FileSystem.ts:89) but deletePaths (line 31-40) and movePaths (line 42-60) never touch it, so a deleted dirty file lingers in dirtyFiles and a moved file leaves the old path dirty and the new path unmarked. getDirtyFiles is consumed at useGlobalEditorToolbarActions.ts:27-28 to choose files to save, so the change set is genuinely wrong."
+  },
+  {
+    "id": "P.run1.154",
+    "fingerprint": "map:src/engine/vfs/indexedDbBatch.ts:52:940329ad",
+    "verdict": "real",
+    "judge_severity": "high",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "moveMany captures allKeys once (line 38), collects all writes and a delete set independently with no collision guard, then flushes every put (line 52) before every delete (line 53). When one move's target key equals another move's deleted source (overlapping moves reachable via RefactorService.ts:54), the delete phase removes a key the write phase just populated, silently dropping data; no overlap test exists in IndexedDBPersistence.test.ts."
+  },
+  {
+    "id": "P.run1.155",
+    "fingerprint": "map:src/engine/vfs/IndexedDBPersistence.ts:70:159dc658",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "importAll (lines 71-82) validates only via assertValidBootstrapSnapshot, then clears the store (line 74) and puts each top-level value verbatim, so a JSON-serializable but non-cartridge snapshot wipes prior VFS contents and repopulates with garbage. The clear/put are one atomic tx (correct for replace semantics), so the real defect is the absent value/path validation, not the clear itself."
+  },
+  {
+    "id": "P.run1.201",
+    "fingerprint": "map:src/engine/vfs/fileSystemBaseDisk.ts:43:04a43419",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "fetchDiskData wraps the fetch and response.json() in try/catch and returns null on any error (fileSystemBaseDisk.ts:43-45) with no logging. readFile/readText (FileSystem.base.ts:66,81) treat null identically to 'file absent', and during init a null disk read feeds decideHydration as diskData:null, so a transient network/CORS/parse failure is indistinguishable from a missing file and can trigger create_empty or an empty read."
+  }
+]

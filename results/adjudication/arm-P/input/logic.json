@@ -1,0 +1,162 @@
+[
+  {
+    "id": "P.run1.013",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.compile.ts:29:02b8bebe",
+    "file": "src/engine/logic/JsonLogicAdapter.compile.ts",
+    "line": 29,
+    "title": "footgun: normalizeRef appears to normalize a 'self.'-prefixed ref, sitting alongside the 'global.'->'globals.' rewrite as if it transforms the string.",
+    "detail": "'self.'.length is 5, so `self.${ref.slice(5)}` strips 'self.' and re-prepends the identical 'self.' \u2014 the branch is a pure no-op returning ref unchanged. The 'globals.' branch on line 31 is likewise a no-op. Only the 'global.'->'globals.' branch (line 30) actually rewrites anything.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "logic",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.014",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.entityFacade.ts:13:f89698be",
+    "file": "src/engine/logic/JsonLogicAdapter.entityFacade.ts",
+    "line": 13,
+    "title": "footgun: The entity facade's get trap intercepts prop === 'assignment' to derive { parentId } from the assignmentMap, reading as a convenience accessor added on top of the entity.",
+    "detail": "RuntimeEntity is Record<string, unknown>, so an entity may carry its own real 'assignment' field; the Proxy unconditionally shadows it and always returns the synthesized { parentId }, so any genuine entity.assignment data is unreachable through the facade.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "logic",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.015",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.ops.ts:12:de2e6053",
+    "file": "src/engine/logic/JsonLogicAdapter.ops.ts",
+    "line": 12,
+    "title": "footgun: registerOperations is invoked from the JsonLogicAdapter constructor (JsonLogicAdapter.ts:16), reading as per-instance operation registration.",
+    "detail": "A module-level `opsRegistered` flag (ops.ts:7) makes every call after the first a no-op, and json-logic-js.add_operation mutates the shared singleton import \u2014 so QUERY/QUERY_COUNT/SLOT/SUM are registered exactly once and leak globally into every json-logic-js consumer in the process, not scoped to any adapter instance.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "logic",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.088",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.compile.ts:71:6f3adaf3",
+    "file": "src/engine/logic/JsonLogicAdapter.compile.ts",
+    "line": 71,
+    "title": "Compiler ignores operator precedence; mixed arithmetic/boolean folds strictly left-to-right",
+    "detail": "The token loop applies every op/keyword in source order with no precedence, so `1 + 2 * 3` compiles to *(+(1,2),3)=9 not 7, and `a AND b OR c` compiles to or(and(a,b),c) regardless of intended grouping. Any rule authored assuming standard precedence silently evaluates to the wrong number/boolean.",
+    "finder_severity": "high",
+    "finder_class": "risk",
+    "subsystem": "logic",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.089",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.entityFacade.ts:30:8d636221",
+    "file": "src/engine/logic/JsonLogicAdapter.entityFacade.ts",
+    "line": 30,
+    "title": "Tier-2 isolation is enforced on QUERY/SLOT but not on by-id entity access",
+    "detail": "createLogicDataFacade resolves any unknown top-level var name as an entity id via snapshot.getEntity in ALL modes. json-logic's `var` walks the first path segment, so tier2_entity logic \u2014 explicitly blocked from QUERY/QUERY_COUNT (ops.ts:19,33) \u2014 can still read arbitrary entities and their fields with `{var:\"<entityId>.<field>\"}`, defeating the intended tier-2 sandbox.",
+    "finder_severity": "high",
+    "finder_class": "risk",
+    "subsystem": "logic",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.090",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.compile.ts:90:0de8babe",
+    "file": "src/engine/logic/JsonLogicAdapter.compile.ts",
+    "line": 90,
+    "title": "Operator right-hand operand cannot be NOT or a sub-expression",
+    "detail": "For an `op` token the RHS is read with tokenToAtom(requireToken(index)) rather than consumeAtom(), so `x == NOT y` throws LogicCompileError('Unexpected token keyword') even though NOT is accepted as an AND/OR operand and at expression start. The grammar is asymmetric and rejects otherwise-reasonable comparisons against a negated value.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "logic",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.091",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.ts:12:e262d54f",
+    "file": "src/engine/logic/JsonLogicAdapter.ts",
+    "line": 12,
+    "title": "Shared EMPTY_SELF singleton used as default self target",
+    "detail": "A single module-level EMPTY_SELF = {} is reused as the Proxy target for every evaluation whose context.self is nullish. The facade is read-only today so this is benign, but any future write through the self facade (or a json-logic op mutating `this`) would leak state across unrelated evaluations. It also has no id, so assignmentMap lookups collapse to assignmentMap[''].",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "logic",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.167",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.ops.ts:23:d22e8c3a",
+    "file": "src/engine/logic/JsonLogicAdapter.ops.ts",
+    "line": 23,
+    "title": "silent failure: ignored-return",
+    "detail": "QUERY returns [] when __snapshot is absent OR tag is not a string. A malformed tag (number/undefined) is indistinguishable from a genuinely empty query result, so a typo'd or wrong-typed tag silently evaluates as 'no matching entities' rather than erroring \u2014 real: can mask authoring mistakes in rules.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "logic",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.168",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.ops.ts:39:065e138d",
+    "file": "src/engine/logic/JsonLogicAdapter.ops.ts",
+    "line": 39,
+    "title": "silent failure: ignored-return",
+    "detail": "QUERY_COUNT returns 0 when __snapshot is absent OR tag is not a string, conflating a malformed/wrong-typed tag with a legitimate count of zero; a rule gated on QUERY_COUNT(badTag) > 0 silently never fires. Real for rule correctness, benign for crash-safety.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "logic",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.169",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/logic/JsonLogicAdapter.ops.ts:58:7e227b76",
+    "file": "src/engine/logic/JsonLogicAdapter.ops.ts",
+    "line": 58,
+    "title": "silent failure: ignored-return",
+    "detail": "SLOT returns [] when slotName is not a string (and [] for a missing slot), so a mistyped slot reference yields an empty entity list instead of an error. Combined with SUM (which returns 0 for non-arrays), a broken SLOT path silently produces 0 downstream. Real: masks slot-name authoring errors.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "logic",
+    "in_target_region": true
+  }
+]

@@ -1,0 +1,1867 @@
+{
+  "source": ".pdd/findings/check.json",
+  "scope": "whole engine (src/engine incl compiler+linker)",
+  "generatedAt": "2026-07-06T22:45:33.348Z",
+  "overall_verdict": "pass",
+  "gates": [
+    {
+      "gate": "cover-the-mirror",
+      "mode": "warn",
+      "verdict": "fail",
+      "stats": {
+        "files": 604,
+        "definitions": 1873,
+        "subjects": 1025,
+        "suppressedByTeardown": 9,
+        "gating": 8
+      },
+      "finding_count": 36,
+      "findings": [
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "high",
+          "title": "attach \u2192 detach",
+          "subject": "if needed runtime",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/scenes/GameScene.runtime.ts",
+            "line": 4,
+            "offset": null
+          },
+          "detail": "unpaired attach on subject \"if needed runtime\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "attach",
+            "expectedInverse": [
+              "detach"
+            ],
+            "tier": "high",
+            "present": [
+              {
+                "name": "attachRuntimeIfNeeded",
+                "file": "phaser/scenes/GameScene.runtime.ts",
+                "line": 4
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:if needed runtime:src/engine/phaser/scenes/GameScene.runtime.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "high",
+          "title": "bind \u2192 unbind/detach",
+          "subject": "circle interactive",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/display/interactionHitArea.ts",
+            "line": 38,
+            "offset": null
+          },
+          "detail": "unpaired bind on subject \"circle interactive\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "bind",
+            "expectedInverse": [
+              "unbind",
+              "detach"
+            ],
+            "tier": "high",
+            "present": [
+              {
+                "name": "bindInteractiveCircle",
+                "file": "phaser/display/interactionHitArea.ts",
+                "line": 38
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:circle interactive:src/engine/phaser/display/interactionHitArea.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "high",
+          "title": "register \u2192 unregister/deregister",
+          "subject": "behavior pre system",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/RuntimeAccessors.ts",
+            "line": 81,
+            "offset": null
+          },
+          "detail": "unpaired register on subject \"behavior pre system\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "register",
+            "expectedInverse": [
+              "unregister",
+              "deregister"
+            ],
+            "tier": "high",
+            "present": [
+              {
+                "name": "registerPreBehaviorSystem",
+                "file": "runtime/RuntimeAccessors.ts",
+                "line": 81
+              },
+              {
+                "name": "registerPreBehaviorSystem",
+                "file": "runtime/RuntimeSystemsRegistry.ts",
+                "line": 42
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:behavior pre system:src/engine/runtime/RuntimeAccessors.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "high",
+          "title": "register \u2192 unregister/deregister",
+          "subject": "body physic",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/RuntimeAccessors.ts",
+            "line": 102,
+            "offset": null
+          },
+          "detail": "unpaired register on subject \"body physic\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "register",
+            "expectedInverse": [
+              "unregister",
+              "deregister"
+            ],
+            "tier": "high",
+            "present": [
+              {
+                "name": "registerPhysicsBody",
+                "file": "runtime/RuntimeAccessors.ts",
+                "line": 102
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:body physic:src/engine/runtime/RuntimeAccessors.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "high",
+          "title": "register \u2192 unregister/deregister",
+          "subject": "operation",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/logic/JsonLogicAdapter.ops.ts",
+            "line": 12,
+            "offset": null
+          },
+          "detail": "unpaired register on subject \"operation\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "register",
+            "expectedInverse": [
+              "unregister",
+              "deregister"
+            ],
+            "tier": "high",
+            "present": [
+              {
+                "name": "registerOperations",
+                "file": "logic/JsonLogicAdapter.ops.ts",
+                "line": 12
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:operation:src/engine/logic/JsonLogicAdapter.ops.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "high",
+          "title": "register \u2192 unregister/deregister",
+          "subject": "system",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/RuntimeAccessors.ts",
+            "line": 77,
+            "offset": null
+          },
+          "detail": "unpaired register on subject \"system\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "register",
+            "expectedInverse": [
+              "unregister",
+              "deregister"
+            ],
+            "tier": "high",
+            "present": [
+              {
+                "name": "registerSystem",
+                "file": "runtime/RuntimeAccessors.ts",
+                "line": 77
+              },
+              {
+                "name": "registerSystem",
+                "file": "runtime/RuntimeSystemsRegistry.ts",
+                "line": 38
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:system:src/engine/runtime/RuntimeAccessors.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "high",
+          "title": "start \u2192 stop/cancel/abort/kill",
+          "subject": "burst distress",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/display/modules/distress/distressHaloHelpers.ts",
+            "line": 20,
+            "offset": null
+          },
+          "detail": "unpaired start on subject \"burst distress\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "start",
+            "expectedInverse": [
+              "stop",
+              "cancel",
+              "abort",
+              "kill",
+              "halt"
+            ],
+            "tier": "high",
+            "present": [
+              {
+                "name": "startDistressBurst",
+                "file": "phaser/display/modules/distress/distressHaloHelpers.ts",
+                "line": 20
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:burst distress:src/engine/phaser/display/modules/distress/distressHaloHelpers.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "medium",
+          "title": "begin \u2192 end/commit/finish/abort",
+          "subject": "pinch",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/camera/cameraTouch.ts",
+            "line": 43,
+            "offset": null
+          },
+          "detail": "unpaired begin on subject \"pinch\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "begin",
+            "expectedInverse": [
+              "end",
+              "commit",
+              "finish",
+              "abort"
+            ],
+            "tier": "medium",
+            "present": [
+              {
+                "name": "beginPinch",
+                "file": "phaser/camera/cameraTouch.ts",
+                "line": 43
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:pinch:src/engine/phaser/camera/cameraTouch.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "add \u2192 remove/delete/drop/evict",
+          "subject": "demand edge",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/veins/graphBuilderEdges.ts",
+            "line": 38,
+            "offset": null
+          },
+          "detail": "unpaired add on subject \"demand edge\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "add",
+            "expectedInverse": [
+              "remove",
+              "delete",
+              "drop",
+              "evict",
+              "discard",
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "addDemandEdges",
+                "file": "phaser/veins/graphBuilderEdges.ts",
+                "line": 38
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:demand edge:src/engine/phaser/veins/graphBuilderEdges.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "add \u2192 remove/delete/drop/evict",
+          "subject": "demand edge sink",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/veins/graphBuilderSinkEdges.ts",
+            "line": 17,
+            "offset": null
+          },
+          "detail": "unpaired add on subject \"demand edge sink\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "add",
+            "expectedInverse": [
+              "remove",
+              "delete",
+              "drop",
+              "evict",
+              "discard",
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "addSinkDemandEdge",
+                "file": "phaser/veins/graphBuilderSinkEdges.ts",
+                "line": 17
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:demand edge sink:src/engine/phaser/veins/graphBuilderSinkEdges.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "add \u2192 remove/delete/drop/evict",
+          "subject": "demand route",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/veins/graphBuilderEdges.ts",
+            "line": 14,
+            "offset": null
+          },
+          "detail": "unpaired add on subject \"demand route\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "add",
+            "expectedInverse": [
+              "remove",
+              "delete",
+              "drop",
+              "evict",
+              "discard",
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "addDemandRoute",
+                "file": "phaser/veins/graphBuilderEdges.ts",
+                "line": 14
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:demand route:src/engine/phaser/veins/graphBuilderEdges.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "add \u2192 remove/delete/drop/evict",
+          "subject": "direct ids",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/runtimeInvalidationSummary.helpers.ts",
+            "line": 22,
+            "offset": null
+          },
+          "detail": "unpaired add on subject \"direct ids\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "add",
+            "expectedInverse": [
+              "remove",
+              "delete",
+              "drop",
+              "evict",
+              "discard",
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "addDirectIds",
+                "file": "runtime/runtimeInvalidationSummary.helpers.ts",
+                "line": 22
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:direct ids:src/engine/runtime/runtimeInvalidationSummary.helpers.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "add \u2192 remove/delete/drop/evict",
+          "subject": "edge nervous",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/veins/graphBuilderNervous.ts",
+            "line": 53,
+            "offset": null
+          },
+          "detail": "unpaired add on subject \"edge nervous\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "add",
+            "expectedInverse": [
+              "remove",
+              "delete",
+              "drop",
+              "evict",
+              "discard",
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "addNervousEdges",
+                "file": "phaser/veins/graphBuilderNervous.ts",
+                "line": 53
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:edge nervous:src/engine/phaser/veins/graphBuilderNervous.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "add \u2192 remove/delete/drop/evict",
+          "subject": "edge sink",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/veins/graphBuilderEdges.ts",
+            "line": 52,
+            "offset": null
+          },
+          "detail": "unpaired add on subject \"edge sink\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "add",
+            "expectedInverse": [
+              "remove",
+              "delete",
+              "drop",
+              "evict",
+              "discard",
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "addSinkEdges",
+                "file": "phaser/veins/graphBuilderEdges.ts",
+                "line": 52
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:edge sink:src/engine/phaser/veins/graphBuilderEdges.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "add \u2192 remove/delete/drop/evict",
+          "subject": "edge world",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/veins/graphBuilderNervous.ts",
+            "line": 11,
+            "offset": null
+          },
+          "detail": "unpaired add on subject \"edge world\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "add",
+            "expectedInverse": [
+              "remove",
+              "delete",
+              "drop",
+              "evict",
+              "discard",
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "addWorldEdge",
+                "file": "phaser/veins/graphBuilderNervous.ts",
+                "line": 11
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:edge world:src/engine/phaser/veins/graphBuilderNervous.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "add \u2192 remove/delete/drop/evict",
+          "subject": "id",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/runtimeInvalidationSummary.helpers.ts",
+            "line": 16,
+            "offset": null
+          },
+          "detail": "unpaired add on subject \"id\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "add",
+            "expectedInverse": [
+              "remove",
+              "delete",
+              "drop",
+              "evict",
+              "discard",
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "addId",
+                "file": "runtime/runtimeInvalidationSummary.helpers.ts",
+                "line": 16
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:id:src/engine/runtime/runtimeInvalidationSummary.helpers.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "add \u2192 remove/delete/drop/evict",
+          "subject": "node",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/veins/graphBuilderCommon.ts",
+            "line": 18,
+            "offset": null
+          },
+          "detail": "unpaired add on subject \"node\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "add",
+            "expectedInverse": [
+              "remove",
+              "delete",
+              "drop",
+              "evict",
+              "discard",
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "addNode",
+                "file": "phaser/veins/graphBuilderCommon.ts",
+                "line": 18
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:node:src/engine/phaser/veins/graphBuilderCommon.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "add \u2192 remove/delete/drop/evict",
+          "subject": "route world",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/veins/graphBuilderNervous.ts",
+            "line": 26,
+            "offset": null
+          },
+          "detail": "unpaired add on subject \"route world\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "add",
+            "expectedInverse": [
+              "remove",
+              "delete",
+              "drop",
+              "evict",
+              "discard",
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "addWorldRoute",
+                "file": "phaser/veins/graphBuilderNervous.ts",
+                "line": 26
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:route world:src/engine/phaser/veins/graphBuilderNervous.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "encode \u2192 decode",
+          "subject": "pointer segment",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/workspace/projectModuleParsing.ts",
+            "line": 8,
+            "offset": null
+          },
+          "detail": "unpaired encode on subject \"pointer segment\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "encode",
+            "expectedInverse": [
+              "decode"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "encodePointerSegment",
+                "file": "workspace/projectModuleParsing.ts",
+                "line": 8
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:pointer segment:src/engine/workspace/projectModuleParsing.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "enqueue \u2192 dequeue/drain",
+          "subject": "add",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+            "line": 24,
+            "offset": null
+          },
+          "detail": "unpaired enqueue on subject \"add\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "enqueue",
+            "expectedInverse": [
+              "dequeue",
+              "drain"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "enqueueAdd",
+                "file": "runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+                "line": 24
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:add:src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "enqueue \u2192 dequeue/drain",
+          "subject": "adjust fact",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/factCommands.ts",
+            "line": 5,
+            "offset": null
+          },
+          "detail": "unpaired enqueue on subject \"adjust fact\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "enqueue",
+            "expectedInverse": [
+              "dequeue",
+              "drain"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "enqueueFactAdjust",
+                "file": "runtime/factCommands.ts",
+                "line": 5
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:adjust fact:src/engine/runtime/factCommands.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "enqueue \u2192 dequeue/drain",
+          "subject": "adjust fact mirrored",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/factCommands.ts",
+            "line": 18,
+            "offset": null
+          },
+          "detail": "unpaired enqueue on subject \"adjust fact mirrored\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "enqueue",
+            "expectedInverse": [
+              "dequeue",
+              "drain"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "enqueueMirroredFactAdjust",
+                "file": "runtime/factCommands.ts",
+                "line": 18
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:adjust fact mirrored:src/engine/runtime/factCommands.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "enqueue \u2192 dequeue/drain",
+          "subject": "assignment drag",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/scenes/entityDragController.assignment.ts",
+            "line": 16,
+            "offset": null
+          },
+          "detail": "unpaired enqueue on subject \"assignment drag\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "enqueue",
+            "expectedInverse": [
+              "dequeue",
+              "drain"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "enqueueDragAssignment",
+                "file": "phaser/scenes/entityDragController.assignment.ts",
+                "line": 16
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:assignment drag:src/engine/phaser/scenes/entityDragController.assignment.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "enqueue \u2192 dequeue/drain",
+          "subject": "body habiti pending update",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/handlers/spawnPendingHabiti.ts",
+            "line": 4,
+            "offset": null
+          },
+          "detail": "unpaired enqueue on subject \"body habiti pending update\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "enqueue",
+            "expectedInverse": [
+              "dequeue",
+              "drain"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "enqueuePendingBodyHabitiUpdate",
+                "file": "runtime/handlers/spawnPendingHabiti.ts",
+                "line": 4
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:body habiti pending update:src/engine/runtime/handlers/spawnPendingHabiti.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "enqueue \u2192 dequeue/drain",
+          "subject": "collected command",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/runtimeCollectCommands.ts",
+            "line": 14,
+            "offset": null
+          },
+          "detail": "unpaired enqueue on subject \"collected command\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "enqueue",
+            "expectedInverse": [
+              "dequeue",
+              "drain"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "enqueueCollectedCommands",
+                "file": "runtime/runtimeCollectCommands.ts",
+                "line": 14
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:collected command:src/engine/runtime/runtimeCollectCommands.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "enqueue \u2192 dequeue/drain",
+          "subject": "initial spawn",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/balancing/HeadlessRunner.utils.ts",
+            "line": 56,
+            "offset": null
+          },
+          "detail": "unpaired enqueue on subject \"initial spawn\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "enqueue",
+            "expectedInverse": [
+              "dequeue",
+              "drain"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "enqueueInitialSpawn",
+                "file": "balancing/HeadlessRunner.utils.ts",
+                "line": 56
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:initial spawn:src/engine/balancing/HeadlessRunner.utils.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "enqueue \u2192 dequeue/drain",
+          "subject": "mutation state",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+            "line": 49,
+            "offset": null
+          },
+          "detail": "unpaired enqueue on subject \"mutation state\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "enqueue",
+            "expectedInverse": [
+              "dequeue",
+              "drain"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "enqueueStateMutation",
+                "file": "runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+                "line": 49
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:mutation state:src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "enqueue \u2192 dequeue/drain",
+          "subject": "set",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+            "line": 36,
+            "offset": null
+          },
+          "detail": "unpaired enqueue on subject \"set\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "enqueue",
+            "expectedInverse": [
+              "dequeue",
+              "drain"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "enqueueSet",
+                "file": "runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+                "line": 36
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:set:src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "enqueue \u2192 dequeue/drain",
+          "subject": "sub",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+            "line": 30,
+            "offset": null
+          },
+          "detail": "unpaired enqueue on subject \"sub\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "enqueue",
+            "expectedInverse": [
+              "dequeue",
+              "drain"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "enqueueSub",
+                "file": "runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+                "line": 30
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:sub:src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "enqueue \u2192 dequeue/drain",
+          "subject": "trait update",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/systems/behavior/actionExecutorTraits.ts",
+            "line": 15,
+            "offset": null
+          },
+          "detail": "unpaired enqueue on subject \"trait update\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "enqueue",
+            "expectedInverse": [
+              "dequeue",
+              "drain"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "enqueueTraitUpdate",
+                "file": "runtime/systems/behavior/actionExecutorTraits.ts",
+                "line": 15
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:trait update:src/engine/runtime/systems/behavior/actionExecutorTraits.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "push \u2192 pop",
+          "subject": "edge vein",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/veins/graphBuilderEdgeFactory.ts",
+            "line": 13,
+            "offset": null
+          },
+          "detail": "unpaired push on subject \"edge vein\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "push",
+            "expectedInverse": [
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "pushVeinEdge",
+                "file": "phaser/veins/graphBuilderEdgeFactory.ts",
+                "line": 13
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:edge vein:src/engine/phaser/veins/graphBuilderEdgeFactory.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "push \u2192 pop",
+          "subject": "incoming",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/registry/referenceIndex.walk.ts",
+            "line": 14,
+            "offset": null
+          },
+          "detail": "unpaired push on subject \"incoming\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "push",
+            "expectedInverse": [
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "pushIncoming",
+                "file": "registry/referenceIndex.walk.ts",
+                "line": 14
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:incoming:src/engine/registry/referenceIndex.walk.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "push \u2192 pop",
+          "subject": "lever",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/balancing/Scanner.ts",
+            "line": 30,
+            "offset": null
+          },
+          "detail": "unpaired push on subject \"lever\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "push",
+            "expectedInverse": [
+              "pop"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "pushLever",
+                "file": "balancing/Scanner.ts",
+                "line": 30
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:lever:src/engine/balancing/Scanner.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "serialize \u2192 deserialize/parse",
+          "subject": "body physic",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/persistence/physicsBodyPersistence.ts",
+            "line": 7,
+            "offset": null
+          },
+          "detail": "unpaired serialize on subject \"body physic\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "serialize",
+            "expectedInverse": [
+              "deserialize",
+              "parse"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "serializePhysicsBody",
+                "file": "runtime/persistence/physicsBodyPersistence.ts",
+                "line": 7
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:body physic:src/engine/runtime/persistence/physicsBodyPersistence.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "serialize \u2192 deserialize/parse",
+          "subject": "delay signature",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/display/glyph/glyphDelaySignature.ts",
+            "line": 16,
+            "offset": null
+          },
+          "detail": "unpaired serialize on subject \"delay signature\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "serialize",
+            "expectedInverse": [
+              "deserialize",
+              "parse"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "serializeDelaySignature",
+                "file": "phaser/display/glyph/glyphDelaySignature.ts",
+                "line": 16
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:delay signature:src/engine/phaser/display/glyph/glyphDelaySignature.ts"
+        },
+        {
+          "source": "cover-the-mirror",
+          "kind": "cover-the-mirror",
+          "severity": "info",
+          "title": "serialize \u2192 deserialize/parse",
+          "subject": "entity flyweight",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/persistence/flyweightPersistence.ts",
+            "line": 47,
+            "offset": null
+          },
+          "detail": "unpaired serialize on subject \"entity flyweight\"",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "forward": "serialize",
+            "expectedInverse": [
+              "deserialize",
+              "parse"
+            ],
+            "tier": "judgment",
+            "present": [
+              {
+                "name": "serializeFlyweightEntity",
+                "file": "runtime/persistence/flyweightPersistence.ts",
+                "line": 47
+              }
+            ]
+          },
+          "fingerprint": "cover-the-mirror:entity flyweight:src/engine/runtime/persistence/flyweightPersistence.ts"
+        }
+      ]
+    },
+    {
+      "gate": "vestigial",
+      "mode": "warn",
+      "verdict": "pass",
+      "stats": {
+        "files": 604,
+        "markers": 0,
+        "byMarker": {}
+      },
+      "finding_count": 0,
+      "findings": []
+    },
+    {
+      "gate": "silent-failure",
+      "mode": "warn",
+      "verdict": "fail",
+      "stats": {
+        "files": 604,
+        "sites": 5,
+        "byKind": {
+          "default-swallow": 4,
+          "empty-catch": 1
+        }
+      },
+      "finding_count": 5,
+      "findings": [
+        {
+          "source": "silent-failure",
+          "kind": "silent-failure",
+          "severity": "high",
+          "title": "default-swallow",
+          "subject": "default-swallow",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts",
+            "line": 31,
+            "offset": null
+          },
+          "detail": "catch \u2192 `return null`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it).",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "silent-failure",
+            "severity": "high",
+            "subject": "default-swallow",
+            "file": "phaser/avatar/resolveBodyAvatarPresentation.ts",
+            "line": 31,
+            "detail": "catch \u2192 `return null`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it)."
+          },
+          "fingerprint": "silent-failure:default-swallow:src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts"
+        },
+        {
+          "source": "silent-failure",
+          "kind": "silent-failure",
+          "severity": "high",
+          "title": "default-swallow",
+          "subject": "default-swallow",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/debug/phaserDebugToggle.ts",
+            "line": 6,
+            "offset": null
+          },
+          "detail": "catch \u2192 `return false`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it).",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "silent-failure",
+            "severity": "high",
+            "subject": "default-swallow",
+            "file": "phaser/debug/phaserDebugToggle.ts",
+            "line": 6,
+            "detail": "catch \u2192 `return false`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it)."
+          },
+          "fingerprint": "silent-failure:default-swallow:src/engine/phaser/debug/phaserDebugToggle.ts"
+        },
+        {
+          "source": "silent-failure",
+          "kind": "silent-failure",
+          "severity": "high",
+          "title": "empty-catch",
+          "subject": "empty-catch",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/debug/phaserDebugToggle.ts",
+            "line": 22,
+            "offset": null
+          },
+          "detail": "} catch {}",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "silent-failure",
+            "severity": "high",
+            "subject": "empty-catch",
+            "file": "phaser/debug/phaserDebugToggle.ts",
+            "line": 22,
+            "detail": "} catch {}"
+          },
+          "fingerprint": "silent-failure:empty-catch:src/engine/phaser/debug/phaserDebugToggle.ts"
+        },
+        {
+          "source": "silent-failure",
+          "kind": "silent-failure",
+          "severity": "high",
+          "title": "default-swallow",
+          "subject": "default-swallow",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/display-export/buildDisplayImageRequest.ts",
+            "line": 114,
+            "offset": null
+          },
+          "detail": "catch \u2192 `continue`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it).",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "silent-failure",
+            "severity": "high",
+            "subject": "default-swallow",
+            "file": "phaser/display-export/buildDisplayImageRequest.ts",
+            "line": 114,
+            "detail": "catch \u2192 `continue`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it)."
+          },
+          "fingerprint": "silent-failure:default-swallow:src/engine/phaser/display-export/buildDisplayImageRequest.ts"
+        },
+        {
+          "source": "silent-failure",
+          "kind": "silent-failure",
+          "severity": "high",
+          "title": "default-swallow",
+          "subject": "default-swallow",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/vfs/fileSystemBaseDisk.ts",
+            "line": 43,
+            "offset": null
+          },
+          "detail": "catch \u2192 `return null`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it).",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "silent-failure",
+            "severity": "high",
+            "subject": "default-swallow",
+            "file": "vfs/fileSystemBaseDisk.ts",
+            "line": 43,
+            "detail": "catch \u2192 `return null`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it)."
+          },
+          "fingerprint": "silent-failure:default-swallow:src/engine/vfs/fileSystemBaseDisk.ts"
+        }
+      ]
+    },
+    {
+      "gate": "no-op-paths",
+      "mode": "block",
+      "verdict": "pass",
+      "stats": {
+        "candidates": 5,
+        "covered": 2,
+        "gaps": 3,
+        "untested": 0,
+        "testFilesParsed": 314
+      },
+      "finding_count": 3,
+      "findings": [
+        {
+          "source": "no-op-paths",
+          "kind": "no-op-paths",
+          "severity": "medium",
+          "title": "clear",
+          "subject": "clear",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/physics/quadtree/Quadtree.ts",
+            "line": 241,
+            "offset": null
+          },
+          "detail": "referenced by 9 test(s), none titled as a no-op/unchanged case",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "no-op-paths",
+            "severity": "medium",
+            "title": "clear() is tested, but no test exercises the no-op (trigger-not-met) path",
+            "subject": "clear",
+            "file": "physics/quadtree/Quadtree.ts",
+            "line": 241,
+            "detail": "referenced by 9 test(s), none titled as a no-op/unchanged case"
+          },
+          "fingerprint": "no-op-paths:clear:src/engine/physics/quadtree/Quadtree.ts"
+        },
+        {
+          "source": "no-op-paths",
+          "kind": "no-op-paths",
+          "severity": "medium",
+          "title": "removeBodyFromOwners",
+          "subject": "removeBodyFromOwners",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/handlers/removeBodyFromOwners.ts",
+            "line": 10,
+            "offset": null
+          },
+          "detail": "reached through tested caller(s) (handle); no test exercises removeBodyFromOwners's no-op path directly",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "no-op-paths",
+            "severity": "medium",
+            "title": "removeBodyFromOwners() runs only via tested caller(s); no test exercises its no-op (trigger-not-met) path",
+            "subject": "removeBodyFromOwners",
+            "file": "runtime/handlers/removeBodyFromOwners.ts",
+            "line": 10,
+            "detail": "reached through tested caller(s) (handle); no test exercises removeBodyFromOwners's no-op path directly"
+          },
+          "fingerprint": "no-op-paths:removeBodyFromOwners:src/engine/runtime/handlers/removeBodyFromOwners.ts"
+        },
+        {
+          "source": "no-op-paths",
+          "kind": "no-op-paths",
+          "severity": "medium",
+          "title": "clearTransientDraft",
+          "subject": "clearTransientDraft",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/persistence/hydrateRuntime.ts",
+            "line": 14,
+            "offset": null
+          },
+          "detail": "reached through tested caller(s) (hydrateRuntime); no test exercises clearTransientDraft's no-op path directly",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "no-op-paths",
+            "severity": "medium",
+            "title": "clearTransientDraft() runs only via tested caller(s); no test exercises its no-op (trigger-not-met) path",
+            "subject": "clearTransientDraft",
+            "file": "runtime/persistence/hydrateRuntime.ts",
+            "line": 14,
+            "detail": "reached through tested caller(s) (hydrateRuntime); no test exercises clearTransientDraft's no-op path directly"
+          },
+          "fingerprint": "no-op-paths:clearTransientDraft:src/engine/runtime/persistence/hydrateRuntime.ts"
+        }
+      ]
+    },
+    {
+      "gate": "boundary-tests",
+      "mode": "warn",
+      "verdict": "fail",
+      "stats": {
+        "thresholdConstants": 14,
+        "covered": 4,
+        "gaps": 10,
+        "literalBoundaries": 18
+      },
+      "finding_count": 10,
+      "findings": [
+        {
+          "source": "boundary-tests",
+          "kind": "boundary-tests",
+          "severity": "high",
+          "title": "SMALL_SWARM_LIMIT",
+          "subject": "SMALL_SWARM_LIMIT",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/display/avatar/swarmAvatarLayout.ts",
+            "line": 52,
+            "offset": null
+          },
+          "detail": "compared at 1 site(s) (e.g. count <= SMALL_SWARM_LIMIT); no test names SMALL_SWARM_LIMIT, so the boundary case (== SMALL_SWARM_LIMIT) is likely untested",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "boundary-tests",
+            "severity": "high",
+            "title": "SMALL_SWARM_LIMIT is compared as a limit but no test references it",
+            "subject": "SMALL_SWARM_LIMIT",
+            "file": "phaser/display/avatar/swarmAvatarLayout.ts",
+            "line": 52,
+            "detail": "compared at 1 site(s) (e.g. count <= SMALL_SWARM_LIMIT); no test names SMALL_SWARM_LIMIT, so the boundary case (== SMALL_SWARM_LIMIT) is likely untested"
+          },
+          "fingerprint": "boundary-tests:SMALL_SWARM_LIMIT:src/engine/phaser/display/avatar/swarmAvatarLayout.ts"
+        },
+        {
+          "source": "boundary-tests",
+          "kind": "boundary-tests",
+          "severity": "high",
+          "title": "MAX_GLYPH_CAPACITY",
+          "subject": "MAX_GLYPH_CAPACITY",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/display/glyph/GlyphRegistry.ts",
+            "line": 102,
+            "offset": null
+          },
+          "detail": "compared at 1 site(s) (e.g. this.nextOrdinal < MAX_GLYPH_CAPACITY); no test names MAX_GLYPH_CAPACITY, so the boundary case (== MAX_GLYPH_CAPACITY) is likely untested",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "boundary-tests",
+            "severity": "high",
+            "title": "MAX_GLYPH_CAPACITY is compared as a limit but no test references it",
+            "subject": "MAX_GLYPH_CAPACITY",
+            "file": "phaser/display/glyph/GlyphRegistry.ts",
+            "line": 102,
+            "detail": "compared at 1 site(s) (e.g. this.nextOrdinal < MAX_GLYPH_CAPACITY); no test names MAX_GLYPH_CAPACITY, so the boundary case (== MAX_GLYPH_CAPACITY) is likely untested"
+          },
+          "fingerprint": "boundary-tests:MAX_GLYPH_CAPACITY:src/engine/phaser/display/glyph/GlyphRegistry.ts"
+        },
+        {
+          "source": "boundary-tests",
+          "kind": "boundary-tests",
+          "severity": "high",
+          "title": "PROXIMITY_LIGHT_CUTOFF_PX",
+          "subject": "PROXIMITY_LIGHT_CUTOFF_PX",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/display/modules/light/menuAmbientProximityLightState.ts",
+            "line": 41,
+            "offset": null
+          },
+          "detail": "compared at 1 site(s) (e.g. distance >= PROXIMITY_LIGHT_CUTOFF_PX); no test names PROXIMITY_LIGHT_CUTOFF_PX, so the boundary case (== PROXIMITY_LIGHT_CUTOFF_PX) is likely untested",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "boundary-tests",
+            "severity": "high",
+            "title": "PROXIMITY_LIGHT_CUTOFF_PX is compared as a limit but no test references it",
+            "subject": "PROXIMITY_LIGHT_CUTOFF_PX",
+            "file": "phaser/display/modules/light/menuAmbientProximityLightState.ts",
+            "line": 41,
+            "detail": "compared at 1 site(s) (e.g. distance >= PROXIMITY_LIGHT_CUTOFF_PX); no test names PROXIMITY_LIGHT_CUTOFF_PX, so the boundary case (== PROXIMITY_LIGHT_CUTOFF_PX) is likely untested"
+          },
+          "fingerprint": "boundary-tests:PROXIMITY_LIGHT_CUTOFF_PX:src/engine/phaser/display/modules/light/menuAmbientProximityLightState.ts"
+        },
+        {
+          "source": "boundary-tests",
+          "kind": "boundary-tests",
+          "severity": "high",
+          "title": "ZERO_LENGTH_PX",
+          "subject": "ZERO_LENGTH_PX",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/display/modules/veins/veinsRopePath.ts",
+            "line": 38,
+            "offset": null
+          },
+          "detail": "compared at 1 site(s) (e.g. pathLengthPx < ZERO_LENGTH_PX); no test names ZERO_LENGTH_PX, so the boundary case (== ZERO_LENGTH_PX) is likely untested",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "boundary-tests",
+            "severity": "high",
+            "title": "ZERO_LENGTH_PX is compared as a limit but no test references it",
+            "subject": "ZERO_LENGTH_PX",
+            "file": "phaser/display/modules/veins/veinsRopePath.ts",
+            "line": 38,
+            "detail": "compared at 1 site(s) (e.g. pathLengthPx < ZERO_LENGTH_PX); no test names ZERO_LENGTH_PX, so the boundary case (== ZERO_LENGTH_PX) is likely untested"
+          },
+          "fingerprint": "boundary-tests:ZERO_LENGTH_PX:src/engine/phaser/display/modules/veins/veinsRopePath.ts"
+        },
+        {
+          "source": "boundary-tests",
+          "kind": "boundary-tests",
+          "severity": "high",
+          "title": "HEAT_THRESHOLD",
+          "subject": "HEAT_THRESHOLD",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/display/particles/HeatParticlesConfigResolver.ts",
+            "line": 22,
+            "offset": null
+          },
+          "detail": "compared at 1 site(s) (e.g. intensity < HEAT_THRESHOLD); no test names HEAT_THRESHOLD, so the boundary case (== HEAT_THRESHOLD) is likely untested",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "boundary-tests",
+            "severity": "high",
+            "title": "HEAT_THRESHOLD is compared as a limit but no test references it",
+            "subject": "HEAT_THRESHOLD",
+            "file": "phaser/display/particles/HeatParticlesConfigResolver.ts",
+            "line": 22,
+            "detail": "compared at 1 site(s) (e.g. intensity < HEAT_THRESHOLD); no test names HEAT_THRESHOLD, so the boundary case (== HEAT_THRESHOLD) is likely untested"
+          },
+          "fingerprint": "boundary-tests:HEAT_THRESHOLD:src/engine/phaser/display/particles/HeatParticlesConfigResolver.ts"
+        },
+        {
+          "source": "boundary-tests",
+          "kind": "boundary-tests",
+          "severity": "high",
+          "title": "XP_THRESHOLD",
+          "subject": "XP_THRESHOLD",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/phaser/display/particles/XpParticlesConfigResolver.ts",
+            "line": 22,
+            "offset": null
+          },
+          "detail": "compared at 1 site(s) (e.g. intensity < XP_THRESHOLD); no test names XP_THRESHOLD, so the boundary case (== XP_THRESHOLD) is likely untested",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "boundary-tests",
+            "severity": "high",
+            "title": "XP_THRESHOLD is compared as a limit but no test references it",
+            "subject": "XP_THRESHOLD",
+            "file": "phaser/display/particles/XpParticlesConfigResolver.ts",
+            "line": 22,
+            "detail": "compared at 1 site(s) (e.g. intensity < XP_THRESHOLD); no test names XP_THRESHOLD, so the boundary case (== XP_THRESHOLD) is likely untested"
+          },
+          "fingerprint": "boundary-tests:XP_THRESHOLD:src/engine/phaser/display/particles/XpParticlesConfigResolver.ts"
+        },
+        {
+          "source": "boundary-tests",
+          "kind": "boundary-tests",
+          "severity": "high",
+          "title": "MIN_DISTANCE",
+          "subject": "MIN_DISTANCE",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/physics/impulse/Steering.ts",
+            "line": 17,
+            "offset": null
+          },
+          "detail": "compared at 1 site(s) (e.g. len <= MIN_DISTANCE); no test names MIN_DISTANCE, so the boundary case (== MIN_DISTANCE) is likely untested",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "boundary-tests",
+            "severity": "high",
+            "title": "MIN_DISTANCE is compared as a limit but no test references it",
+            "subject": "MIN_DISTANCE",
+            "file": "physics/impulse/Steering.ts",
+            "line": 17,
+            "detail": "compared at 1 site(s) (e.g. len <= MIN_DISTANCE); no test names MIN_DISTANCE, so the boundary case (== MIN_DISTANCE) is likely untested"
+          },
+          "fingerprint": "boundary-tests:MIN_DISTANCE:src/engine/physics/impulse/Steering.ts"
+        },
+        {
+          "source": "boundary-tests",
+          "kind": "boundary-tests",
+          "severity": "high",
+          "title": "MIN_EXTENT",
+          "subject": "MIN_EXTENT",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/physics/quadtree/Quadtree.ts",
+            "line": 124,
+            "offset": null
+          },
+          "detail": "compared at 2 site(s) (e.g. width <= MIN_EXTENT); no test names MIN_EXTENT, so the boundary case (== MIN_EXTENT) is likely untested",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "boundary-tests",
+            "severity": "high",
+            "title": "MIN_EXTENT is compared as a limit but no test references it",
+            "subject": "MIN_EXTENT",
+            "file": "physics/quadtree/Quadtree.ts",
+            "line": 124,
+            "detail": "compared at 2 site(s) (e.g. width <= MIN_EXTENT); no test names MIN_EXTENT, so the boundary case (== MIN_EXTENT) is likely untested"
+          },
+          "fingerprint": "boundary-tests:MIN_EXTENT:src/engine/physics/quadtree/Quadtree.ts"
+        },
+        {
+          "source": "boundary-tests",
+          "kind": "boundary-tests",
+          "severity": "high",
+          "title": "MIN_TRANSFER_THRESHOLD",
+          "subject": "MIN_TRANSFER_THRESHOLD",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/handlers/TransferHandler.ts",
+            "line": 51,
+            "offset": null
+          },
+          "detail": "compared at 1 site(s) (e.g. total < MIN_TRANSFER_THRESHOLD); no test names MIN_TRANSFER_THRESHOLD, so the boundary case (== MIN_TRANSFER_THRESHOLD) is likely untested",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "boundary-tests",
+            "severity": "high",
+            "title": "MIN_TRANSFER_THRESHOLD is compared as a limit but no test references it",
+            "subject": "MIN_TRANSFER_THRESHOLD",
+            "file": "runtime/handlers/TransferHandler.ts",
+            "line": 51,
+            "detail": "compared at 1 site(s) (e.g. total < MIN_TRANSFER_THRESHOLD); no test names MIN_TRANSFER_THRESHOLD, so the boundary case (== MIN_TRANSFER_THRESHOLD) is likely untested"
+          },
+          "fingerprint": "boundary-tests:MIN_TRANSFER_THRESHOLD:src/engine/runtime/handlers/TransferHandler.ts"
+        },
+        {
+          "source": "boundary-tests",
+          "kind": "boundary-tests",
+          "severity": "high",
+          "title": "MAX_RUNTIME_SUBSTEPS",
+          "subject": "MAX_RUNTIME_SUBSTEPS",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/runtime/runtimeTick.ts",
+            "line": 54,
+            "offset": null
+          },
+          "detail": "compared at 2 site(s) (e.g. steps < MAX_RUNTIME_SUBSTEPS); no test names MAX_RUNTIME_SUBSTEPS, so the boundary case (== MAX_RUNTIME_SUBSTEPS) is likely untested",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "boundary-tests",
+            "severity": "high",
+            "title": "MAX_RUNTIME_SUBSTEPS is compared as a limit but no test references it",
+            "subject": "MAX_RUNTIME_SUBSTEPS",
+            "file": "runtime/runtimeTick.ts",
+            "line": 54,
+            "detail": "compared at 2 site(s) (e.g. steps < MAX_RUNTIME_SUBSTEPS); no test names MAX_RUNTIME_SUBSTEPS, so the boundary case (== MAX_RUNTIME_SUBSTEPS) is likely untested"
+          },
+          "fingerprint": "boundary-tests:MAX_RUNTIME_SUBSTEPS:src/engine/runtime/runtimeTick.ts"
+        }
+      ]
+    },
+    {
+      "gate": "pin-values",
+      "mode": "warn",
+      "verdict": "fail",
+      "stats": {
+        "blocks": 1554,
+        "weakOnly": 4
+      },
+      "finding_count": 4,
+      "findings": [
+        {
+          "source": "pin-values",
+          "kind": "pin-values",
+          "severity": "high",
+          "title": "throws when payload references a missing id",
+          "subject": "throws when payload references a missing id",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/linker/Gatekeeper.test.ts",
+            "line": 22,
+            "offset": null
+          },
+          "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "pin-values",
+            "severity": "high",
+            "subject": "throws when payload references a missing id",
+            "file": "linker/Gatekeeper.test.ts",
+            "line": 22,
+            "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value"
+          },
+          "fingerprint": "pin-values:throws when payload references a missing id:src/engine/linker/Gatekeeper.test.ts"
+        },
+        {
+          "source": "pin-values",
+          "kind": "pin-values",
+          "severity": "high",
+          "title": "throws when payload has schema violations",
+          "subject": "throws when payload has schema violations",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/linker/Gatekeeper.test.ts",
+            "line": 32,
+            "offset": null
+          },
+          "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "pin-values",
+            "severity": "high",
+            "subject": "throws when payload has schema violations",
+            "file": "linker/Gatekeeper.test.ts",
+            "line": 32,
+            "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value"
+          },
+          "fingerprint": "pin-values:throws when payload has schema violations:src/engine/linker/Gatekeeper.test.ts"
+        },
+        {
+          "source": "pin-values",
+          "kind": "pin-values",
+          "severity": "high",
+          "title": "throws deterministic parse and validation errors",
+          "subject": "throws deterministic parse and validation errors",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/linker/ModuleLinker.core.test.ts",
+            "line": 62,
+            "offset": null
+          },
+          "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "pin-values",
+            "severity": "high",
+            "subject": "throws deterministic parse and validation errors",
+            "file": "linker/ModuleLinker.core.test.ts",
+            "line": 62,
+            "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value"
+          },
+          "fingerprint": "pin-values:throws deterministic parse and validation errors:src/engine/linker/ModuleLinker.core.test.ts"
+        },
+        {
+          "source": "pin-values",
+          "kind": "pin-values",
+          "severity": "high",
+          "title": "throws on duplicate ids after same-file namespacing",
+          "subject": "throws on duplicate ids after same-file namespacing",
+          "locus": {
+            "kind": "code",
+            "file": "src/engine/linker/ModuleLinker.core.test.ts",
+            "line": 80,
+            "offset": null
+          },
+          "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value",
+          "status": null,
+          "classification": null,
+          "extra": {
+            "gate": "pin-values",
+            "severity": "high",
+            "subject": "throws on duplicate ids after same-file namespacing",
+            "file": "linker/ModuleLinker.core.test.ts",
+            "line": 80,
+            "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value"
+          },
+          "fingerprint": "pin-values:throws on duplicate ids after same-file namespacing:src/engine/linker/ModuleLinker.core.test.ts"
+        }
+      ]
+    },
+    {
+      "gate": "disposable-leak",
+      "mode": "warn",
+      "verdict": "pass",
+      "stats": {
+        "discarded": 0
+      },
+      "finding_count": 0,
+      "findings": []
+    }
+  ]
+}

@@ -1,0 +1,178 @@
+[
+  {
+    "id": "P.run1.039",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseEngine.ts:73:3709d1af",
+    "file": "src/engine/physics/impulse/ImpulseEngine.ts",
+    "line": 73,
+    "title": "footgun: config.maxSubSteps (schema-capped at 16) reads as the ceiling on physics substeps per tick.",
+    "detail": "It is combined via Math.max(configMax, min(requiredSteps,48)) then subSteps=min(requiredSteps,effectiveLimit), which algebraically reduces to subSteps=min(requiredSteps,48) for every input. maxSubSteps never changes the substep count; the real (and only) cap is the hardcoded ABSOLUTE_MAX_SUBSTEPS=48.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "physics",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.040",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseEngine.ts:78:cc108aea",
+    "file": "src/engine/physics/impulse/ImpulseEngine.ts",
+    "line": 78,
+    "title": "footgun: ImpulseConfig exposes a user-facing subSteps slider described 'Physics sub-steps per frame' (impulseConfig schema, default 1), implying it controls the tick substep count.",
+    "detail": "tick() derives subSteps purely from dt (requiredSteps) and the 48-cap; config.subSteps is never read here or anywhere in src, so the slider has no effect on the simulation.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "physics",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.041",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseObstacleAvoidance.ts:89:fb5f1a3c",
+    "file": "src/engine/physics/impulse/ImpulseObstacleAvoidance.ts",
+    "line": 89,
+    "title": "footgun: computeObstacleAvoidance takes a general 'neighbors' list and is fed the full spatial query buffer, reading as if it avoids all nearby bodies.",
+    "detail": "'if (!neighbor.isStatic) continue;' skips every dynamic body, so only STATIC bodies are ever treated as obstacles; dynamic bodies are never avoided by this path (they rely on separation instead).",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "physics",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.042",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/physics/quadtree/Quadtree.ts:230:589557c8",
+    "file": "src/engine/physics/quadtree/Quadtree.ts",
+    "line": 230,
+    "title": "footgun: queryRadius is documented as returning 'all bodies that *might* collide with the given circle (x, y, radius)'.",
+    "detail": "It queries a square (half-extent=radius, not a circle) and its containment test only checks each neighbor's CENTER against that box, ignoring the neighbor's own radius, so a large body straddling the query circle from just outside can be missed; it is not collision-complete.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "physics",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.043",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/physics/impulse/Steering.ts:35:100174c4",
+    "file": "src/engine/physics/impulse/Steering.ts",
+    "line": 35,
+    "title": "footgun: applySeek is exported as part of the steering API, implying it is a live force applied during ticks.",
+    "detail": "applySeek has zero callers anywhere in src (only computeSeek is used); it is dead exported code.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "physics",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.044",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseSeparation.ts:56:0780455b",
+    "file": "src/engine/physics/impulse/ImpulseSeparation.ts",
+    "line": 56,
+    "title": "footgun: applySeparation is exported alongside computeSeparation and takes a Quadtree, implying it is the live separation entry point.",
+    "detail": "applySeparation has zero callers in src; the live path is computeSeparation via ImpulseSteeringForces, and this quadtree-based wrapper is dead code.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "physics",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.125",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseEngineIntegration.ts:22:bf36e8ab",
+    "file": "src/engine/physics/impulse/ImpulseEngineIntegration.ts",
+    "line": 22,
+    "title": "clampToBounds replaces the position object instead of mutating in place",
+    "detail": "Every other code path mutates body.position.x/y in place, but clampToBounds reassigns body.position to a fresh {x,y}. Any code holding a reference to the previous position Vector2 (renderer, cached alias) silently keeps the stale, unclamped object and diverges from the body.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "physics",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.126",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseSeparation.ts:36:f71812c3",
+    "file": "src/engine/physics/impulse/ImpulseSeparation.ts",
+    "line": 36,
+    "title": "Coincident bodies always separate along +X only",
+    "detail": "When two bodies are within 0.0001 the code does 'dx += 1; distance = 1;' but never adjusts dy, so exactly-stacked bodies are always pushed apart along +X. Perfectly-overlapping clusters fan out on one axis, producing a directional bias rather than isotropic dispersal.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "physics",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.127",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseSteeringForces.ts:16:44c65548",
+    "file": "src/engine/physics/impulse/ImpulseSteeringForces.ts",
+    "line": 16,
+    "title": "Shared mutable zeroVector singleton returned to callers",
+    "detail": "computeWobbleForce (and the zeroVector singletons in ImpulseSteeringHelpers.ts:7 and ImpulseAnchor.ts:4) return one shared {x:0,y:0} object. Current callers only read it, but any future consumer that mutates a returned force vector in place would corrupt the global zero for all subsequent callers this frame.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "physics",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.182",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseEngine.ts:42:aabac847",
+    "file": "src/engine/physics/impulse/ImpulseEngine.ts",
+    "line": 42,
+    "title": "silent failure: ignored-return",
+    "detail": "Real: setWorldBounds silently returns (no-op) when width/height are non-finite or below config.minWorldSize, giving the caller no signal. A caller that passes a too-small or NaN size believes bounds were set while the engine keeps its previous/null bounds, leaving the simulation effectively unbounded (clampToBounds becomes a no-op).",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "physics",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.183",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/physics/impulse/ImpulseEngine.ts:37:d57ae7d9",
+    "file": "src/engine/physics/impulse/ImpulseEngine.ts",
+    "line": 37,
+    "title": "silent failure: ignored-return",
+    "detail": "Mostly benign: setTarget returns silently when bodyId is not in the map, so a mistimed setTarget for a not-yet-added or already-removed body is dropped with no error or return value; the seek simply never engages and the failure is untraced.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "physics",
+    "in_target_region": true
+  }
+]

@@ -1,0 +1,101 @@
+[
+  {
+    "id": "P.run1.071",
+    "fingerprint": "map:src/engine/workspace/projectManifest.ts:77:759cb7f7",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "parseProjectModuleFile (projectModuleParsing.ts:25) returns null (not a thrown ZodError) when a non-semantic module fails ModuleCartridgeSchema; the try/catch at lines 90-94 does not catch that, and line 95 `if (module)` silently drops it, so an invalid module is omitted from the returned map without error. Name promises rejection; code silently skips."
+  },
+  {
+    "id": "P.run1.072",
+    "fingerprint": "map:src/engine/workspace/RefactorService.ts:55:a164704d",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "pending is keyed by nextFile, a project-relative filename (line 51), yet the loop binds it to a variable named `path`; writeModule's parameter is `filename` and resolves it via resolveProjectFile. Genuine name/reality mismatch but benign since the value is a valid relative filename and resolution is correct."
+  },
+  {
+    "id": "P.run1.073",
+    "fingerprint": "map:src/engine/workspace/projectVersionTracker.ts:20:55c0b77e",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "stageProjectVersion reads/mutates the module-level stagedVersions Map, and once an entry exists (lines 43-47) subsequent bumps recompute from staged.baseVersion, ignoring the passed-in currentManifestVersion. Signature reads pure but is stateful and drops the arg after the first call, as claimed."
+  },
+  {
+    "id": "P.run1.156",
+    "fingerprint": "map:src/engine/workspace/RefactorService.ts:40:7b0484aa",
+    "verdict": "real",
+    "judge_severity": "high",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "ns.startsWith(oldNamespace) plus filename.replace(oldNamespace,...) (lines 40-41) and manifest file.replace (line 65) match by bare prefix, so renaming `foo` also moves/renames `foobar.json` to `Cbar.json` and rewrites sibling files. (replaceRefs uses `${from}::` so ref bodies are delimiter-safe, but the filename/manifest corruption is real.)"
+  },
+  {
+    "id": "P.run1.157",
+    "fingerprint": "map:src/engine/workspace/RefactorService.ts:41:7078c27d",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "filename.replace (line 41) and file.replace (line 65) use single-match String.replace, while replaceRefs uses replaceAll (line 9). A filename or manifest entry containing the old namespace twice is only half-rewritten, diverging from the fully-rewritten refs; narrower but real."
+  },
+  {
+    "id": "P.run1.158",
+    "fingerprint": "map:src/engine/workspace/projectVersionTracker.ts:12:08a0a3c6",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "resource",
+    "oracle_match": null,
+    "notes": "stagedVersions is a module-level (process-global) Map cleared only by explicit clearStagedProjectVersion (line 55), so entries leak and are shared across all consumers on the same manifestPath. RefactorService.test.ts's beforeEach(clearStagedProjectVersion) confirms the cross-case statefulness is real."
+  },
+  {
+    "id": "P.run1.159",
+    "fingerprint": "map:src/engine/workspace/RefactorService.ts:61:e1934293",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "Line 61 uses raw vfs.readFile ?? { files: [] }, and FileSystemBase.readFile returns null for string-stored values (base:57,66); on that path the empty fallback is written back at line 67, wiping name/version/files, whereas loadProject uses the object-or-text-aware readProjectManifest. Mechanism is code-confirmed; the wipe requires the manifest to be text-stored, which is a narrower path."
+  },
+  {
+    "id": "P.run1.160",
+    "fingerprint": "map:src/engine/workspace/WorkspaceService.ts:98:a4da1bb4",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "replaceRuntime seeds Runtime from Array.from(this.moduleCache.values())[0] (line 98), the first module by Map insertion order, not the linker's activeCartridge produced at loadProject:49. Which module runs depends on manifest.files ordering and the compiled cartridge is not what the runtime executes, as claimed."
+  },
+  {
+    "id": "P.run1.202",
+    "fingerprint": "map:src/engine/workspace/projectManifest.ts:95:55973ae9",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Same defect as the guard at projectManifest.ts:95: parseProjectModuleFile returns null (projectModuleParsing.ts:25) for a non-semantic module failing ModuleCartridgeSchema, and `if (module)` drops it with no throw or log, so loadProject proceeds with an incomplete moduleCache. A malformed module silently vanishes."
+  },
+  {
+    "id": "P.run1.203",
+    "fingerprint": "map:src/engine/workspace/WorkspaceService.ts:88:8c43588d",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "Line 88 `if (!this.manifestPath || !root) return;` is a normal defensive early return when no project is loaded; there is nothing to reload, so the void return cannot produce wrong results. Technically silent but immaterial, as the finding itself concedes."
+  },
+  {
+    "id": "P.run1.204",
+    "fingerprint": "map:src/engine/workspace/WorkspaceService.ts:90:db6c65b8",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "In reloadModules, line 90-91 reads each file and only sets the cache `if (mod)`; readFile returns null for missing or string-stored files (base:57,66), so such a file is silently skipped and the stale prior moduleCache entry is retained while the reload appears to succeed. Real silent skip, though impact is bounded since linkProject re-reads independently."
+  }
+]

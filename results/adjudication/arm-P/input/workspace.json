@@ -1,0 +1,178 @@
+[
+  {
+    "id": "P.run1.071",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/workspace/projectManifest.ts:77:759cb7f7",
+    "file": "src/engine/workspace/projectManifest.ts",
+    "line": 77,
+    "title": "footgun: `assertValidProjectModules` \u2014 the name promises it asserts every listed module is valid and rejects otherwise.",
+    "detail": "A non-semantic module that fails `ModuleCartridgeSchema` makes `parseProjectModuleFile` return null (projectModuleParsing.ts:25), which the try/catch does not catch; line 95 `if (module)` then silently skips it, so an invalid module is dropped from the returned map without any error. It only throws for a missing file (line 88) or a thrown ZodError.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "workspace",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.072",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/workspace/RefactorService.ts:55:a164704d",
+    "file": "src/engine/workspace/RefactorService.ts",
+    "line": 55,
+    "title": "footgun: `for (const [path, mod] of pending.entries())` then `writeModule(path, ...)` \u2014 the variable named `path` reads like a resolved absolute file path.",
+    "detail": "`pending` is keyed by `nextFile`, a project-relative filename (set at line 51), and `writeModule`'s parameter is `filename`. The value is a relative name, not a path; `writeModule` itself resolves it via resolveProjectFile. The name contradicts what it holds.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "workspace",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.073",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/workspace/projectVersionTracker.ts:20:55c0b77e",
+    "file": "src/engine/workspace/projectVersionTracker.ts",
+    "line": 20,
+    "title": "footgun: `stageProjectVersion(manifestPath, currentManifestVersion, changeKind)` reads like a pure function of its arguments.",
+    "detail": "It reads and mutates the module-level `stagedVersions` Map (process-global singleton). The `currentManifestVersion` argument is ignored on every call after the first for a given path \u2014 subsequent bumps are computed from the cached `baseVersion`, not the passed-in version, so passing an updated current version has no effect once a bump is staged.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "workspace",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.156",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/workspace/RefactorService.ts:40:7b0484aa",
+    "file": "src/engine/workspace/RefactorService.ts",
+    "line": 40,
+    "title": "Namespace rename matches by prefix, corrupting sibling namespaces",
+    "detail": "`ns.startsWith(oldNamespace)` and `replaceRefs`/filename `.replace(oldNamespace, ...)` treat the namespace as a bare prefix/substring: renaming `foo` also rewrites `foobar`, `foo2`, and any `foo::`-prefixed ref inside an unrelated `foobarbaz::` string. Unrelated modules get silently moved and their refs mangled.",
+    "finder_severity": "high",
+    "finder_class": "risk",
+    "subsystem": "workspace",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.157",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/workspace/RefactorService.ts:41:7078c27d",
+    "file": "src/engine/workspace/RefactorService.ts",
+    "line": 41,
+    "title": "String.replace rewrites only the first occurrence of a namespace",
+    "detail": "`filename.replace(oldNamespace, newNamespace)` (line 41) and `file.replace(oldNamespace, newNamespace)` (line 65) use the single-match form of replace. If a filename or manifest entry contains the old namespace more than once, only the first is rewritten, leaving a half-renamed path that no longer resolves. `replaceRefs` uses replaceAll and is correct, so refs and filenames diverge.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "workspace",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.158",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/workspace/projectVersionTracker.ts:12:08a0a3c6",
+    "file": "src/engine/workspace/projectVersionTracker.ts",
+    "line": 12,
+    "title": "Global staged-version Map leaks and cross-contaminates instances",
+    "detail": "`stagedVersions` is a module-level Map shared by every WorkspaceService/RefactorService in the process. Entries are only removed by explicit clearStagedProjectVersion, so an abandoned project (or a test that stages but never persists) leaks its entry forever, and two consumers acting on the same manifestPath see each other's pending bump. In tests this makes version-staging order-dependent and stateful across cases.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "workspace",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.159",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/workspace/RefactorService.ts:61:e1934293",
+    "file": "src/engine/workspace/RefactorService.ts",
+    "line": 61,
+    "title": "Manifest re-read via readFile can silently reset the manifest to empty",
+    "detail": "`(await this.vfs.readFile(manifestPath)) ?? { files: [] }` uses FileSystemBase.readFile, which returns null when the stored value is a string / only present on the text path (FileSystem.base.ts:57,66). On that path the fallback `{ files: [] }` is written back, discarding the real name, version, and file list \u2014 a full manifest wipe. loadProject uses readProjectManifest (object-or-text aware) but this refactor path does not.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "workspace",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.160",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/workspace/WorkspaceService.ts:98:a4da1bb4",
+    "file": "src/engine/workspace/WorkspaceService.ts",
+    "line": 98,
+    "title": "Runtime rebuilt from an arbitrary first cache entry",
+    "detail": "`replaceRuntime` seeds a new Runtime from `Array.from(this.moduleCache.values())[0]` \u2014 the first module by Map insertion order, not the linked/compiled cartridge (activeCartridge) and not a designated entry module. Which single module becomes the runtime depends on manifest.files ordering, and the compiled activeCartridge produced by the linker is not what the runtime runs.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "workspace",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.202",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/workspace/projectManifest.ts:95:55973ae9",
+    "file": "src/engine/workspace/projectManifest.ts",
+    "line": 95,
+    "title": "silent failure: ignored-return",
+    "detail": "Real. `parseProjectModuleFile` returns null when a non-semantic module fails ModuleCartridgeSchema (projectModuleParsing.ts:25); the guard `if (module)` drops it with no throw and no log, so loadProject proceeds with an incomplete moduleCache and activeCartridge as if the invalid module never existed. A malformed module silently disappears from the project instead of failing the load.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "workspace",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.203",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/workspace/WorkspaceService.ts:88:8c43588d",
+    "file": "src/engine/workspace/WorkspaceService.ts",
+    "line": 88,
+    "title": "silent failure: ignored-return",
+    "detail": "Mostly benign but silent. `reloadModules` returns early when no project/root is loaded, doing nothing and returning void \u2014 a caller expecting the modules to have been reloaded gets no error and no signal that the reload was skipped.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "workspace",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.204",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/workspace/WorkspaceService.ts:90:db6c65b8",
+    "file": "src/engine/workspace/WorkspaceService.ts",
+    "line": 90,
+    "title": "silent failure: ignored-return",
+    "detail": "Real. In reloadModules, `const mod = await this.vfs.readFile(...)` then `if (mod) this.moduleCache.set(...)`: a filename that reads back as null (missing on disk, or stored as a string so readFile returns null) is skipped silently, leaving the stale prior cache entry in place with no error, so the reload appears to succeed while that module is unchanged.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "workspace",
+    "in_target_region": true
+  }
+]

@@ -1,0 +1,370 @@
+[
+  {
+    "id": "P.run1.004",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/abilities/cycleResourceCostRuleFactories.ts:22:15b5d9e7",
+    "file": "src/engine/compiler/abilities/cycleResourceCostRuleFactories.ts",
+    "line": 22,
+    "title": "footgun: createCycleCostCondition carries a token form `self.state.<resource>.value >= amountRef`, i.e. the has-enough-resource check reads as a plain >= on the raw resource value.",
+    "detail": "The runtime evaluator (JsonLogicAdapter.evaluate) uses rule.compiled when present and only compiles from tokens as a fallback, so the authoritative predicate is the compiled `>` on `(resource.value + 1)` vs amountRef (a +1 grace unit), not the token's `>=`. The tokens are dead for evaluation and encode a different boundary; editing the visible token `>=` has zero runtime effect.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.005",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/abilities/cycleResourceCostRuleFactories.ts:63:eebbb7cd",
+    "file": "src/engine/compiler/abilities/cycleResourceCostRuleFactories.ts",
+    "line": 63,
+    "title": "footgun: createCycleCostPowerGateRule's condition token form is `self.state.<resource>.value < amountRef` (gate power when resource is below the cost).",
+    "detail": "The compiled form actually evaluated is `(resource.value + 1) <= amountRef` (a +1 grace unit and a <= boundary), so the token `<` is dead and disagrees with the runtime boundary; a maintainer reading or editing the tokens sees the wrong predicate.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.006",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/abilities/cycleCompiler.rules.ts:36:dbea9444",
+    "file": "src/engine/compiler/abilities/cycleCompiler.rules.ts",
+    "line": 36,
+    "title": "footgun: createCycleRule's is_active gate condition is `{ t: 'ref', v: 'self.state.cycle_active' }`, reading like a boolean check that the cycle is active (cycle_active is a state entry `{value:1|0}`).",
+    "detail": "The ref omits `.value`, so it compiles to `{var:'self.state.cycle_active'}` which json-logic-js resolves to the whole state-entry OBJECT (not its numeric value). A non-null object is always truthy, so this gate is truthy even when cycle_active.value is 0; every other compiled condition in the subsystem uses the `.value` suffix. The intended gating is effectively inert here (masked only because conditional-activation also zeroes powerSink.throttle, which zeroes the accumulated allocatedDraw*dt_s).",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.007",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/conditions/compileStructuredConditions.ts:4:ba5915d8",
+    "file": "src/engine/compiler/conditions/compileStructuredConditions.ts",
+    "line": 4,
+    "title": "footgun: `toRefPath` is a `switch (condition.kind)` that reads as a total mapping from any structured condition to its state var path.",
+    "detail": "The union has 9 kinds but the switch only handles 4 (`fact_threshold`, `world_state_threshold`, `world_state_boolean`, `user_interaction`); for the other 5 (`entity_tag_present`, `bodies_assigned`, `body_in_pointer`, `carriers_orbiting`, `destructive_assignment_has_all_bodies`) it falls off the end and returns `undefined`. There is no return-type annotation and no exhaustiveness guard, so this is silent. It is currently harmless only because those 5 kinds return fixed tokens in `toCompiledExpression` and never call `toRefPath`.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.008",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/conditions/compileStructuredConditions.ts:41:4da4a2d3",
+    "file": "src/engine/compiler/conditions/compileStructuredConditions.ts",
+    "line": 41,
+    "title": "footgun: The `user_interaction` compiled expression selects `==` vs `!=` via `interaction === \"self_selected\" ? \"==\" : \"!=\"`, reading as a two-value toggle between the two documented interaction states.",
+    "detail": "The ternary is not a match on `\"self_unselected\"` \u2014 any interaction value other than the exact string `\"self_selected\"` yields `!=`. The schema currently constrains it to those two enums, but the lowering silently treats every non-`self_selected` value (including any future or malformed interaction state) as the unselected/`!=` branch rather than erroring.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.078",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/abilities/assignmentCompiler.ts:78:65a6a88c",
+    "file": "src/engine/compiler/abilities/assignmentCompiler.ts",
+    "line": 78,
+    "title": "Assignment one-off installs a GC rule whose trigger it never fires",
+    "detail": "For a one-off assignment without a cycle ability, the pushed sys_cycle_gc rule is gated on is_depleted==1, but the assignment path only seeds is_depleted to 0 and nothing sets it to 1 (only the cycle reset rule in cycleCompiler.rules.ts flips it). The entity is therefore never garbage-collected on depletion unless a cycle ability is also present, so a one-off-only assignment silently leaks.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.079",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/abilities/conditionalActivationCompiler/compileConfig.ts:29:af062898",
+    "file": "src/engine/compiler/abilities/conditionalActivationCompiler/compileConfig.ts",
+    "line": 29,
+    "title": "Conditional-activation config silently dropped when a gate fails to compile",
+    "detail": "compileConditionalActivationConfig does `if (!onGate || !offGate) return;` with no warning, so if the structured conditions fail to produce both gates the entire config (its active-state key and both on/off rules) is emitted as nothing. Any ability targeting that conditional-activation slot then references an active-state flag that is never toggled, and the misconfiguration produces no diagnostic.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.080",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/conditions/appendRuleConditions.ts:16:283deb4b",
+    "file": "src/engine/compiler/conditions/appendRuleConditions.ts",
+    "line": 16,
+    "title": "appendRuleConditions drops a malformed gate, leaving the rule ungated",
+    "detail": "A single unparseable condition string is skipped while its sibling gates and the rule's actions are kept, so a rule that was meant to be gated compiles to one that fires unconditionally (fail-open). The only signal is a console.warn; the compiled blueprint is silently more permissive than authored.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.081",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/conditions/compileStructuredConditions.ts:4:29b96fab",
+    "file": "src/engine/compiler/conditions/compileStructuredConditions.ts",
+    "line": 4,
+    "title": "toRefPath returns undefined for 5 of 9 condition kinds with no compile-time guard",
+    "detail": "Latent defect: if a future ref-based condition kind is added to the union and to `toCompiledExpression` (calling `toRefPath`) but the `toRefPath` switch is not extended, it emits `{ var: undefined }` with no type error and no runtime throw, producing a compiled rule that references an undefined var. The missing exhaustiveness check makes this failure invisible at build time.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.082",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/utils/scalableCompiler.ts:43:f839a3bd",
+    "file": "src/engine/compiler/utils/scalableCompiler.ts",
+    "line": 43,
+    "title": "scalableCompiler seeds initial state value only when no per-body scaling is configured",
+    "detail": "`setInitialValue` (which writes `components.state[key].value|max`) runs only in the no-scaling branch; when perBody/multPerBody scaling is present the initial static field is left untouched and the value is expected to be produced by passiveEffects at runtime. Callers that do not independently declare the target state key (unlike storageCompiler, which pre-creates it) would get a target whose static initial value/max is never seeded, relying entirely on passive-effect evaluation order.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.163",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/compiler/conditions/appendRuleConditions.ts:25:a040761e",
+    "file": "src/engine/compiler/conditions/appendRuleConditions.ts",
+    "line": 25,
+    "title": "silent failure: ignored-return",
+    "detail": "Real. `compileConditionText` returns a discriminated `{ok:false,error}` result; on failure the code logs `console.warn` and does not push the gate, so the error return is effectively swallowed. The rule is still emitted without the intended gate, so a typo in an author's condition text silently downgrades a gated rule to an always-firing one rather than failing the compile.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "compiler",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.009",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/linkerUtils.ts:32:71cdcab5",
+    "file": "src/engine/linker/linkerUtils.ts",
+    "line": 32,
+    "title": "footgun: namespaceBlueprints is named as though it always namespaces blueprint ids under the file's namespace.",
+    "detail": "Only ids WITHOUT an explicit `id` field are namespaced; any blueprint carrying a bare explicit `id` (e.g. \"cannon\") is used verbatim and stays unnamespaced, so two files can produce the same global id and collide during registry merge.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "linker",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.010",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/Gatekeeper.ts:52:aef8bdaa",
+    "file": "src/engine/linker/Gatekeeper.ts",
+    "line": 52,
+    "title": "footgun: validatePayload guards with `typeof this.linker.linkProject === \"function\"`, implying it links/loads the project to validate against.",
+    "detail": "linkProject is never called anywhere in validatePayload; validation is done entirely from the passed-in currentModules map. The guard checks a capability the method does not use, so a linker missing every other method still passes.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "linker",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.011",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/semanticParser.ts:36:17af8172",
+    "file": "src/engine/linker/semanticParser.ts",
+    "line": 36,
+    "title": "footgun: The strict .cave schema accepts keys `swarm`, `world`, and `understanding` (line 36/35/39), implying these are valid cartridge config sections.",
+    "detail": "mergeSemanticFragment deep-merges the whole parsed .cave object into runtime.config, but SysConfigSchema has no `swarm` or `understanding` keys; those values are silently carried as inert extra properties on config and never consumed by the runtime.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "linker",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.012",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/deepMerge.ts:12:a0dfbaeb",
+    "file": "src/engine/linker/deepMerge.ts",
+    "line": 12,
+    "title": "footgun: deepMergeObjects reads as a full recursive merge that combines base and override for the whole config tree.",
+    "detail": "Arrays never merge \u2014 an override array replaces the base array entirely (line 15), so array-valued config sections (conditions/guidances/tutorials/knowledge) from a later .cave file overwrite rather than accumulate across files.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "linker",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.083",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/moduleLinkerRuntime.ts:28:fb50d435",
+    "file": "src/engine/linker/moduleLinkerRuntime.ts",
+    "line": 28,
+    "title": "Array-valued config sections are overwritten, not accumulated, across semantic files",
+    "detail": "When multiple .cave files each contribute array config (conditions, guidances, tutorials, knowledge), deepMergeObjects replaces the array wholesale, so all but the last file's entries are silently lost even though multi-file merge is the linker's purpose.",
+    "finder_severity": "high",
+    "finder_class": "risk",
+    "subsystem": "linker",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.084",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/registryMerge.ts:18:7870be0f",
+    "file": "src/engine/linker/registryMerge.ts",
+    "line": 18,
+    "title": "Explicit bare blueprint ids bypass namespacing and silently override across files",
+    "detail": "namespaceBlueprints keeps an explicit non-namespaced id as-is, and mergeRegistry only fires a debug callback on collision before overwriting; two files defining the same explicit id produce a silent last-wins override with no error and no user-visible warning.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "linker",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.085",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/normalizeBpInput.ts:9:6c69e521",
+    "file": "src/engine/linker/normalizeBpInput.ts",
+    "line": 9,
+    "title": "normalizeBpInput discards sibling blueprints when a top-level id and a blueprints wrapper coexist",
+    "detail": "If a .bp file has both a top-level `id` and a `blueprints` map, only the entry matching `raw.id` (or the first entry) is kept and re-keyed; any other blueprints in the wrapper are dropped without error, so authored blueprints can vanish from the cartridge.",
+    "finder_severity": "medium",
+    "finder_class": "risk",
+    "subsystem": "linker",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.086",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/Gatekeeper.ts:62:81bc7645",
+    "file": "src/engine/linker/Gatekeeper.ts",
+    "line": 62,
+    "title": "validatePayload never checks draftPool ids, so payloads referencing pools are flagged as broken refs",
+    "detail": "existingIds is built only from blueprint headers and draftOptions; a fully-qualified reference to a valid draftPool id is not in the set and is reported as a broken reference, failing an otherwise-valid save.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "linker",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.087",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/moduleLinkerRuntime.ts:49:4a1e7a07",
+    "file": "src/engine/linker/moduleLinkerRuntime.ts",
+    "line": 49,
+    "title": "CompilerService leaves the internal _editor block on compiled blueprints stored in the cartridge",
+    "detail": "compile() returns the draft with _editor intact (it only early-returns when _editor is absent), so RuntimeCartridge.blueprints carry authoring-only _editor data that BlueprintV2 does not declare; downstream consumers see undeclared extra state and serialization has to special-case stripping it.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "linker",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.164",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/registryMerge.ts:19:12794cc1",
+    "file": "src/engine/linker/registryMerge.ts",
+    "line": 19,
+    "title": "silent failure: ignored-return",
+    "detail": "Real: a blueprint id collision between two loaded files is only surfaced through an optional onCollision callback wired to logger.debug; if the callback is omitted (or debug is a no-op) the earlier blueprint is overwritten with no error and no operator-visible signal.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "linker",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.165",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/ModuleLinker.ts:72:6121529f",
+    "file": "src/engine/linker/ModuleLinker.ts",
+    "line": 72,
+    "title": "silent failure: ignored-return",
+    "detail": "Benign-ish: an unsupported file listed in the manifest is skipped with only a logger.warn and readFragment returns null; the file is silently excluded from the cartridge rather than failing the link, so a typo in an extension drops content without erroring.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "linker",
+    "in_target_region": false
+  },
+  {
+    "id": "P.run1.166",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/linker/semanticParser.ts:79:028655c4",
+    "file": "src/engine/linker/semanticParser.ts",
+    "line": 79,
+    "title": "silent failure: ignored-return",
+    "detail": "Real: on a schema failure only the FIRST zod issue's message is put in the thrown LinkerValidationError (issues[0]); all other validation issues for that file are discarded, so an author fixing one error at a time never sees the rest.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "linker",
+    "in_target_region": false
+  }
+]

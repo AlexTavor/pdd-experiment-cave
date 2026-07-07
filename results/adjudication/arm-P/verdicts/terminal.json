@@ -1,0 +1,164 @@
+[
+  {
+    "id": "P.run1.062",
+    "fingerprint": "map:src/engine/terminal/catCommand.ts:14:76ceb9c8",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "catCommand.ts:14 calls vfs.readFile, which (FileSystem.base.ts:57,66) returns null for any string-valued entry; .cvs templates are stored as strings (makeCommands.ts:63), so cat always reports a real .cvs file as 'not found'. readText exists but is not used here."
+  },
+  {
+    "id": "P.run1.063",
+    "fingerprint": "map:src/engine/terminal/rmCommand.ts:16:0669f812",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "rmCommand.ts:16 uses vfs.readFile for its existence check; since readFile returns null for string (.cvs) files, rm reports 'File not found' and refuses to delete an existing .cvs entry."
+  },
+  {
+    "id": "P.run1.064",
+    "fingerprint": "map:src/engine/terminal/saveCommand.ts:16:8dd93d8f",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "saveToDisk -> saveJsonToDisk -> postJsonToEditor POSTs to /__editor/save (fileSystemBaseDisk.ts:53), a dev-only Vite editor route, so the 'saved to source' success is dev-only; the command description does mention 'editor middleware', limiting the footgun to the success message overclaiming."
+  },
+  {
+    "id": "P.run1.065",
+    "fingerprint": "map:src/engine/terminal/commands/makeCommands.ts:107:31668d9c",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "makeCommands.ts:63 builds the .cvs template as the string '# Cave script\\n' and line 107 writes it via writeFile(path, template as ModuleCartridge); because readFile never returns strings, the just-created .cvs is invisible to cat/rm and dropped by fs-save, and the cast masks storing a string under an object-typed API."
+  },
+  {
+    "id": "P.run1.066",
+    "fingerprint": "map:src/engine/terminal/smartPathUtils.ts:110:47271996",
+    "verdict": "false",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "The claim's premise is wrong: smartPathUtils.ts:2 imports fileCache (which is used at line 115), not getFileSuggestions, from ./fileUtils. There is no imported getFileSuggestions symbol being shadowed and no unused fileUtils import; the local getFileSuggestions at line 110 shadows nothing."
+  },
+  {
+    "id": "P.run1.067",
+    "fingerprint": "map:src/engine/terminal/commands/projectCommandSuggestions.ts:6:48e9754d",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "projectRoots (line 5-12) keeps only paths ending in '/manifest.json', so .cave-dir markers cannot pollute project suggestions; ls does clobber fileCache with raw keys (lsCommand.ts:14) making it stale, but this only affects autocomplete and cannot affect behavior."
+  },
+  {
+    "id": "P.run1.147",
+    "fingerprint": "map:src/engine/terminal/commands/fsCommands.ts:116:64d0f4a5",
+    "verdict": "real",
+    "judge_severity": "high",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": ".cvs is a supported fs file (fsSemanticFiles.ts:1) and fs-load writes it as text (fsCommands.ts:77-80), but fs-save reads each file with vfs.readFile (line 116) which returns null for strings, so 'if (data == null) continue' (line 117) silently skips every .cvs and reports success; cave-script edits are lost on save with no error."
+  },
+  {
+    "id": "P.run1.148",
+    "fingerprint": "map:src/engine/terminal/lsCommand.ts:13:9567765b",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "ls overwrites fileCache with vfs.listFiles() raw keys (lsCommand.ts:13-14) including '.cave-dir' markers, whereas refreshFileCache filters them (fileUtils.ts:33); real but affects only autocomplete offerings and the ls listing until the next refresh, no behavioral impact."
+  },
+  {
+    "id": "P.run1.149",
+    "fingerprint": "map:src/engine/terminal/commands/projectDuplicateCommand.ts:44:a1e649dd",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "projectDuplicateCommand.ts:44 sets targetRoot = newName verbatim and uses it directly as a VFS key prefix (writeFile `${targetRoot}/manifest.json`) with no normalize(); a name containing slashes or '..' yields malformed/path-traversing keys, unlike makeCommands which normalizes."
+  },
+  {
+    "id": "P.run1.150",
+    "fingerprint": "map:src/engine/terminal/commands/projectServices.ts:6:c07af6f1",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "concurrency",
+    "oracle_match": null,
+    "notes": "The singletons and shared mutable state (moduleCache/activeCartridge) at projectServices.ts:6-10 are real, but JS is single-threaded so 'concurrent race' is not supported; loadProject clears then repopulates state (WorkspaceService.ts:45-49) so a mid-load throw can leave a narrow inconsistency, but the claimed failure mode is speculative."
+  },
+  {
+    "id": "P.run1.151",
+    "fingerprint": "map:src/engine/terminal/smartPathUtils.ts:58:79fb21aa",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "other",
+    "oracle_match": null,
+    "notes": "depthHandlers[segments.length] returns undefined (-> []) for depth >= 4, but depth 0 is handled earlier (line 37) so the 'omits depth 0' framing is misleading; the deep no-op is benign and the whole module has no non-test importer (dead code), so nothing user-facing can break."
+  },
+  {
+    "id": "P.run1.152",
+    "fingerprint": "map:src/engine/terminal/commands/projectSaveCommand.ts:68:12ae9793",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "The `if (manifestPath)` guard (projectSaveCommand.ts:69) can skip the version bump when getManifestPath() is null, but reaching it requires locate() to find a blueprint in moduleCache, which is only populated by loadProject alongside manifestPath (WorkspaceService.ts:37,45-48) and cleared together by closeProject, so the no-op is effectively unreachable."
+  },
+  {
+    "id": "P.run1.195",
+    "fingerprint": "map:src/engine/terminal/fileUtils.ts:37:3e6a7ffc",
+    "verdict": "real",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "refreshFileCache().catch(() => {}) at fileUtils.ts:37-39 swallows any listFiles rejection with only a comment and no pdd-ignore marker; a persistently broken VFS leaves autocomplete stale/empty with no user signal, but the impact is limited to the autocomplete cache."
+  },
+  {
+    "id": "P.run1.196",
+    "fingerprint": "map:src/engine/terminal/commands/fsCommands.ts:76:7cc30c71",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "In handleFsLoad's Promise.all, each per-file read does `if (!res.ok) return;` (fsCommands.ts:76) skipping the file silently, yet the command reports `Loaded ${files.length} file(s)` (line 86) counting files that were never written; partial loads are reported as full success."
+  },
+  {
+    "id": "P.run1.197",
+    "fingerprint": "map:src/engine/terminal/commands/vfsHardReloadCommand.ts:42:d8c91506",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "vfsHardReloadCommand deletes the entire VFS first (line 20), then per-file `if (!res.ok) return;` (line 42) silently skips any failed re-read while reporting `Hard-reloaded ${files.length} file(s)` (line 53); a failed read after the destructive wipe is silent data loss reported as success."
+  },
+  {
+    "id": "P.run1.198",
+    "fingerprint": "map:src/engine/terminal/rmCommand.ts:32:95d5f396",
+    "verdict": "trivial",
+    "judge_severity": "low",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "rmCommand.ts:32 calls refreshFileCache() without await and its rejection is swallowed by the function's own catch; the delete itself is awaited (line 31) and already succeeded, so the only effect is the deleted file briefly lingering in autocomplete, which cannot corrupt state."
+  },
+  {
+    "id": "P.run1.199",
+    "fingerprint": "map:src/engine/terminal/commands/projectCommands.ts:117:d71176ea",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "correctness",
+    "oracle_match": null,
+    "notes": "handleProjectClose awaits workspaceService.closeProject() (projectCommands.ts:117) with no try/catch; if it rejects, context.runtime?.unload() and ui?.closeWorkspace() (lines 118-119) never run, leaving runtime/UI half-open, unlike the other project handlers which wrap their work in try/catch."
+  },
+  {
+    "id": "P.run1.200",
+    "fingerprint": "map:src/engine/terminal/commands/fsCommands.ts:124:006479d9",
+    "verdict": "real",
+    "judge_severity": "medium",
+    "judge_class": "silent-failure",
+    "oracle_match": null,
+    "notes": "handleFsSave loops sequentially; on the first failed /__editor/save it returns an error (fsCommands.ts:124-128) but files POSTed earlier in the loop remain on disk, and every .cvs (null data) is skipped via `continue` (line 117) and excluded from the reported count, so a half-completed save is reported without indicating which files were skipped."
+  }
+]

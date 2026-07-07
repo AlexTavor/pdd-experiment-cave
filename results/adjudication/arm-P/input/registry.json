@@ -1,0 +1,98 @@
+[
+  {
+    "id": "P.run1.045",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/registry/referenceIndex.walk.ts:3:370ca7ed",
+    "file": "src/engine/registry/referenceIndex.walk.ts",
+    "line": 3,
+    "title": "footgun: ENTITY_ID_PATTERN plus the broken-reference machinery reads as a general 'detect references to missing blueprints' check.",
+    "detail": "The pattern /\\bentity_[a-z0-9]+\\b/i only recognizes ids of the shape entity_<alnum>. Real blueprint/draftOption ids in src/data are nanoid-style (e.g. 0HNjKctJ5pN7Zwr6gV2ay) or human slugs (e.g. Accountant, 30_seconds_in) \u2014 0 of 265 distinct ids are entity_-prefixed \u2014 so a missing reference to a real id never becomes a BrokenReference; broken detection fires only for the synthetic entity_ ids used in tests.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "registry",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.046",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/registry/referenceIndex.walk.ts:52:589560f9",
+    "file": "src/engine/registry/referenceIndex.walk.ts",
+    "line": 52,
+    "title": "footgun: ENTITY_ID_PATTERN.test(value) reads as 'this string IS an entity id', so the recorded missingId is the referenced id.",
+    "detail": "test() is a substring match anchored only by \\b word boundaries, not ^...$, so any free-text string that merely contains an entity_ token (e.g. 'spawn entity_foo now') matches, and broken.push records missingId: value = the entire string, not the matched id. The later filter existingIds.has(b.missingId) then compares that whole sentence against the id set.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "registry",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.047",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/registry/referenceIndex.walk.ts:41:ccfb007a",
+    "file": "src/engine/registry/referenceIndex.walk.ts",
+    "line": 41,
+    "title": "footgun: existingIds.has(value) paired with a case-insensitive ENTITY_ID_PATTERN suggests id resolution is case-tolerant.",
+    "detail": "existingIds is a Set with exact case-sensitive lookup, while ENTITY_ID_PATTERN carries the i flag. A reference written as entity_A when the blueprint key is entity_a fails existingIds.has (miss), then matches the pattern, and is reported as a broken reference even though a case-variant of the target exists.",
+    "finder_severity": "medium",
+    "finder_class": "footgun",
+    "subsystem": "registry",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.128",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/registry/referenceIndex.walk.ts:52:10ff916b",
+    "file": "src/engine/registry/referenceIndex.walk.ts",
+    "line": 52,
+    "title": "Broken-reference detection is inert on real ids: missing references never surface",
+    "detail": "Because unresolved strings are only reported when they match the entity_ pattern, a payload/pool/blueprint that points at a real but non-existent target (nanoid or slug id) yields an empty broken list. Any consumer that trusts index.broken to catch dangling references gets a false all-clear on production module data.",
+    "finder_severity": "high",
+    "finder_class": "risk",
+    "subsystem": "registry",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.129",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/registry/referenceIndex.ts:65:1d1a1b3e",
+    "file": "src/engine/registry/referenceIndex.ts",
+    "line": 65,
+    "title": "filteredBroken filter is dead code and masks the real dedup intent",
+    "detail": "broken.filter((b) => !existingIds.has(b.missingId)) can never remove an element: in walk.ts a value is pushed to broken only after existingIds.has(value) has already returned false, so every b.missingId is guaranteed absent from existingIds. The filter is a no-op that reads as a meaningful safety net; if the walk logic later changes to push existing ids, this line silently becomes load-bearing without any test exercising the removal.",
+    "finder_severity": "low",
+    "finder_class": "risk",
+    "subsystem": "registry",
+    "in_target_region": true
+  },
+  {
+    "id": "P.run1.184",
+    "source": {
+      "arm": "P",
+      "run_index": 1
+    },
+    "fingerprint": "map:src/engine/registry/referenceIndex.walk.ts:61:4d7eb3bd",
+    "file": "src/engine/registry/referenceIndex.walk.ts",
+    "line": 61,
+    "title": "silent failure: ignored-return",
+    "detail": "REAL: an unresolved string reference that does not match ENTITY_ID_PATTERN hits the bare `return` and is dropped with no incoming entry and no broken entry. Since real blueprint/draftOption ids are not entity_-prefixed, a dangling reference to a missing real id (e.g. a draft payload blueprintId or a pool optionId pointing at a deleted 'Accountant') fails completely untraced \u2014 the index looks healthy while the graph is broken.",
+    "finder_severity": "medium",
+    "finder_class": "silent-failure",
+    "subsystem": "registry",
+    "in_target_region": true
+  }
+]
