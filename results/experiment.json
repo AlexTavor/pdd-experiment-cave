@@ -2,7 +2,7 @@
   "id": "cave-experiment",
   "protocol_version": "1",
   "target_commit": "117cd7deb661067e4c503291fff99018427ed6f5",
-  "pdd_commit": "731ba4d09e9a654211bb23e2572ba4cfdc4b2776",
+  "pdd_commit": "c63c7d99028788fecf97ec1448f49450ee6b9e91",
   "models": { "finder": "claude-opus-4-8", "judge": "claude-opus-4-8" },
   "prompt_refs": {
     "raw": "prompts/raw.md@sha256:1f6333bfa1016a67e1406d3bf96b5a6e57fcb15bc6a6dc9f39105978c40238e8",
@@ -11,7 +11,7 @@
   },
   "arms": ["R", "C", "P"],
   "runs_per_arm": 3,
-  "budget_per_arm": "pending-calibration",
+  "budget_per_arm": "uncalibrated (weekly-allowance gate dropped); P = operator's phase-1 run, R/C shape-matched to P",
   "kill_condition": "Keep iff, on the large target: (a) C beats R on recall by >= 10 pts AND by more than the within-arm run spread; (b) the gate suite yields >= K=1 killable gap missed by all finders, confirmed killable after triage; (c) P beats C on precision by >= 8 pts AND by more than the within-arm run spread. Kill iff C is within R's run spread AND the gates yield near-zero killable-missed gaps after triage. A negative high-severity delta is expected and is not a kill trigger. K=1 is the floor read as 'keep exploring'; >= 5 confirmed killable-missed gaps is a clear signal. Authoritative text: plan.md.",
-  "notes": "budget_per_arm is set from the calibration read (one arm P over ~1-2k lines, meter before/after), not a token count. Prompt hashes are sha256 of the frozen files at pin time."
+  "notes": "Arm P finder output is taken from the operator's 'PDD phase 1 cave-public engine' run (2026-07-06/07), which ran the full MAP over the whole engine at depth=1 (11 subsystems incl compiler+linker). pdd_commit c63c7d9 was determined from the run-start timestamp (HEAD immediately before 2026-07-06T22:47); confirm if the run used a different PDD version. Prompt hashes are sha256 of the frozen files at pin time. Arm P findings adjudicated by the blind judge (prompts/judge.md), not PDD's own classify."
 }
