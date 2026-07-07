@@ -1,0 +1,119 @@
+[
+  {
+    "id": "silent-failure#00",
+    "gate": "silent-failure",
+    "file": "src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts",
+    "line": 31,
+    "detail": "catch \u2192 `return null`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it).",
+    "extra": {
+      "source": "silent-failure",
+      "kind": "silent-failure",
+      "severity": "high",
+      "fingerprint": "silent-failure:default-swallow:src/engine/phaser/avatar/resolveBodyAvatarPresentation.ts"
+    }
+  },
+  {
+    "id": "silent-failure#01",
+    "gate": "silent-failure",
+    "file": "src/engine/phaser/debug/phaserDebugToggle.ts",
+    "line": 6,
+    "detail": "catch \u2192 `return false`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it).",
+    "extra": {
+      "source": "silent-failure",
+      "kind": "silent-failure",
+      "severity": "high",
+      "fingerprint": "silent-failure:default-swallow:src/engine/phaser/debug/phaserDebugToggle.ts"
+    }
+  },
+  {
+    "id": "silent-failure#02",
+    "gate": "silent-failure",
+    "file": "src/engine/phaser/debug/phaserDebugToggle.ts",
+    "line": 22,
+    "detail": "} catch {}",
+    "extra": {
+      "source": "silent-failure",
+      "kind": "silent-failure",
+      "severity": "high",
+      "fingerprint": "silent-failure:empty-catch:src/engine/phaser/debug/phaserDebugToggle.ts"
+    }
+  },
+  {
+    "id": "silent-failure#03",
+    "gate": "silent-failure",
+    "file": "src/engine/phaser/display-export/buildDisplayImageRequest.ts",
+    "line": 114,
+    "detail": "catch \u2192 `continue`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it).",
+    "extra": {
+      "source": "silent-failure",
+      "kind": "silent-failure",
+      "severity": "high",
+      "fingerprint": "silent-failure:default-swallow:src/engine/phaser/display-export/buildDisplayImageRequest.ts"
+    }
+  },
+  {
+    "id": "silent-failure#04",
+    "gate": "silent-failure",
+    "file": "src/engine/vfs/fileSystemBaseDisk.ts",
+    "line": 43,
+    "detail": "catch \u2192 `return null`: the error is converted into a healthy-looking default, so a corrupt input reads exactly like a benign absent one \u2014 the code looks clean while it is wrong. Surface the failure (stderr/throw) or sanction the swallow (a `pdd-ignore: <reason>` marker, or a try*-named wrapper whose name declares it).",
+    "extra": {
+      "source": "silent-failure",
+      "kind": "silent-failure",
+      "severity": "high",
+      "fingerprint": "silent-failure:default-swallow:src/engine/vfs/fileSystemBaseDisk.ts"
+    }
+  },
+  {
+    "id": "pin-values#00",
+    "gate": "pin-values",
+    "file": "src/engine/linker/Gatekeeper.test.ts",
+    "line": 22,
+    "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value",
+    "extra": {
+      "source": "pin-values",
+      "kind": "pin-values",
+      "severity": "high",
+      "fingerprint": "pin-values:throws when payload references a missing id:src/engine/linker/Gatekeeper.test.ts"
+    }
+  },
+  {
+    "id": "pin-values#01",
+    "gate": "pin-values",
+    "file": "src/engine/linker/Gatekeeper.test.ts",
+    "line": 32,
+    "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value",
+    "extra": {
+      "source": "pin-values",
+      "kind": "pin-values",
+      "severity": "high",
+      "fingerprint": "pin-values:throws when payload has schema violations:src/engine/linker/Gatekeeper.test.ts"
+    }
+  },
+  {
+    "id": "pin-values#02",
+    "gate": "pin-values",
+    "file": "src/engine/linker/ModuleLinker.core.test.ts",
+    "line": 62,
+    "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value",
+    "extra": {
+      "source": "pin-values",
+      "kind": "pin-values",
+      "severity": "high",
+      "fingerprint": "pin-values:throws deterministic parse and validation errors:src/engine/linker/ModuleLinker.core.test.ts"
+    }
+  },
+  {
+    "id": "pin-values#03",
+    "gate": "pin-values",
+    "file": "src/engine/linker/ModuleLinker.core.test.ts",
+    "line": 80,
+    "detail": "assertions are truthiness/type only (toBeTruthy/toBeInstanceOf/\u2026); pins no concrete value",
+    "extra": {
+      "source": "pin-values",
+      "kind": "pin-values",
+      "severity": "high",
+      "fingerprint": "pin-values:throws on duplicate ids after same-file namespacing:src/engine/linker/ModuleLinker.core.test.ts"
+    }
+  }
+]

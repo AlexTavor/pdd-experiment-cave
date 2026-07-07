@@ -1,0 +1,236 @@
+[
+  {
+    "id": "cover-the-mirror#00",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/scenes/GameScene.runtime.ts",
+    "line": 4,
+    "detail": "unpaired attach on subject \"if needed runtime\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "high",
+      "fingerprint": "cover-the-mirror:if needed runtime:src/engine/phaser/scenes/GameScene.runtime.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#01",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/display/interactionHitArea.ts",
+    "line": 38,
+    "detail": "unpaired bind on subject \"circle interactive\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "high",
+      "fingerprint": "cover-the-mirror:circle interactive:src/engine/phaser/display/interactionHitArea.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#02",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/RuntimeAccessors.ts",
+    "line": 81,
+    "detail": "unpaired register on subject \"behavior pre system\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "high",
+      "fingerprint": "cover-the-mirror:behavior pre system:src/engine/runtime/RuntimeAccessors.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#03",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/RuntimeAccessors.ts",
+    "line": 102,
+    "detail": "unpaired register on subject \"body physic\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "high",
+      "fingerprint": "cover-the-mirror:body physic:src/engine/runtime/RuntimeAccessors.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#04",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/logic/JsonLogicAdapter.ops.ts",
+    "line": 12,
+    "detail": "unpaired register on subject \"operation\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "high",
+      "fingerprint": "cover-the-mirror:operation:src/engine/logic/JsonLogicAdapter.ops.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#05",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/RuntimeAccessors.ts",
+    "line": 77,
+    "detail": "unpaired register on subject \"system\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "high",
+      "fingerprint": "cover-the-mirror:system:src/engine/runtime/RuntimeAccessors.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#06",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/display/modules/distress/distressHaloHelpers.ts",
+    "line": 20,
+    "detail": "unpaired start on subject \"burst distress\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "high",
+      "fingerprint": "cover-the-mirror:burst distress:src/engine/phaser/display/modules/distress/distressHaloHelpers.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#07",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/camera/cameraTouch.ts",
+    "line": 43,
+    "detail": "unpaired begin on subject \"pinch\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "medium",
+      "fingerprint": "cover-the-mirror:pinch:src/engine/phaser/camera/cameraTouch.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#08",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/veins/graphBuilderEdges.ts",
+    "line": 38,
+    "detail": "unpaired add on subject \"demand edge\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:demand edge:src/engine/phaser/veins/graphBuilderEdges.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#09",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/veins/graphBuilderSinkEdges.ts",
+    "line": 17,
+    "detail": "unpaired add on subject \"demand edge sink\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:demand edge sink:src/engine/phaser/veins/graphBuilderSinkEdges.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#10",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/veins/graphBuilderEdges.ts",
+    "line": 14,
+    "detail": "unpaired add on subject \"demand route\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:demand route:src/engine/phaser/veins/graphBuilderEdges.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#11",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/runtimeInvalidationSummary.helpers.ts",
+    "line": 22,
+    "detail": "unpaired add on subject \"direct ids\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:direct ids:src/engine/runtime/runtimeInvalidationSummary.helpers.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#12",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/veins/graphBuilderNervous.ts",
+    "line": 53,
+    "detail": "unpaired add on subject \"edge nervous\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:edge nervous:src/engine/phaser/veins/graphBuilderNervous.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#13",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/veins/graphBuilderEdges.ts",
+    "line": 52,
+    "detail": "unpaired add on subject \"edge sink\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:edge sink:src/engine/phaser/veins/graphBuilderEdges.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#14",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/veins/graphBuilderNervous.ts",
+    "line": 11,
+    "detail": "unpaired add on subject \"edge world\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:edge world:src/engine/phaser/veins/graphBuilderNervous.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#15",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/runtimeInvalidationSummary.helpers.ts",
+    "line": 16,
+    "detail": "unpaired add on subject \"id\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:id:src/engine/runtime/runtimeInvalidationSummary.helpers.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#16",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/veins/graphBuilderCommon.ts",
+    "line": 18,
+    "detail": "unpaired add on subject \"node\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:node:src/engine/phaser/veins/graphBuilderCommon.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#17",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/veins/graphBuilderNervous.ts",
+    "line": 26,
+    "detail": "unpaired add on subject \"route world\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:route world:src/engine/phaser/veins/graphBuilderNervous.ts"
+    }
+  }
+]

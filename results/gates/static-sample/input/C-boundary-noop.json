@@ -1,0 +1,171 @@
+[
+  {
+    "id": "no-op-paths#00",
+    "gate": "no-op-paths",
+    "file": "src/engine/physics/quadtree/Quadtree.ts",
+    "line": 241,
+    "detail": "referenced by 9 test(s), none titled as a no-op/unchanged case",
+    "extra": {
+      "source": "no-op-paths",
+      "kind": "no-op-paths",
+      "severity": "medium",
+      "fingerprint": "no-op-paths:clear:src/engine/physics/quadtree/Quadtree.ts"
+    }
+  },
+  {
+    "id": "no-op-paths#01",
+    "gate": "no-op-paths",
+    "file": "src/engine/runtime/handlers/removeBodyFromOwners.ts",
+    "line": 10,
+    "detail": "reached through tested caller(s) (handle); no test exercises removeBodyFromOwners's no-op path directly",
+    "extra": {
+      "source": "no-op-paths",
+      "kind": "no-op-paths",
+      "severity": "medium",
+      "fingerprint": "no-op-paths:removeBodyFromOwners:src/engine/runtime/handlers/removeBodyFromOwners.ts"
+    }
+  },
+  {
+    "id": "no-op-paths#02",
+    "gate": "no-op-paths",
+    "file": "src/engine/runtime/persistence/hydrateRuntime.ts",
+    "line": 14,
+    "detail": "reached through tested caller(s) (hydrateRuntime); no test exercises clearTransientDraft's no-op path directly",
+    "extra": {
+      "source": "no-op-paths",
+      "kind": "no-op-paths",
+      "severity": "medium",
+      "fingerprint": "no-op-paths:clearTransientDraft:src/engine/runtime/persistence/hydrateRuntime.ts"
+    }
+  },
+  {
+    "id": "boundary-tests#00",
+    "gate": "boundary-tests",
+    "file": "src/engine/phaser/display/avatar/swarmAvatarLayout.ts",
+    "line": 52,
+    "detail": "compared at 1 site(s) (e.g. count <= SMALL_SWARM_LIMIT); no test names SMALL_SWARM_LIMIT, so the boundary case (== SMALL_SWARM_LIMIT) is likely untested",
+    "extra": {
+      "source": "boundary-tests",
+      "kind": "boundary-tests",
+      "severity": "high",
+      "fingerprint": "boundary-tests:SMALL_SWARM_LIMIT:src/engine/phaser/display/avatar/swarmAvatarLayout.ts"
+    }
+  },
+  {
+    "id": "boundary-tests#01",
+    "gate": "boundary-tests",
+    "file": "src/engine/phaser/display/glyph/GlyphRegistry.ts",
+    "line": 102,
+    "detail": "compared at 1 site(s) (e.g. this.nextOrdinal < MAX_GLYPH_CAPACITY); no test names MAX_GLYPH_CAPACITY, so the boundary case (== MAX_GLYPH_CAPACITY) is likely untested",
+    "extra": {
+      "source": "boundary-tests",
+      "kind": "boundary-tests",
+      "severity": "high",
+      "fingerprint": "boundary-tests:MAX_GLYPH_CAPACITY:src/engine/phaser/display/glyph/GlyphRegistry.ts"
+    }
+  },
+  {
+    "id": "boundary-tests#02",
+    "gate": "boundary-tests",
+    "file": "src/engine/phaser/display/modules/light/menuAmbientProximityLightState.ts",
+    "line": 41,
+    "detail": "compared at 1 site(s) (e.g. distance >= PROXIMITY_LIGHT_CUTOFF_PX); no test names PROXIMITY_LIGHT_CUTOFF_PX, so the boundary case (== PROXIMITY_LIGHT_CUTOFF_PX) is likely untested",
+    "extra": {
+      "source": "boundary-tests",
+      "kind": "boundary-tests",
+      "severity": "high",
+      "fingerprint": "boundary-tests:PROXIMITY_LIGHT_CUTOFF_PX:src/engine/phaser/display/modules/light/menuAmbientProximityLightState.ts"
+    }
+  },
+  {
+    "id": "boundary-tests#03",
+    "gate": "boundary-tests",
+    "file": "src/engine/phaser/display/modules/veins/veinsRopePath.ts",
+    "line": 38,
+    "detail": "compared at 1 site(s) (e.g. pathLengthPx < ZERO_LENGTH_PX); no test names ZERO_LENGTH_PX, so the boundary case (== ZERO_LENGTH_PX) is likely untested",
+    "extra": {
+      "source": "boundary-tests",
+      "kind": "boundary-tests",
+      "severity": "high",
+      "fingerprint": "boundary-tests:ZERO_LENGTH_PX:src/engine/phaser/display/modules/veins/veinsRopePath.ts"
+    }
+  },
+  {
+    "id": "boundary-tests#04",
+    "gate": "boundary-tests",
+    "file": "src/engine/phaser/display/particles/HeatParticlesConfigResolver.ts",
+    "line": 22,
+    "detail": "compared at 1 site(s) (e.g. intensity < HEAT_THRESHOLD); no test names HEAT_THRESHOLD, so the boundary case (== HEAT_THRESHOLD) is likely untested",
+    "extra": {
+      "source": "boundary-tests",
+      "kind": "boundary-tests",
+      "severity": "high",
+      "fingerprint": "boundary-tests:HEAT_THRESHOLD:src/engine/phaser/display/particles/HeatParticlesConfigResolver.ts"
+    }
+  },
+  {
+    "id": "boundary-tests#05",
+    "gate": "boundary-tests",
+    "file": "src/engine/phaser/display/particles/XpParticlesConfigResolver.ts",
+    "line": 22,
+    "detail": "compared at 1 site(s) (e.g. intensity < XP_THRESHOLD); no test names XP_THRESHOLD, so the boundary case (== XP_THRESHOLD) is likely untested",
+    "extra": {
+      "source": "boundary-tests",
+      "kind": "boundary-tests",
+      "severity": "high",
+      "fingerprint": "boundary-tests:XP_THRESHOLD:src/engine/phaser/display/particles/XpParticlesConfigResolver.ts"
+    }
+  },
+  {
+    "id": "boundary-tests#06",
+    "gate": "boundary-tests",
+    "file": "src/engine/physics/impulse/Steering.ts",
+    "line": 17,
+    "detail": "compared at 1 site(s) (e.g. len <= MIN_DISTANCE); no test names MIN_DISTANCE, so the boundary case (== MIN_DISTANCE) is likely untested",
+    "extra": {
+      "source": "boundary-tests",
+      "kind": "boundary-tests",
+      "severity": "high",
+      "fingerprint": "boundary-tests:MIN_DISTANCE:src/engine/physics/impulse/Steering.ts"
+    }
+  },
+  {
+    "id": "boundary-tests#07",
+    "gate": "boundary-tests",
+    "file": "src/engine/physics/quadtree/Quadtree.ts",
+    "line": 124,
+    "detail": "compared at 2 site(s) (e.g. width <= MIN_EXTENT); no test names MIN_EXTENT, so the boundary case (== MIN_EXTENT) is likely untested",
+    "extra": {
+      "source": "boundary-tests",
+      "kind": "boundary-tests",
+      "severity": "high",
+      "fingerprint": "boundary-tests:MIN_EXTENT:src/engine/physics/quadtree/Quadtree.ts"
+    }
+  },
+  {
+    "id": "boundary-tests#08",
+    "gate": "boundary-tests",
+    "file": "src/engine/runtime/handlers/TransferHandler.ts",
+    "line": 51,
+    "detail": "compared at 1 site(s) (e.g. total < MIN_TRANSFER_THRESHOLD); no test names MIN_TRANSFER_THRESHOLD, so the boundary case (== MIN_TRANSFER_THRESHOLD) is likely untested",
+    "extra": {
+      "source": "boundary-tests",
+      "kind": "boundary-tests",
+      "severity": "high",
+      "fingerprint": "boundary-tests:MIN_TRANSFER_THRESHOLD:src/engine/runtime/handlers/TransferHandler.ts"
+    }
+  },
+  {
+    "id": "boundary-tests#09",
+    "gate": "boundary-tests",
+    "file": "src/engine/runtime/runtimeTick.ts",
+    "line": 54,
+    "detail": "compared at 2 site(s) (e.g. steps < MAX_RUNTIME_SUBSTEPS); no test names MAX_RUNTIME_SUBSTEPS, so the boundary case (== MAX_RUNTIME_SUBSTEPS) is likely untested",
+    "extra": {
+      "source": "boundary-tests",
+      "kind": "boundary-tests",
+      "severity": "high",
+      "fingerprint": "boundary-tests:MAX_RUNTIME_SUBSTEPS:src/engine/runtime/runtimeTick.ts"
+    }
+  }
+]

@@ -1,0 +1,28 @@
+{
+  "per_gate": {
+    "cover-the-mirror": {
+      "false": 36
+    },
+    "silent-failure": {
+      "real": 3,
+      "false": 2
+    },
+    "pin-values": {
+      "false": 4
+    },
+    "no-op-paths": {
+      "trivial": 2,
+      "real": 1
+    },
+    "boundary-tests": {
+      "trivial": 3,
+      "real": 6,
+      "false": 1
+    }
+  },
+  "total": {
+    "false": 43,
+    "trivial": 5,
+    "real": 10
+  }
+}

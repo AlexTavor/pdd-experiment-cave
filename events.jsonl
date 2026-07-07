@@ -12,3 +12,4 @@
 {"ts": "2026-07-07T10:08:57Z", "actor": "agent", "action": "adjudicate", "target": "results/findings/arm-R.adjudicated.json,metrics.json", "note": "arm R blind-judged: 37 real/1 false/0 trivial of 38; dashboard live"}
 {"ts": "2026-07-07T14:19:44Z", "actor": "agent", "action": "build", "target": "view/server.mjs,metrics.json", "note": "comparison-first dashboard: head-to-head + severity/class/coverage + cost + gate axis; R vs P live"}
 {"ts": "2026-07-07T15:04:15Z", "actor": "agent", "action": "triage", "target": "results/gates/mutation-sample", "note": "gate triage n=385: ~6782 killable (93%, CI 6.6-7.0k); P cost $484 vs R $125"}
+{"ts": "2026-07-07T15:18:37Z", "actor": "agent", "action": "validate", "target": "results/gates/static-sample", "note": "static gates 10 real/43 false/5 trivial of 58; cover-the-mirror 0/36 noise; contribution view added"}

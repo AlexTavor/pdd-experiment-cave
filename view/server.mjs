@@ -105,8 +105,11 @@ function buildSpec() {
   push({ type: 'section', title: 'cost (tokens priced, USD estimate)' });
   push(tableFromRows(m.cost) || { type: 'prose', text: 'cost pending' });
 
-  push({ type: 'section', title: 'deterministic gate axis (PDD-only, R has no equivalent) — primary metric' });
+  push({ type: 'section', title: 'deterministic gate axis (PDD-only, R has no equivalent): primary metric' });
   push(tableFromRows(m.gate) || { type: 'prose', text: 'gate axis pending' });
+
+  push({ type: 'section', title: 'source contribution (what works best)' });
+  push(tableFromRows(m.contribution, ['left', 'right', 'right', 'right']));
 
   push({ type: 'section', title: 'progress' });
   push(progressTable(m.progress_arm_run || {}));

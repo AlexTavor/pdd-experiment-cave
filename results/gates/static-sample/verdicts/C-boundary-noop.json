@@ -1,0 +1,80 @@
+[
+  {
+    "id": "no-op-paths#00",
+    "gate": "no-op-paths",
+    "verdict": "trivial",
+    "notes": "clear() on an undivided tree (line 244 branch false) only runs points.length=0 and is hit incidentally by afterEach release; the inert reset cannot regress observably."
+  },
+  {
+    "id": "no-op-paths#01",
+    "gate": "no-op-paths",
+    "verdict": "real",
+    "notes": "KillHandler.test and AssignBodiesBatch tests never set an owner with assignment.assignedIds, so the 'owner does not reference bodyId, leave untouched' path (line 19) is genuinely unpinned and a regression could wipe unrelated owners' assignments."
+  },
+  {
+    "id": "no-op-paths#02",
+    "gate": "no-op-paths",
+    "verdict": "trivial",
+    "notes": "The no-draft return (line 16) is exercised incidentally by the restore tests' draftless sys_world, and a regression would at worst add an inert active:false draft object with no behavioral effect."
+  },
+  {
+    "id": "boundary-tests#00",
+    "gate": "boundary-tests",
+    "verdict": "trivial",
+    "notes": "Tests use count 2,4,7,40 and never count==6, so the count<=SMALL_SWARM_LIMIT ring-vs-spiral flip is untested, but the boundary only selects one cosmetic layout for one crowd size."
+  },
+  {
+    "id": "boundary-tests#01",
+    "gate": "boundary-tests",
+    "verdict": "real",
+    "notes": "GlyphRegistry.advanced.test never drives nextOrdinal to MAX_GLYPH_CAPACITY, so the capacity-exhaustion throw at the ==MAX boundary (line 102) is untested."
+  },
+  {
+    "id": "boundary-tests#02",
+    "gate": "boundary-tests",
+    "verdict": "trivial",
+    "notes": "Module tests use pointer distances of 400 (null) and 100/160 (visible) but never distance==200, yet at the boundary alpha computes to 0 so returning null vs a zero-alpha light is visually identical."
+  },
+  {
+    "id": "boundary-tests#03",
+    "gate": "boundary-tests",
+    "verdict": "trivial",
+    "notes": "The 'returns null for degenerate paths' test already covers pathLengthPx=0 (< ZERO_LENGTH_PX); the 0.001 epsilon is a degeneracy guard where no meaningful path length lands exactly on the boundary."
+  },
+  {
+    "id": "boundary-tests#04",
+    "gate": "boundary-tests",
+    "verdict": "real",
+    "notes": "ParticlesConfigRegistry.test only calls heat mapIntensity(0.5) and asserts property presence, so the intensity<HEAT_THRESHOLD enabled/disabled flip at ==0.1 is untested."
+  },
+  {
+    "id": "boundary-tests#05",
+    "gate": "boundary-tests",
+    "verdict": "real",
+    "notes": "ParticlesConfigRegistry.test only calls xp mapIntensity(0) and asserts property presence, so the intensity<XP_THRESHOLD enabled/disabled flip at ==0.05 is untested."
+  },
+  {
+    "id": "boundary-tests#06",
+    "gate": "boundary-tests",
+    "verdict": "real",
+    "notes": "No test imports computeSeek/applySeek from Steering.ts (only ImpulseSteeringForces, a different module, is tested), so the len<=MIN_DISTANCE zero-vector boundary and the whole function are untested."
+  },
+  {
+    "id": "boundary-tests#07",
+    "gate": "boundary-tests",
+    "verdict": "real",
+    "notes": "The stack-overflow regression test drives subdivision toward the guard but no test pins width==MIN_EXTENT, and this is a genuine recursion-termination boundary where <= vs < changes how deep subdivision goes."
+  },
+  {
+    "id": "boundary-tests#08",
+    "gate": "boundary-tests",
+    "verdict": "false",
+    "notes": "total is a sum of clamped non-negative amounts and line 44 already returns when total<=0, so total<MIN_TRANSFER_THRESHOLD (0) at line 51 is unreachable dead code with no boundary risk."
+  },
+  {
+    "id": "boundary-tests#09",
+    "gate": "boundary-tests",
+    "verdict": "real",
+    "notes": "The only reference to MAX_RUNTIME_SUBSTEPS in tests is a comment that deliberately avoids the cap by ticking individually, so no test asserts the steps==MAX_RUNTIME_SUBSTEPS substep-cap behavior (loop exit and return 0)."
+  }
+]

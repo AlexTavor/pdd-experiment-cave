@@ -1,0 +1,110 @@
+[
+  {
+    "id": "cover-the-mirror#18",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "encodePointerSegment escapes ~ and / only to build a JSON Pointer inside a human-readable Zod error string that is never parsed back, so no decode inverse is needed."
+  },
+  {
+    "id": "cover-the-mirror#19",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "enqueueAdd pushes an ADJUST_STATE command into a CommandsManager whose process() drains the buffer (buffer.length = 0), so the dequeue inverse is owned by the runtime loop, not this producer."
+  },
+  {
+    "id": "cover-the-mirror#20",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "enqueueFactAdjust enqueues an ADJUST_FACT command consumed by the CommandsManager process loop; the consuming/draining half is owned elsewhere."
+  },
+  {
+    "id": "cover-the-mirror#21",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "enqueueMirroredFactAdjust merely composes two enqueueFactAdjust calls (run + permanent) into the same drained command buffer, so no separate inverse applies."
+  },
+  {
+    "id": "cover-the-mirror#22",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "enqueueDragAssignment queues an ASSIGN_BODIES_BATCH into the runtime command buffer, and the drag_restore path in resolveDragReleaseUpdate already provides the logical undo."
+  },
+  {
+    "id": "cover-the-mirror#23",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "enqueuePendingBodyHabitiUpdate queues an UPDATE_BODIES_BATCH command drained by the runtime command loop, so no producer-side dequeue is required."
+  },
+  {
+    "id": "cover-the-mirror#24",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "enqueueCollectedCommands/enqueueAll forward already-collected commands into context.commandsManager which drains them, so the inverse lives in the processing loop."
+  },
+  {
+    "id": "cover-the-mirror#25",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "enqueueInitialSpawn queues SPAWN commands into the runtime buffer; the KillHandler is the runtime-level inverse and is not this seed-helper's responsibility."
+  },
+  {
+    "id": "cover-the-mirror#26",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "enqueueStateMutation just dispatches to ADD/SUB/SET enqueuers writing to the drained CommandBuffer, so the dequeue inverse is handled by the command processor."
+  },
+  {
+    "id": "cover-the-mirror#27",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "enqueueSet pushes an UPDATE_STATE command into the CommandsManager buffer that is drained by process(), so no local inverse is needed."
+  },
+  {
+    "id": "cover-the-mirror#28",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "enqueueSub enqueues an ADJUST_STATE with negative delta and enqueueAdd is its literal mirror in the same file, both drained by the command loop."
+  },
+  {
+    "id": "cover-the-mirror#29",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "enqueueTraitUpdate queues an UPDATE_TRAITS_BATCH used by both executeAddTraitAction and executeRemoveTraitAction, and the buffer is drained by the runtime, so no separate inverse is missing."
+  },
+  {
+    "id": "cover-the-mirror#30",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "pushVeinEdge appends to a rebuilt graph buffer that is fully cleared each frame via edges.length = 0 (VeinsSystem.ts:55, graphBuilderUtils.ts:18), so the bulk-clear inverse exists."
+  },
+  {
+    "id": "cover-the-mirror#31",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "pushIncoming builds a fresh incomingByTarget index during a one-shot reference walk that is returned to the caller, so there is no removal lifecycle to mirror."
+  },
+  {
+    "id": "cover-the-mirror#32",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "pushLever appends to a fresh local levers array constructed and returned by scan(), a build-once collection with no removal semantics."
+  },
+  {
+    "id": "cover-the-mirror#33",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "serializePhysicsBody has its deserialize counterpart restorePhysicsBody in the same file (also syncPhysicsBody), so the mirror pair is present."
+  },
+  {
+    "id": "cover-the-mirror#34",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "serializeDelaySignature is a one-way join(',') used only as a glyph-registry map key (GlyphRegistry.ts:104), never parsed back to an array, so no deserialize is needed."
+  },
+  {
+    "id": "cover-the-mirror#35",
+    "gate": "cover-the-mirror",
+    "verdict": "false",
+    "notes": "serializeFlyweightEntity has its inverse hydrateFlyweightEntity defined in the same file, so the serialize/deserialize pair is complete."
+  }
+]

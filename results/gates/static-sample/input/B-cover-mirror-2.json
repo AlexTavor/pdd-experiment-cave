@@ -1,0 +1,236 @@
+[
+  {
+    "id": "cover-the-mirror#18",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/workspace/projectModuleParsing.ts",
+    "line": 8,
+    "detail": "unpaired encode on subject \"pointer segment\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:pointer segment:src/engine/workspace/projectModuleParsing.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#19",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+    "line": 24,
+    "detail": "unpaired enqueue on subject \"add\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:add:src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#20",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/factCommands.ts",
+    "line": 5,
+    "detail": "unpaired enqueue on subject \"adjust fact\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:adjust fact:src/engine/runtime/factCommands.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#21",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/factCommands.ts",
+    "line": 18,
+    "detail": "unpaired enqueue on subject \"adjust fact mirrored\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:adjust fact mirrored:src/engine/runtime/factCommands.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#22",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/scenes/entityDragController.assignment.ts",
+    "line": 16,
+    "detail": "unpaired enqueue on subject \"assignment drag\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:assignment drag:src/engine/phaser/scenes/entityDragController.assignment.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#23",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/handlers/spawnPendingHabiti.ts",
+    "line": 4,
+    "detail": "unpaired enqueue on subject \"body habiti pending update\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:body habiti pending update:src/engine/runtime/handlers/spawnPendingHabiti.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#24",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/runtimeCollectCommands.ts",
+    "line": 14,
+    "detail": "unpaired enqueue on subject \"collected command\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:collected command:src/engine/runtime/runtimeCollectCommands.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#25",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/balancing/HeadlessRunner.utils.ts",
+    "line": 56,
+    "detail": "unpaired enqueue on subject \"initial spawn\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:initial spawn:src/engine/balancing/HeadlessRunner.utils.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#26",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+    "line": 49,
+    "detail": "unpaired enqueue on subject \"mutation state\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:mutation state:src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#27",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+    "line": 36,
+    "detail": "unpaired enqueue on subject \"set\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:set:src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#28",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+    "line": 30,
+    "detail": "unpaired enqueue on subject \"sub\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:sub:src/engine/runtime/systems/behavior/actionExecutorMutateHelpers.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#29",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/systems/behavior/actionExecutorTraits.ts",
+    "line": 15,
+    "detail": "unpaired enqueue on subject \"trait update\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:trait update:src/engine/runtime/systems/behavior/actionExecutorTraits.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#30",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/veins/graphBuilderEdgeFactory.ts",
+    "line": 13,
+    "detail": "unpaired push on subject \"edge vein\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:edge vein:src/engine/phaser/veins/graphBuilderEdgeFactory.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#31",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/registry/referenceIndex.walk.ts",
+    "line": 14,
+    "detail": "unpaired push on subject \"incoming\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:incoming:src/engine/registry/referenceIndex.walk.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#32",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/balancing/Scanner.ts",
+    "line": 30,
+    "detail": "unpaired push on subject \"lever\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:lever:src/engine/balancing/Scanner.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#33",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/persistence/physicsBodyPersistence.ts",
+    "line": 7,
+    "detail": "unpaired serialize on subject \"body physic\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:body physic:src/engine/runtime/persistence/physicsBodyPersistence.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#34",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/phaser/display/glyph/glyphDelaySignature.ts",
+    "line": 16,
+    "detail": "unpaired serialize on subject \"delay signature\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:delay signature:src/engine/phaser/display/glyph/glyphDelaySignature.ts"
+    }
+  },
+  {
+    "id": "cover-the-mirror#35",
+    "gate": "cover-the-mirror",
+    "file": "src/engine/runtime/persistence/flyweightPersistence.ts",
+    "line": 47,
+    "detail": "unpaired serialize on subject \"entity flyweight\"",
+    "extra": {
+      "source": "cover-the-mirror",
+      "kind": "cover-the-mirror",
+      "severity": "info",
+      "fingerprint": "cover-the-mirror:entity flyweight:src/engine/runtime/persistence/flyweightPersistence.ts"
+    }
+  }
+]

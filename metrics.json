@@ -163,32 +163,27 @@
     [
       "mutation survivors",
       "7227",
-      "93.8% killable (sample n=385, +/-2.4%)"
+      "93.8% killable (n=385); ~6,782 killable gaps"
     ],
     [
-      "  killable gaps (est)",
+      "  killable gaps missed by finders",
       "~6,782",
-      "95% CI 6,608-6,956"
+      "vs 15 finder test-gaps; K >> 5"
     ],
     [
-      "  equivalent + dead (noise)",
-      "~7%",
-      "the gate is almost all signal"
+      "static-gate findings (validated)",
+      "58 raw -> 10 real",
+      "17% signal; boundary-tests 6/10 best"
     ],
     [
-      "static-gate findings",
-      "58",
-      "full validation pending (cheap)"
+      "  cover-the-mirror",
+      "0 / 36",
+      "pure noise, filter it out"
     ],
     [
-      "boundary survivors",
+      "boundary survivors (prove)",
       "3",
       "high-severity"
-    ],
-    [
-      "KILLABLE gaps missed by finders",
-      "~6,782",
-      "finders reported 15 test-gaps; K >> 5"
     ]
   ],
   "progress_arm_run": {
@@ -236,6 +231,74 @@
     [
       "metrics + kill-condition",
       "pending"
+    ]
+  ],
+  "contribution": [
+    [
+      "source",
+      "raw",
+      "real/killable",
+      "signal"
+    ],
+    [
+      "mutation gate (killable)",
+      "7227",
+      "~6782",
+      "93%"
+    ],
+    [
+      "R raw (baseline)",
+      "38",
+      "37",
+      "97%"
+    ],
+    [
+      "P atlas: risk",
+      "77",
+      "63",
+      "82%"
+    ],
+    [
+      "P atlas: footgun",
+      "65",
+      "55",
+      "85%"
+    ],
+    [
+      "P atlas: silent-failure",
+      "40",
+      "32",
+      "80%"
+    ],
+    [
+      "static: cover-the-mirror",
+      "36",
+      "0",
+      "0%"
+    ],
+    [
+      "static: boundary-tests",
+      "10",
+      "6",
+      "60%"
+    ],
+    [
+      "static: silent-failure",
+      "5",
+      "3",
+      "60%"
+    ],
+    [
+      "static: pin-values",
+      "4",
+      "0",
+      "0%"
+    ],
+    [
+      "static: no-op-paths",
+      "3",
+      "1",
+      "33%"
     ]
   ]
 }

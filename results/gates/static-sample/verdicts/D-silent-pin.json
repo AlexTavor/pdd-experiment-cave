@@ -1,0 +1,56 @@
+[
+  {
+    "id": "silent-failure#00",
+    "gate": "silent-failure",
+    "verdict": "real",
+    "notes": "The broad unsanctioned catch turns any build/registry failure in resolveBodyAvatarPresentation into a null that callers read as a benign absent avatar, masking a genuine error."
+  },
+  {
+    "id": "silent-failure#01",
+    "gate": "silent-failure",
+    "verdict": "false",
+    "notes": "Returning false when localStorage is unavailable is the correct intended default for a debug toggle read, losing no error a caller cares about."
+  },
+  {
+    "id": "silent-failure#02",
+    "gate": "silent-failure",
+    "verdict": "false",
+    "notes": "Persisting a debug flag to localStorage is best-effort; swallowing a write failure is intentional and harmless since nothing depends on the write succeeding."
+  },
+  {
+    "id": "silent-failure#03",
+    "gate": "silent-failure",
+    "verdict": "real",
+    "notes": "A throw from buildRequestFromModule signals a corrupt/malformed source module, but the catch swallows it and continues, making a broken source indistinguishable from one that simply had no matching display."
+  },
+  {
+    "id": "silent-failure#04",
+    "gate": "silent-failure",
+    "verdict": "real",
+    "notes": "response.json() can throw on a present-but-corrupt cartridge, and the catch collapses that genuine parse error into the same null the function returns for a legitimately absent file."
+  },
+  {
+    "id": "pin-values#00",
+    "gate": "pin-values",
+    "verdict": "false",
+    "notes": "rejects.toBeInstanceOf(ValidationError) pins the concrete error class, discriminating it from the plain Error thrown on the linker-unavailable path, so it is a meaningful assertion."
+  },
+  {
+    "id": "pin-values#01",
+    "gate": "pin-values",
+    "verdict": "false",
+    "notes": "Asserting the thrown error is a ValidationError pins the specific failure contract for a schema violation rather than mere truthiness, which is the standard meaningful way to test a throw."
+  },
+  {
+    "id": "pin-values#02",
+    "gate": "pin-values",
+    "verdict": "false",
+    "notes": "The test discriminates LinkerParseError from LinkerValidationError across three cases, so toBeInstanceOf pins a concrete and distinguishing error class rather than nothing."
+  },
+  {
+    "id": "pin-values#03",
+    "gate": "pin-values",
+    "verdict": "false",
+    "notes": "rejects.toBeInstanceOf(LinkerValidationError) pins the specific error class raised for duplicate ids, a meaningful contract distinct from LinkerParseError, not a truthiness-only check."
+  }
+]
