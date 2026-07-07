@@ -1,0 +1,301 @@
+[
+  {
+    "id": "phaser/camera/cameraControllerBindings.ts:1485:logic-flip",
+    "file": "phaser/camera/cameraControllerBindings.ts",
+    "line": 56,
+    "operator": "logic-flip",
+    "snippet": "&& \u2192 || in state.pinch && scene.input.pointer1.isDown && scene.input.po\u2026",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/camera/cameraControllerBindings.ts:1297:num-offbyone",
+    "file": "phaser/camera/cameraControllerBindings.ts",
+    "line": 48,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/camera/cameraControllerBootstrap.ts:3352:arith-flip",
+    "file": "phaser/camera/cameraControllerBootstrap.ts",
+    "line": 99,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in 2 * cam.zoom",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/camera/cameraControllerBootstrap.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/camera/cameraControllerBootstrap.ts:3069:num-offbyone",
+    "file": "phaser/camera/cameraControllerBootstrap.ts",
+    "line": 89,
+    "operator": "num-offbyone",
+    "snippet": "2 \u2192 3",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/camera/cameraControllerBootstrap.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/debug/phaserDebugStats.ts:1880:guard-true",
+    "file": "phaser/debug/phaserDebugStats.ts",
+    "line": 67,
+    "operator": "guard-true",
+    "snippet": "if (root.__caveDebug) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display-export/buildDisplayImageRequest.ts:3262:guard-true",
+    "file": "phaser/display-export/buildDisplayImageRequest.ts",
+    "line": 89,
+    "operator": "guard-true",
+    "snippet": "if (!spec || spec.display_key === BODY_AVATAR_DISPLAY_KEY) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/buildDisplayImageRequest.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/drawTintedTexture.ts:527:guard-true",
+    "file": "phaser/display-export/drawTintedTexture.ts",
+    "line": 17,
+    "operator": "guard-true",
+    "snippet": "if (!offCtx) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/renderBodyAvatarImage.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/drawTintedTexture.ts:638:num-offbyone",
+    "file": "phaser/display-export/drawTintedTexture.ts",
+    "line": 19,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/renderBodyAvatarImage.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/drawTintedTexture.ts:825:num-offbyone",
+    "file": "phaser/display-export/drawTintedTexture.ts",
+    "line": 22,
+    "operator": "num-offbyone",
+    "snippet": "6 \u2192 7",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/renderBodyAvatarImage.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/readPhaserTextureSource.ts:458:return-undefined",
+    "file": "phaser/display-export/readPhaserTextureSource.ts",
+    "line": 15,
+    "operator": "return-undefined",
+    "snippet": "return image as CanvasImageSource \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/renderBodyAvatarImage.test.ts",
+      "phaser/display-export/renderResolvedDisplayImage.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/renderAttributeDisplayImage.ts:1475:num-offbyone",
+    "file": "phaser/display-export/renderAttributeDisplayImage.ts",
+    "line": 38,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/DisplayImageExportService.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/renderAttributeDisplayImage.ts:738:guard-false",
+    "file": "phaser/display-export/renderAttributeDisplayImage.ts",
+    "line": 20,
+    "operator": "guard-false",
+    "snippet": "if (textureManager === undefined) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/DisplayImageExportService.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/renderAttributeDisplayImage.ts:494:guard-false",
+    "file": "phaser/display-export/renderAttributeDisplayImage.ts",
+    "line": 14,
+    "operator": "guard-false",
+    "snippet": "if (attribute === null) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/DisplayImageExportService.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/renderBodyAvatarImage.ts:654:guard-false",
+    "file": "phaser/display-export/renderBodyAvatarImage.ts",
+    "line": 18,
+    "operator": "guard-false",
+    "snippet": "if (ctx === null) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/DisplayImageExportService.test.ts",
+      "phaser/display-export/renderBodyAvatarImage.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/renderCycleProgressCanvas.ts:366:cmp-boundary",
+    "file": "phaser/display-export/renderCycleProgressCanvas.ts",
+    "line": 8,
+    "operator": "cmp-boundary",
+    "snippet": "< \u2192 <= in request.points.length < 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/renderResolvedDisplayImage.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/renderCycleProgressCanvas.ts:737:num-offbyone",
+    "file": "phaser/display-export/renderCycleProgressCanvas.ts",
+    "line": 16,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/renderResolvedDisplayImage.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/renderCycleProgressCanvas.ts:683:num-offbyone",
+    "file": "phaser/display-export/renderCycleProgressCanvas.ts",
+    "line": 15,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/renderResolvedDisplayImage.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/renderResolvedDisplayImage.ts:2629:num-offbyone",
+    "file": "phaser/display-export/renderResolvedDisplayImage.ts",
+    "line": 62,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/DisplayImageExportService.test.ts",
+      "phaser/display-export/renderResolvedDisplayImage.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/renderResolvedDisplayImage.ts:2663:num-offbyone",
+    "file": "phaser/display-export/renderResolvedDisplayImage.ts",
+    "line": 63,
+    "operator": "num-offbyone",
+    "snippet": "44 \u2192 45",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/DisplayImageExportService.test.ts",
+      "phaser/display-export/renderResolvedDisplayImage.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/renderResolvedDisplayImage.ts:2632:num-offbyone",
+    "file": "phaser/display-export/renderResolvedDisplayImage.ts",
+    "line": 62,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/DisplayImageExportService.test.ts",
+      "phaser/display-export/renderResolvedDisplayImage.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/resolveDisplayImageSpec.ts:569:logic-flip",
+    "file": "phaser/display-export/resolveDisplayImageSpec.ts",
+    "line": 18,
+    "operator": "logic-flip",
+    "snippet": "&& \u2192 || in request.kind === \"attribute_display\" && !request.displayKey.\u2026",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/DisplayImageExportService.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display-export/resolveDisplayImageSpec.ts:852:guard-true",
+    "file": "phaser/display-export/resolveDisplayImageSpec.ts",
+    "line": 24,
+    "operator": "guard-true",
+    "snippet": "if (request.kind === \"body_avatar\" && !request.subjectSeed.trim(\u2026) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display-export/DisplayImageExportService.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/avatar/AvatarAppearanceRegistry.ts:767:arith-flip",
+    "file": "phaser/display/avatar/AvatarAppearanceRegistry.ts",
+    "line": 23,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in appearance.eyeScaleX * 100",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/avatar/AvatarAppearanceRegistry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/avatar/AvatarDisplayConstants.ts:663:num-offbyone",
+    "file": "phaser/display/avatar/AvatarDisplayConstants.ts",
+    "line": 21,
+    "operator": "num-offbyone",
+    "snippet": "2 \u2192 3",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/light/LightModule.lights.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/avatar/AvatarDisplayConstants.ts:677:num-offbyone",
+    "file": "phaser/display/avatar/AvatarDisplayConstants.ts",
+    "line": 22,
+    "operator": "num-offbyone",
+    "snippet": "2 \u2192 3",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/light/LightModule.lights.test.ts"
+    ]
+  }
+]

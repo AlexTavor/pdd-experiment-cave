@@ -1,0 +1,147 @@
+[
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:1811:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 90 is the y-coordinate 30 of face_7's vertex [30,8], a distinct point fed to drawAvatarPath's lineTo, so changing it to 31 alters the rendered path yet no test asserts catalog coordinates."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:673:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 29 is the x-coordinate 20 of face_1's vertex [20,-28] used when drawing the face path, so 20->21 changes observable geometry and is untested."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:3109:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 159 is the -44 y-coordinate of hair_2's vertex [8,-44]; changing 44->45 moves a drawn hair path point and no test pins hair coordinates."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:3260:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 167 is the -40 y-coordinate of hair_3's vertex [-26,-40] consumed by drawAvatarPath, so 40->41 changes rendered geometry with no covering assertion."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:2300:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 116 is the y-coordinate 8 of face_10's vertex [-26,8]; 8->9 shifts a drawn path point and catalog coordinates are wholly untested."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:431:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 16 is the y-coordinate 10 of face_0's vertex [-28,10] used in path drawing, so 10->11 alters observable output and no test covers it."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:1443:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 70 is the y-coordinate 0 of face_5's vertex [30,0] passed to lineTo, so 0->1 changes the drawn point and is unasserted."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:3808:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 196 is the -34 y-coordinate of hair_6's vertex [-30,-34] consumed by drawAvatarPath, so 34->35 changes geometry with no covering test."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:2414:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 122 is the y-coordinate 32 of face_10's closing vertex [0,32]; 32->33 moves a drawn point and catalog data has no test."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:1983:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 99 is the x-coordinate 20 of face_8's vertex [20,-18] used in the face path, so 18->19 alters rendered geometry and is untested."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:2335:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 118 is the y-coordinate 0 within face_10's vertex [0,-38] region (the 0 literal) fed to drawAvatarPath, so 0->1 changes a drawn point with no covering assertion."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarTextureGen.ts:2572:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing the texture-cache guard true makes generateAvatarEyesTexture return early and skip all drawing/generateTexture calls, an observable change no test exercises for the eyes texture."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarTextureSupport.ts:840:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 32 is the scaleX=1 default of drawAvatarPath; changing it to 2 doubles the x of every path drawn without an explicit scaleX (silhouette/hair/glow), an observable change with no test."
+  },
+  {
+    "id": "phaser/display/avatar/avatarBlink.ts:388:arith-flip",
+    "verdict": "killable",
+    "reason": "The / -> * in 1 - t/half changes the closing ramp for 0<t<half, but the suite only samples t=0 (where both give 1), t=60 (>=half, hits the other branch) and t=120, so a mid-ramp assertion is missing."
+  },
+  {
+    "id": "phaser/display/avatar/swarmAvatarLayout.ts:1380:arith-flip",
+    "verdict": "killable",
+    "reason": "The / -> * makes memberScale = 1.08*sqrt(count+0.6) which clamps to the 0.56 max instead of the true value, and tests only bound-check memberScale within [0.12,0.56] rather than pinning a value."
+  },
+  {
+    "id": "phaser/display/avatar/swarmAvatarLayout.ts:2515:arith-flip",
+    "verdict": "killable",
+    "reason": "Flipping 0.3 + rnd*0.5 to 0.3 - rnd*0.5 changes motionRadius (can go negative), shifting the deterministic x/y, but tests only assert loose hypot bounds not exact coordinates."
+  },
+  {
+    "id": "phaser/display/avatar/swarmAvatarLayout.ts:2923:cmp-boundary",
+    "verdict": "equivalent",
+    "reason": "<= vs < differs only when distance===maxDistance, and in that case the else branch returns (next.x/maxDistance)*maxDistance === next.x, the same point next, so no output can differ."
+  },
+  {
+    "id": "phaser/display/avatar/swarmAvatarLayout.ts:3004:arith-flip",
+    "verdict": "killable",
+    "reason": "In the clamp branch next.x/distance normalizes to the ring; replacing / with * yields next.x*distance*maxDistance, a wildly larger coordinate that violates the hypot bound, yet the covering test never asserts the clamped value."
+  },
+  {
+    "id": "phaser/display/avatar/swarmAvatarLayout.ts:1057:num-offbyone",
+    "verdict": "killable",
+    "reason": "count<=0 -> count<=1 makes count===1 throw instead of returning the center placement at line 43, and no test calls the function with count===1."
+  },
+  {
+    "id": "phaser/display/displayActivity.ts:2192:guard-false",
+    "verdict": "killable",
+    "reason": "Removing the !child.id skip means a child with a falsy id gets counted (readAllocatedDraw added, undefined marked visited); every test entity has a truthy id so this defensive branch is never exercised."
+  },
+  {
+    "id": "phaser/display/displayActivity.ts:511:logic-flip",
+    "verdict": "killable",
+    "reason": "&& -> || makes readPositive return any negative number instead of 0, so an entity with allocatedDraw {body:1,mind:-1} would flip isDisplayActive from true to false, a case the suite omits."
+  },
+  {
+    "id": "phaser/display/displayActivity.ts:546:cmp-boundary",
+    "verdict": "equivalent",
+    "reason": "value>0 -> value>=0 differs only at value===0, where readPositive then returns value (0), identical to the else branch's 0, so no observable difference."
+  },
+  {
+    "id": "phaser/display/glyph/GlyphGenerator.ts:924:num-offbyone",
+    "verdict": "killable",
+    "reason": "buildCore's radialPositionFactor 1 -> 2 is carried into canonicalKey via placementKey, but no test asserts the core placement's radialPositionFactor equals 1 (determinism tests see 2 on both sides)."
+  },
+  {
+    "id": "phaser/display/glyph/GlyphPRNG.ts:840:arith-flip",
+    "verdict": "killable",
+    "reason": "unit() returning state*0x100000000 instead of state/0x100000000 leaves [0,1) and produces huge values that break pick(), a drastic observable change with no test on this line."
+  },
+  {
+    "id": "phaser/display/glyph/GlyphPRNG.ts:1005:arith-flip",
+    "verdict": "killable",
+    "reason": "pick's unit()*arr.length -> unit()/arr.length yields a value <1 so floor is always 0, making pick always return arr[0]; a distribution/variety assertion would catch it but none runs this line."
+  },
+  {
+    "id": "phaser/display/glyph/GlyphTextureGen.ts:2594:logic-flip",
+    "verdict": "killable",
+    "reason": "thickness||10 -> thickness&&10 changes the value passed to drawCoreGlyphShape for any normalized thickness other than 0 or 10, but the only geometry-asserting test uses shape 'hole' which ignores thickness."
+  },
+  {
+    "id": "phaser/display/glyph/glyphCanonical.ts:463:guard-false",
+    "verdict": "killable",
+    "reason": "Disabling the position tie-break makes placements differing only in position compare equal, so canonical ordering follows input order and can change canonicalKey; no test feeds the same placement set in a different order to check order-independence."
+  },
+  {
+    "id": "phaser/display/glyph/glyphDelaySignature.ts:315:num-offbyone",
+    "verdict": "killable",
+    "reason": "Starting the loop at pos=1 instead of 0 (pos is unused in the body) drops one iteration, yielding an 8-element delay array; the covering GlyphRegistry.advanced test only checks the serialized string differs from the 9-zero reserved sig, missing the length change."
+  },
+  {
+    "id": "phaser/display/glyph/glyphDisplayDefaults.ts:1822:num-offbyone",
+    "verdict": "killable",
+    "reason": "Line 59 changes the first element of buildAttributePoolGlyph's delayMsByPosition from 0 to 1, an observable default-config change, and no test exercises buildAttributePoolGlyph."
+  }
+]

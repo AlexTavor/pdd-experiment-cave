@@ -1,0 +1,352 @@
+[
+  {
+    "id": "balancing/HeadlessRunner.ts:982:guard-false",
+    "file": "balancing/HeadlessRunner.ts",
+    "line": 36,
+    "operator": "guard-false",
+    "snippet": "if (typeof performance === \"undefined\") \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/HeadlessRunner.utils.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/HeadlessRunner.utils.ts:3354:return-undefined",
+    "file": "balancing/HeadlessRunner.utils.ts",
+    "line": 103,
+    "operator": "return-undefined",
+    "snippet": "return { history, status } \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/HeadlessRunner.utils.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/HeadlessRunner.utils.ts:3221:guard-true",
+    "file": "balancing/HeadlessRunner.utils.ts",
+    "line": 98,
+    "operator": "guard-true",
+    "snippet": "if (i > 0 && i % YIELD_INTERVAL === 0) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/HeadlessRunner.utils.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/HeadlessRunner.utils.ts:2030:guard-true",
+    "file": "balancing/HeadlessRunner.utils.ts",
+    "line": 60,
+    "operator": "guard-true",
+    "snippet": "if (!config || config.count <= 0) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/HeadlessRunner.utils.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/HeadlessRunner.utils.ts:2502:num-offbyone",
+    "file": "balancing/HeadlessRunner.utils.ts",
+    "line": 76,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/HeadlessRunner.utils.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/HeadlessRunner.utils.ts:2786:logic-flip",
+    "file": "balancing/HeadlessRunner.utils.ts",
+    "line": 83,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in tick % SNAPSHOT_INTERVAL === 0 || isExtinct",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/HeadlessRunner.utils.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/HeadlessRunner.utils.ts:2780:eq-flip",
+    "file": "balancing/HeadlessRunner.utils.ts",
+    "line": 83,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in tick % SNAPSHOT_INTERVAL === 0",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/HeadlessRunner.utils.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/HeadlessRunner.utils.ts:2057:num-offbyone",
+    "file": "balancing/HeadlessRunner.utils.ts",
+    "line": 60,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/HeadlessRunner.utils.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/HeadlessRunner.utils.ts:3136:cmp-boundary",
+    "file": "balancing/HeadlessRunner.utils.ts",
+    "line": 93,
+    "operator": "cmp-boundary",
+    "snippet": "> \u2192 >= in i > 10",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/HeadlessRunner.utils.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/InstantTransferHandler.ts:922:guard-false",
+    "file": "balancing/InstantTransferHandler.ts",
+    "line": 27,
+    "operator": "guard-false",
+    "snippet": "if (!Number.isFinite(amount) || amount <= 0) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/InstantTransferHandler.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/InstantTransferHandler.ts:1294:guard-false",
+    "file": "balancing/InstantTransferHandler.ts",
+    "line": 41,
+    "operator": "guard-false",
+    "snippet": "if (typeof entry.value !== \"number\") \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/InstantTransferHandler.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/Scanner.ts:1328:logic-flip",
+    "file": "balancing/Scanner.ts",
+    "line": 46,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in !node || typeof node !== \"object\"",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/Scanner.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/transferLogic.ts:876:guard-false",
+    "file": "balancing/transferLogic.ts",
+    "line": 31,
+    "operator": "guard-false",
+    "snippet": "if (!targetState) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/transferLogic.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/transferLogic.ts:558:logic-flip",
+    "file": "balancing/transferLogic.ts",
+    "line": 19,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in !entity.state || typeof entity.state !== \"object\"",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/transferLogic.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/transferLogic.ts:1164:logic-flip",
+    "file": "balancing/transferLogic.ts",
+    "line": 40,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in typeof amount !== \"number\" || amount <= 0",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/transferLogic.test.ts"
+    ]
+  },
+  {
+    "id": "balancing/transferLogic.ts:2158:return-undefined",
+    "file": "balancing/transferLogic.ts",
+    "line": 71,
+    "operator": "return-undefined",
+    "snippet": "return { success: false, clampedPayload: {}, error: `Transfer faile\u2026 \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-balancing",
+    "ranTests": [
+      "balancing/transferLogic.test.ts"
+    ]
+  },
+  {
+    "id": "compiler/abilities/productionCompiler.ts:2004:bool-flip",
+    "file": "compiler/abilities/productionCompiler.ts",
+    "line": 46,
+    "operator": "bool-flip",
+    "snippet": "false \u2192 true",
+    "status": "survived",
+    "unit": "src-engine-compiler",
+    "ranTests": [
+      "compiler/abilities/productionCompiler.conditionalActivation.test.ts",
+      "compiler/abilities/productionCompiler.conditions.test.ts",
+      "compiler/abilities/productionCompiler.directBuild.test.ts",
+      "compiler/abilities/productionCompiler.resourceGain.test.ts",
+      "compiler/abilities/productionCompiler.test.ts"
+    ]
+  },
+  {
+    "id": "compiler/abilities/productionCompiler.ts:1992:num-offbyone",
+    "file": "compiler/abilities/productionCompiler.ts",
+    "line": 46,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-compiler",
+    "ranTests": [
+      "compiler/abilities/productionCompiler.conditionalActivation.test.ts",
+      "compiler/abilities/productionCompiler.conditions.test.ts",
+      "compiler/abilities/productionCompiler.directBuild.test.ts",
+      "compiler/abilities/productionCompiler.resourceGain.test.ts",
+      "compiler/abilities/productionCompiler.test.ts"
+    ]
+  },
+  {
+    "id": "compiler/abilities/resourceGainAmountCompiler.ts:1569:num-offbyone",
+    "file": "compiler/abilities/resourceGainAmountCompiler.ts",
+    "line": 44,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "uncovered",
+    "unit": "src-engine-compiler",
+    "ranTests": []
+  },
+  {
+    "id": "linker/Gatekeeper.ts:1524:guard-false",
+    "file": "linker/Gatekeeper.ts",
+    "line": 53,
+    "operator": "guard-false",
+    "snippet": "if (!linkerReady) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-linker",
+    "ranTests": [
+      "linker/Gatekeeper.test.ts"
+    ]
+  },
+  {
+    "id": "linker/Gatekeeper.ts:823:guard-false",
+    "file": "linker/Gatekeeper.ts",
+    "line": 30,
+    "operator": "guard-false",
+    "snippet": "if (Array.isArray(node)) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-linker",
+    "ranTests": [
+      "linker/Gatekeeper.test.ts"
+    ]
+  },
+  {
+    "id": "linker/deepMerge.ts:581:guard-false",
+    "file": "linker/deepMerge.ts",
+    "line": 15,
+    "operator": "guard-false",
+    "snippet": "if (Array.isArray(override)) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-linker",
+    "ranTests": [
+      "linker/deepMerge.test.ts"
+    ]
+  },
+  {
+    "id": "linker/normalizeBpInput.ts:926:logic-flip",
+    "file": "linker/normalizeBpInput.ts",
+    "line": 22,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in !nested || typeof nested !== \"object\"",
+    "status": "uncovered",
+    "unit": "src-engine-linker",
+    "ranTests": []
+  },
+  {
+    "id": "linker/normalizeBpInput.ts:1089:guard-false",
+    "file": "linker/normalizeBpInput.ts",
+    "line": 26,
+    "operator": "guard-false",
+    "snippet": "if (typeof nestedRaw.id === \"string\") \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-linker",
+    "ranTests": []
+  },
+  {
+    "id": "linker/utils/namespaces.ts:114:return-undefined",
+    "file": "linker/utils/namespaces.ts",
+    "line": 2,
+    "operator": "return-undefined",
+    "snippet": "return localId \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-linker",
+    "ranTests": []
+  },
+  {
+    "id": "logic/JsonLogicAdapter.compile.ts:611:return-undefined",
+    "file": "logic/JsonLogicAdapter.compile.ts",
+    "line": 30,
+    "operator": "return-undefined",
+    "snippet": "return `globals.${ref.slice(7)}` \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-logic",
+    "ranTests": []
+  },
+  {
+    "id": "logic/JsonLogicAdapter.compile.ts:1054:guard-false",
+    "file": "logic/JsonLogicAdapter.compile.ts",
+    "line": 42,
+    "operator": "guard-false",
+    "snippet": "if (tokens.length === 0) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-logic",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/background/biologicalFogShaderSource.ts:1892:num-offbyone",
+    "file": "phaser/background/biologicalFogShaderSource.ts",
+    "line": 61,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/camera/CameraController.ts:2787:num-offbyone",
+    "file": "phaser/camera/CameraController.ts",
+    "line": 81,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/camera/CameraController.ts:1890:guard-false",
+    "file": "phaser/camera/CameraController.ts",
+    "line": 53,
+    "operator": "guard-false",
+    "snippet": "if (vx !== undefined) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  }
+]

@@ -1,0 +1,337 @@
+[
+  {
+    "id": "runtime/systems/behavior/targetSelector.ts:2178:guard-true",
+    "file": "runtime/systems/behavior/targetSelector.ts",
+    "line": 71,
+    "operator": "guard-true",
+    "snippet": "if (ref.startsWith(\"tag:\")) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "compiler/abilities/hommletBlueprintHydration.test.ts",
+      "runtime/systems/behavior/TargetSelector.permissions.test.ts",
+      "runtime/systems/behavior/targetSelector.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/systems/behavior/valueResolverPath.ts:1290:return-undefined",
+    "file": "runtime/systems/behavior/valueResolverPath.ts",
+    "line": 50,
+    "operator": "return-undefined",
+    "snippet": "return typeof value === \"number\" && Number.isFinite(value) ? value \u2026 \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/systems/behavior/valueResolverPath.incoming.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/systems/behavior/valueResolverPath.ts:2292:return-undefined",
+    "file": "runtime/systems/behavior/valueResolverPath.ts",
+    "line": 86,
+    "operator": "return-undefined",
+    "snippet": "return 0 \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/systems/behavior/valueResolverPath.incoming.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/systems/behavior/valueResolverPath.ts:1042:return-undefined",
+    "file": "runtime/systems/behavior/valueResolverPath.ts",
+    "line": 39,
+    "operator": "return-undefined",
+    "snippet": "return 0 \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/systems/behavior/valueResolverPath.incoming.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/systems/behavior/valueResolverPath.ts:2237:guard-false",
+    "file": "runtime/systems/behavior/valueResolverPath.ts",
+    "line": 86,
+    "operator": "guard-false",
+    "snippet": "if (segments[0] !== \"state\" || segments.length < 2) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/systems/behavior/valueResolverPath.incoming.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/systems/behavior/valueResolverPath.ts:1235:guard-true",
+    "file": "runtime/systems/behavior/valueResolverPath.ts",
+    "line": 48,
+    "operator": "guard-true",
+    "snippet": "if (!key) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/systems/behavior/valueResolverPath.incoming.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/systems/behavior/valueResolverTokens.ts:966:return-undefined",
+    "file": "runtime/systems/behavior/valueResolverTokens.ts",
+    "line": 34,
+    "operator": "return-undefined",
+    "snippet": "return { value: literal, nextIndex: index } \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/systems/behavior/valueResolverTokens.ts:564:logic-flip",
+    "file": "runtime/systems/behavior/valueResolverTokens.ts",
+    "line": 19,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in !prev || prev.value === \"(\" || prev.type === \"op\"",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/systems/behavior/valueResolverTokens.ts:577:eq-flip",
+    "file": "runtime/systems/behavior/valueResolverTokens.ts",
+    "line": 19,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in prev.type === \"op\"",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/worldUtils.ts:295:guard-false",
+    "file": "runtime/worldUtils.ts",
+    "line": 10,
+    "operator": "guard-false",
+    "snippet": "if (prop === \"add\" && typeof value === \"function\") \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/CommandsManager.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/fsCommands.ts:3372:eq-flip",
+    "file": "terminal/commands/fsCommands.ts",
+    "line": 109,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in file === scope",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/fsCommands.test.ts",
+      "terminal/commands/vfsCommands.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/makeCommands.ts:691:num-offbyone",
+    "file": "terminal/commands/makeCommands.ts",
+    "line": 16,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "runtime/systems/behavior/cycleResourceCostTolerance.test.ts",
+      "terminal/commands/makeCommands.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/makeCommands.ts:1950:return-undefined",
+    "file": "terminal/commands/makeCommands.ts",
+    "line": 58,
+    "operator": "return-undefined",
+    "snippet": "return { displays: {}, styles: {}, settings: { vein_network: DEFAUL\u2026 \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "runtime/systems/behavior/cycleResourceCostTolerance.test.ts",
+      "terminal/commands/makeCommands.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/makeCommands.ts:1722:return-undefined",
+    "file": "terminal/commands/makeCommands.ts",
+    "line": 52,
+    "operator": "return-undefined",
+    "snippet": "return { impulse: DEFAULT_IMPULSE_CONFIG, game_config: DEFAULT_GAME\u2026 \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "runtime/systems/behavior/cycleResourceCostTolerance.test.ts",
+      "terminal/commands/makeCommands.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/projectCommandSuggestions.ts:204:eq-flip",
+    "file": "terminal/commands/projectCommandSuggestions.ts",
+    "line": 7,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in path === \"manifest.json\"",
+    "status": "uncovered",
+    "unit": "src-engine-terminal",
+    "ranTests": []
+  },
+  {
+    "id": "terminal/commands/projectCommands.ts:2246:return-undefined",
+    "file": "terminal/commands/projectCommands.ts",
+    "line": 65,
+    "operator": "return-undefined",
+    "snippet": "return { type: \"error\" as const, content: error instanceof Error ? \u2026 \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/projectCommands.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/projectCommands.ts:2048:num-offbyone",
+    "file": "terminal/commands/projectCommands.ts",
+    "line": 58,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/projectCommands.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/projectSaveCommand.ts:1184:return-undefined",
+    "file": "terminal/commands/projectSaveCommand.ts",
+    "line": 29,
+    "operator": "return-undefined",
+    "snippet": "return { type: \"error\", content: \"Usage: project-save-blueprint <fq\u2026 \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/projectSaveCommand.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/projectSaveCommand.ts:1348:guard-false",
+    "file": "terminal/commands/projectSaveCommand.ts",
+    "line": 34,
+    "operator": "guard-false",
+    "snippet": "if (!located) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/projectSaveCommand.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/projectSaveCommand.ts:737:eq-flip",
+    "file": "terminal/commands/projectSaveCommand.ts",
+    "line": 14,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in resolved === fqId",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/projectSaveCommand.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/vfsCommands.ts:1666:eq-flip",
+    "file": "terminal/commands/vfsCommands.ts",
+    "line": 44,
+    "operator": "eq-flip",
+    "snippet": "!== \u2192 === in child.type !== \"file\"",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/vfsCommands.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/vfsCommands.ts:3956:return-undefined",
+    "file": "terminal/commands/vfsCommands.ts",
+    "line": 111,
+    "operator": "return-undefined",
+    "snippet": "return [] \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/vfsCommands.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/vfsCommands.ts:3776:guard-false",
+    "file": "terminal/commands/vfsCommands.ts",
+    "line": 108,
+    "operator": "guard-false",
+    "snippet": "if (args.length === 1) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/vfsCommands.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/vfsCommands.ts:2942:num-offbyone",
+    "file": "terminal/commands/vfsCommands.ts",
+    "line": 86,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/vfsCommands.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/vfsCommands.ts:1519:num-offbyone",
+    "file": "terminal/commands/vfsCommands.ts",
+    "line": 41,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/vfsCommands.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/commands/vfsHardReloadCommand.ts:705:guard-true",
+    "file": "terminal/commands/vfsHardReloadCommand.ts",
+    "line": 20,
+    "operator": "guard-true",
+    "snippet": "if (existing.length > 0) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-terminal",
+    "ranTests": []
+  },
+  {
+    "id": "terminal/fileUtils.ts:1523:guard-true",
+    "file": "terminal/fileUtils.ts",
+    "line": 47,
+    "operator": "guard-true",
+    "snippet": "if (args.length === 1) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/commands/bootstrapLoadCommand.test.ts",
+      "terminal/commands/fsCommands.test.ts",
+      "terminal/commands/makeCommands.test.ts",
+      "terminal/commands/projectCommands.test.ts",
+      "terminal/commands/vfsCommands.test.ts",
+      "terminal/smartPathUtils.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/helpCommand.ts:329:num-offbyone",
+    "file": "terminal/helpCommand.ts",
+    "line": 11,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "uncovered",
+    "unit": "src-engine-terminal",
+    "ranTests": []
+  }
+]

@@ -1,0 +1,27 @@
+{
+  "n": 385,
+  "seed": 42,
+  "design": "stratified by status; survived=250, uncovered=135",
+  "population": {
+    "total": 7227,
+    "uncovered": 4087,
+    "survived": 3140
+  },
+  "slices": 14,
+  "per_slice": [
+    30,
+    25,
+    29,
+    30,
+    30,
+    25,
+    30,
+    28,
+    26,
+    29,
+    29,
+    30,
+    28,
+    16
+  ]
+}

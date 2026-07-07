@@ -1,0 +1,284 @@
+[
+  {
+    "id": "phaser/display/modules/menu/PulseModule.ts:1597:guard-true",
+    "file": "phaser/display/modules/menu/PulseModule.ts",
+    "line": 63,
+    "operator": "guard-true",
+    "snippet": "if (config.effect === \"scale\") \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/MenuAmbientDisplayDefinition.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/progress-bar/progressBarIcon.ts:1839:num-offbyone",
+    "file": "phaser/display/modules/progress-bar/progressBarIcon.ts",
+    "line": 51,
+    "operator": "num-offbyone",
+    "snippet": "10 \u2192 11",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/progress-bar/progressBarTick.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/progress-bar/progressBarIcon.ts:882:guard-false",
+    "file": "phaser/display/modules/progress-bar/progressBarIcon.ts",
+    "line": 22,
+    "operator": "guard-false",
+    "snippet": "if (!cartridge) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/progress-bar/progressBarTick.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/progress-bar/progressBarTick.cache.ts:1353:guard-false",
+    "file": "phaser/display/modules/progress-bar/progressBarTick.cache.ts",
+    "line": 36,
+    "operator": "guard-false",
+    "snippet": "if (cached) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/progress-bar/progressBarTick.positioned.ts:564:guard-true",
+    "file": "phaser/display/modules/progress-bar/progressBarTick.positioned.ts",
+    "line": 15,
+    "operator": "guard-true",
+    "snippet": "if (!bar.position || !live) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/progress-bar/progressBarTick.slot.ts:3844:bool-flip",
+    "file": "phaser/display/modules/progress-bar/progressBarTick.slot.ts",
+    "line": 112,
+    "operator": "bool-flip",
+    "snippet": "true \u2192 false",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/veins/VeinsModule.ts:1695:guard-false",
+    "file": "phaser/display/modules/veins/VeinsModule.ts",
+    "line": 42,
+    "operator": "guard-false",
+    "snippet": "if (existing) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/DisplayDefinitionCatalog.test.ts",
+      "phaser/display/modules/veins/VeinsModule.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsBlobVariance.ts:430:arith-flip",
+    "file": "phaser/display/modules/veins/veinsBlobVariance.ts",
+    "line": 11,
+    "operator": "arith-flip",
+    "snippet": "/ \u2192 * in (hash(`${edgeId}:${ordinal}:${key}`) % 1000) / 999",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsBlobVariance.ts:441:arith-flip",
+    "file": "phaser/display/modules/veins/veinsBlobVariance.ts",
+    "line": 11,
+    "operator": "arith-flip",
+    "snippet": "- \u2192 + in ((hash(`${edgeId}:${ordinal}:${key}`) % 1000) / 999) * 2 - 1",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsDisplayTestUtils.ts:2561:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsDisplayTestUtils.ts",
+    "line": 102,
+    "operator": "num-offbyone",
+    "snippet": "100 \u2192 101",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/VeinsModule.test.ts",
+      "phaser/display/modules/veins/veinsEdgeAnimation.test.ts",
+      "phaser/display/modules/veins/veinsEdgeTick.pulses.test.ts",
+      "phaser/display/modules/veins/veinsEdgeTick.test.ts",
+      "phaser/display/modules/veins/veinsPulseLifecycle.test.ts",
+      "phaser/display/modules/veins/veinsRopeRenderer.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsGuidePathSampler.ts:509:guard-true",
+    "file": "phaser/display/modules/veins/veinsGuidePathSampler.ts",
+    "line": 14,
+    "operator": "guard-true",
+    "snippet": "if (remaining <= len || index === segmentLensPx.length - 1) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsGuidePathSampler.ts:519:cmp-boundary",
+    "file": "phaser/display/modules/veins/veinsGuidePathSampler.ts",
+    "line": 14,
+    "operator": "cmp-boundary",
+    "snippet": "<= \u2192 < in remaining <= len",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsPulseLifecycle.ts:1239:arith-flip",
+    "file": "phaser/display/modules/veins/veinsPulseLifecycle.ts",
+    "line": 37,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in resolvePulseScale(image.width, edge) * variance.sizeMultipli\u2026",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsPulseLifecycle.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopePath.ts:1986:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsRopePath.ts",
+    "line": 62,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsRopePath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopePath.ts:2566:arith-flip",
+    "file": "phaser/display/modules/veins/veinsRopePath.ts",
+    "line": 76,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in compiled.simplex(distance01 * scale * 2.4 + 5.1, 7.9) * 0.35",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsRopePath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopePath.ts:2351:arith-flip",
+    "file": "phaser/display/modules/veins/veinsRopePath.ts",
+    "line": 71,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in Math.PI * distance01",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsRopePath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopePath.ts:2979:arith-flip",
+    "file": "phaser/display/modules/veins/veinsRopePath.ts",
+    "line": 89,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in 2 * Math.PI * edge.freq * distance01",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsRopePath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopeRenderer.ts:627:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsRopeRenderer.ts",
+    "line": 20,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/progress-bar/progressBarTick.test.ts",
+      "phaser/display/modules/veins/veinsRopeRenderer.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopeRenderer.ts:1030:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsRopeRenderer.ts",
+    "line": 35,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/progress-bar/progressBarTick.test.ts",
+      "phaser/display/modules/veins/veinsRopeRenderer.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRuntimeAlpha.ts:567:guard-false",
+    "file": "phaser/display/modules/veins/veinsRuntimeAlpha.ts",
+    "line": 17,
+    "operator": "guard-false",
+    "snippet": "if (world?.tutorial?.active) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsSimplexNoise.ts:1122:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsSimplexNoise.ts",
+    "line": 45,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsSimplexNoise.ts:1690:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsSimplexNoise.ts",
+    "line": 60,
+    "operator": "num-offbyone",
+    "snippet": "2 \u2192 3",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsSimplexNoise.ts:240:arith-flip",
+    "file": "phaser/display/modules/veins/veinsSimplexNoise.ts",
+    "line": 14,
+    "operator": "arith-flip",
+    "snippet": "- \u2192 + in 3 - Math.sqrt(3)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsSimplexNoise.ts:1788:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsSimplexNoise.ts",
+    "line": 63,
+    "operator": "num-offbyone",
+    "snippet": "255 \u2192 256",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsSimplexNoise.ts:1432:arith-flip",
+    "file": "phaser/display/modules/veins/veinsSimplexNoise.ts",
+    "line": 53,
+    "operator": "arith-flip",
+    "snippet": "+ \u2192 - in i + j",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  }
+]

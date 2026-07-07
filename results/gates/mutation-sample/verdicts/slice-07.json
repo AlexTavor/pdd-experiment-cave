@@ -1,0 +1,142 @@
+[
+  {
+    "id": "phaser/pointer/pointerPreviewImage.ts:160:num-offbyone",
+    "verdict": "killable",
+    "reason": "The `?? 1` fallback in resolveScale is the intended path when image.width is undefined; changing it to `?? 2` yields a different scale (Math.max(2,1)=2 vs 1), which a test on an image without width would observe."
+  },
+  {
+    "id": "phaser/pointer/pointerPreviewState.ts:666:return-undefined",
+    "verdict": "killable",
+    "reason": "readPointerStateString is documented to return a string (value or \"\"); returning undefined is an observable change a test asserting the return value would catch."
+  },
+  {
+    "id": "phaser/scenes/GameScene.runtime.ts:394:return-undefined",
+    "verdict": "killable",
+    "reason": "attachRuntimeIfNeeded returns the newly attached runtime; returning undefined instead of `next` changes the observable return a caller/test would assert."
+  },
+  {
+    "id": "phaser/scenes/entityDragController.ts:2046:guard-false",
+    "verdict": "killable",
+    "reason": "getRuntime() is typed `() => Runtime | null`, so the guard is reachable; with `if (false)` a null runtime reaches runtime.getEntity and throws, catchable by a test where getRuntime returns null."
+  },
+  {
+    "id": "phaser/scenes/gameSceneMath.ts:1081:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing the guard true makes the object-value branch return a non-numeric/NaN `value` instead of falling through to 0, observable when the entity's .value is not a finite number."
+  },
+  {
+    "id": "phaser/scenes/gameSceneMath.ts:1107:logic-flip",
+    "verdict": "killable",
+    "reason": "Changing `&&` to `||` makes a numeric-but-nonfinite value (e.g. NaN) pass the guard and be returned instead of 0, a difference a test with a NaN .value would catch."
+  },
+  {
+    "id": "phaser/scenes/gameSceneVisualParsers.ts:1152:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing the guard true makes parsePhysicsComponent always return null even for valid numeric x/y, which a test on a well-formed physics object would catch."
+  },
+  {
+    "id": "phaser/utils/PlaceholderTextureGen.ts:703:arith-flip",
+    "verdict": "killable",
+    "reason": "drawStar is wired via SHAPE_DRAW_MAP and reachable; changing `Math.cos(angle) * r` to `/ r` (r is R-4 or R*0.45, never 1) moves the star points, observable via the graphics fillPoints calls."
+  },
+  {
+    "id": "phaser/utils/PlaceholderTextureGen.ts:1182:bool-flip",
+    "verdict": "killable",
+    "reason": "drawOctagon's `fillPoints(pts, true)` closeShape flag flipped to false changes the fillPoints argument, catchable by asserting the graphics call."
+  },
+  {
+    "id": "phaser/utils/PlaceholderTextureGen.ts:1288:arith-flip",
+    "verdict": "killable",
+    "reason": "drawPlus's `g.fillRect(R-w, 4, w*2, SIZE-8)` height changed from SIZE-8 to SIZE+8 alters the drawn rectangle, observable via the fillRect call arguments."
+  },
+  {
+    "id": "phaser/utils/ShapeTextureGen.ts:955:num-offbyone",
+    "verdict": "killable",
+    "reason": "drawHexPoints is invoked for the \"hex\" shape; changing the angle step `Math.PI/3` to `Math.PI/4` moves every hex vertex, catchable by a hex-shape test asserting fillPoints geometry (current suite tests no hex shape)."
+  },
+  {
+    "id": "phaser/utils/ShapeTextureGen.ts:901:num-offbyone",
+    "verdict": "killable",
+    "reason": "Changing hex point count from 6 to 7 adds a spurious vertex; a hex-shape test asserting the number/positions of fillPoints would catch it, but the suite tests only plus/triple_circle/chevron."
+  },
+  {
+    "id": "phaser/utils/ShapeTextureRecipeRenderer.ts:505:num-offbyone",
+    "verdict": "killable",
+    "reason": "The plus_rounded recipe rect `[48,30,32,68]` feeds drawComplexShape's fillRect; changing 30 to 31 changes the fillRect args, which ShapeTextureGen.test.ts already asserts as [48,30,32,68]."
+  },
+  {
+    "id": "phaser/utils/ShapeTextureRecipeRenderer.ts:1522:arith-flip",
+    "verdict": "killable",
+    "reason": "buildSegment (used for chevron segments) computes point x as `bx + leftX`; flipping to `bx - leftX` moves the segment corner, catchable by asserting fillPoints coordinates (existing chevron test only checks call count)."
+  },
+  {
+    "id": "phaser/utils/TextureManager.ts:2900:return-undefined",
+    "verdict": "killable",
+    "reason": "getAvatarGlowTexture's returned key flows into image.setTexture in renderAvatarStack; returning undefined makes setTexture receive undefined, catchable by asserting the glow image's texture key."
+  },
+  {
+    "id": "phaser/utils/TextureManager.ts:3301:return-undefined",
+    "verdict": "killable",
+    "reason": "getStats returns a TextureManagerStats object; returning undefined is observable by any test asserting the stats result."
+  },
+  {
+    "id": "phaser/veins/PulseEngine.ts:2834:num-offbyone",
+    "verdict": "killable",
+    "reason": "Starting the interpolation loop at i=2 skips the first envelope segment; the current test only samples exact knot phases (0/0.5/1 coincidentally equal), but a phase inside the first segment would differ."
+  },
+  {
+    "id": "phaser/veins/VeinsSystem.ts:1197:num-offbyone",
+    "verdict": "killable",
+    "reason": "The initial lastHeartbeatCheckMs feeds `virtualTimeMs - lastHeartbeatCheckMs < intervalMs`; 0 vs 1 flips that boundary at virtualTimeMs===intervalMs on the first check, resolving vs skipping the preset."
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:885:guard-false",
+    "verdict": "killable",
+    "reason": "Forcing `max === gn` to false routes green-dominant colors into the blue-branch hue formula `(rn-gn)/delta+4` instead of `(bn-rn)/delta+2`, a different hue observable via toHsl/fromHsl."
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:2840:num-offbyone",
+    "verdict": "killable",
+    "reason": "Changing clamp min from 0 to 1 in `clamp(hsl.s*factor, 0, 1)` forces saturation to 1 for all inputs in scaleSaturationInt, changing the returned color."
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:1231:arith-flip",
+    "verdict": "killable",
+    "reason": "In hueToRgb's first sextant, `(q-p) * 6 * temp` -> `(q-p) / 6 * temp` changes the interpolated channel, observable through fromHsl for hues in [0,1/6)."
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:264:num-offbyone",
+    "verdict": "killable",
+    "reason": "parseHex's green extraction `(value >> 8) & 0xff` -> `>> 9` misparses the green channel, catchable by any test asserting parseHex output."
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:286:num-offbyone",
+    "verdict": "killable",
+    "reason": "Changing the channel mask from `& 255` (0xff) to `& 256` keeps only bit 8 instead of the low byte, corrupting the parsed channel, observable via parseHex output."
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:1531:cmp-boundary",
+    "verdict": "equivalent",
+    "reason": "`l < 0.5` vs `l <= 0.5` differ only at l===0.5, where both branches yield the same value: l*(1+s)=0.5+0.5s equals l+s-l*s=0.5+0.5s, so no input distinguishes them."
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:1541:arith-flip",
+    "verdict": "killable",
+    "reason": "For l<0.5, `q = l * (1+s)` -> `l / (1+s)` changes q (and thus p and the resulting rgb), observable through fromHsl for dark saturated colors."
+  },
+  {
+    "id": "phaser/veins/graphBuilderUtils.ts:730:guard-false",
+    "verdict": "killable",
+    "reason": "addNode returns null when sys_world has no physics body, so `if (!worldNode) return` is reachable; `if (false)` passes a null worldNode into addDemandEdges, catchable by a test where sys_world lacks a body (current tests always give it one)."
+  },
+  {
+    "id": "phaser/veins/pulseEngineMath.ts:566:num-offbyone",
+    "verdict": "killable",
+    "reason": "`char.codePointAt(0)` -> `codePointAt(1)` returns undefined for each single-code-point char, so via `?? 0` the hash is always 0 and hashToPulseUnit returns 0 for any string, an observable change."
+  },
+  {
+    "id": "phaser/veins/veinDisplayColors.ts:538:num-offbyone",
+    "verdict": "killable",
+    "reason": "applyFactor packs red via `<< 16`; shifting `<< 17` corrupts the packed color value, catchable by asserting the numeric color returned by resolveDisplayColors."
+  }
+]

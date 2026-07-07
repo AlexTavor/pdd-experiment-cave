@@ -1,0 +1,340 @@
+[
+  {
+    "id": "phaser/display/modules/avatar/avatarStackRender.ts:2085:num-offbyone",
+    "file": "phaser/display/modules/avatar/avatarStackRender.ts",
+    "line": 73,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/avatar/AvatarModule.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/CaveEyesModule.ts:569:bool-flip",
+    "file": "phaser/display/modules/cave/CaveEyesModule.ts",
+    "line": 17,
+    "operator": "bool-flip",
+    "snippet": "false \u2192 true",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/DisplayDefinitionCatalog.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:1812:arith-flip",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 53,
+    "operator": "arith-flip",
+    "snippet": "+ \u2192 - in angle * octave.frequency + phaseFor(seed, octaveIndex)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:882:arith-flip",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 30,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in seed * (index + 1)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:1305:return-undefined",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 42,
+    "operator": "return-undefined",
+    "snippet": "return [] \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:2115:arith-flip",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 62,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in angle * octave.frequency",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:2302:num-offbyone",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 66,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:5226:arith-flip",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 140,
+    "operator": "arith-flip",
+    "snippet": "+ \u2192 - in TAU * fur.motionHz * timeSeconds * 1.7 + phaseFor(seed, hair\u2026",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:5036:arith-flip",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 135,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in pulseValue * fur.pulseLengthScale",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:5701:arith-flip",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 152,
+    "operator": "arith-flip",
+    "snippet": "/ \u2192 * in fur.rootWidthPx / 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:2510:arith-flip",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 72,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in Math.sin(angle) * length",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:5110:arith-flip",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 137,
+    "operator": "arith-flip",
+    "snippet": "- \u2192 + in finalAngle - curlAngle",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:1283:guard-false",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 42,
+    "operator": "guard-false",
+    "snippet": "if (radius <= 0.5) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveBackgroundGeometry.ts:5611:num-offbyone",
+    "file": "phaser/display/modules/cave/caveBackgroundGeometry.ts",
+    "line": 150,
+    "operator": "num-offbyone",
+    "snippet": "2 \u2192 3",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/cave/caveBackgroundGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cave/caveEyesRenderMath.ts:314:guard-false",
+    "file": "phaser/display/modules/cave/caveEyesRenderMath.ts",
+    "line": 8,
+    "operator": "guard-false",
+    "snippet": "if (shape === \"unhappy\") \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/cycle-progress/CycleProgressModule.ts:1980:eq-flip",
+    "file": "phaser/display/modules/cycle-progress/CycleProgressModule.ts",
+    "line": 50,
+    "operator": "eq-flip",
+    "snippet": "!== \u2192 === in visual.ropeSignature !== lastSignature",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/DefaultPlaceholderDisplayDefinition.test.ts",
+      "phaser/display/DisplayDefinitionCatalog.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/cycle-progress/cycleProgressGeometry.ts:1050:return-undefined",
+    "file": "phaser/display/modules/cycle-progress/cycleProgressGeometry.ts",
+    "line": 33,
+    "operator": "return-undefined",
+    "snippet": "return 1 \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/cycle-progress/cycleProgressGeometry.ts:2428:num-offbyone",
+    "file": "phaser/display/modules/cycle-progress/cycleProgressGeometry.ts",
+    "line": 69,
+    "operator": "num-offbyone",
+    "snippet": "3 \u2192 4",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/cycle-progress/cycleProgressGeometry.ts:1266:num-offbyone",
+    "file": "phaser/display/modules/cycle-progress/cycleProgressGeometry.ts",
+    "line": 39,
+    "operator": "num-offbyone",
+    "snippet": "3 \u2192 4",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/cycle-progress/cycleProgressGeometry.ts:2582:num-offbyone",
+    "file": "phaser/display/modules/cycle-progress/cycleProgressGeometry.ts",
+    "line": 73,
+    "operator": "num-offbyone",
+    "snippet": "4 \u2192 5",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/cycle-progress/cycleProgressPath.ts:3027:return-undefined",
+    "file": "phaser/display/modules/cycle-progress/cycleProgressPath.ts",
+    "line": 83,
+    "operator": "return-undefined",
+    "snippet": "return [] \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/cycle-progress/cycleProgressPath.ts:4012:arith-flip",
+    "file": "phaser/display/modules/cycle-progress/cycleProgressPath.ts",
+    "line": 106,
+    "operator": "arith-flip",
+    "snippet": "/ \u2192 * in remaining / closing",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/cycle-progress/cycleProgressPath.ts:4044:return-undefined",
+    "file": "phaser/display/modules/cycle-progress/cycleProgressPath.ts",
+    "line": 108,
+    "operator": "return-undefined",
+    "snippet": "return path \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/cycle-progress/cycleProgressRopeRenderer.ts:742:return-undefined",
+    "file": "phaser/display/modules/cycle-progress/cycleProgressRopeRenderer.ts",
+    "line": 22,
+    "operator": "return-undefined",
+    "snippet": "return hideCycleProgressRope(rope) \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/distress/DistressModule.ts:2231:guard-false",
+    "file": "phaser/display/modules/distress/DistressModule.ts",
+    "line": 65,
+    "operator": "guard-false",
+    "snippet": "if (!body) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/DisplayDefinitionCatalog.test.ts",
+      "phaser/display/modules/distress/DistressModule.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/light/lightModuleBaseState.ts:306:num-offbyone",
+    "file": "phaser/display/modules/light/lightModuleBaseState.ts",
+    "line": 6,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/light/lightModuleBaseState.ts:2089:return-undefined",
+    "file": "phaser/display/modules/light/lightModuleBaseState.ts",
+    "line": 60,
+    "operator": "return-undefined",
+    "snippet": "return ( PRODUCER_MIN_SCALE + (PRODUCER_MAX_SCALE - PRODUCER_MIN_SC\u2026 \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/light/lightModuleBaseState.ts:522:num-offbyone",
+    "file": "phaser/display/modules/light/lightModuleBaseState.ts",
+    "line": 12,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/modules/light/lightModuleState.ts:618:num-offbyone",
+    "file": "phaser/display/modules/light/lightModuleState.ts",
+    "line": 16,
+    "operator": "num-offbyone",
+    "snippet": "16 \u2192 17",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/light/LightModule.cycleLights.test.ts",
+      "phaser/display/modules/light/LightModule.lights.test.ts",
+      "phaser/display/modules/light/lightModuleState.attention.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/light/menuAmbientProximityLightState.ts:994:arith-flip",
+    "file": "phaser/display/modules/light/menuAmbientProximityLightState.ts",
+    "line": 38,
+    "operator": "arith-flip",
+    "snippet": "- \u2192 + in input.pointerX - input.nodeX",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  }
+]

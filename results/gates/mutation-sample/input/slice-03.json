@@ -1,0 +1,349 @@
+[
+  {
+    "id": "phaser/display/glyph/glyphGenConstants.ts:932:num-offbyone",
+    "file": "phaser/display/glyph/glyphGenConstants.ts",
+    "line": 43,
+    "operator": "num-offbyone",
+    "snippet": "90 \u2192 91",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/GlyphGenerator.validation.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphGenConstants.ts:765:num-offbyone",
+    "file": "phaser/display/glyph/glyphGenConstants.ts",
+    "line": 37,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/GlyphGenerator.validation.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphGenConstants.ts:552:num-offbyone",
+    "file": "phaser/display/glyph/glyphGenConstants.ts",
+    "line": 29,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/GlyphGenerator.validation.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphGenConstants.ts:1040:num-offbyone",
+    "file": "phaser/display/glyph/glyphGenConstants.ts",
+    "line": 47,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/GlyphGenerator.validation.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphGenConstants.ts:555:num-offbyone",
+    "file": "phaser/display/glyph/glyphGenConstants.ts",
+    "line": 29,
+    "operator": "num-offbyone",
+    "snippet": "3 \u2192 4",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/GlyphGenerator.validation.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphGenConstants.ts:1182:num-offbyone",
+    "file": "phaser/display/glyph/glyphGenConstants.ts",
+    "line": 53,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/GlyphGenerator.validation.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphShapeDrawFns.ts:1067:num-offbyone",
+    "file": "phaser/display/glyph/glyphShapeDrawFns.ts",
+    "line": 45,
+    "operator": "num-offbyone",
+    "snippet": "2 \u2192 3",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/glyph/glyphShapeDrawFns.ts:1511:arith-flip",
+    "file": "phaser/display/glyph/glyphShapeDrawFns.ts",
+    "line": 60,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in Math.PI * 2 * i",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/glyph/glyphShapeDrawFnsRings.ts:803:num-offbyone",
+    "file": "phaser/display/glyph/glyphShapeDrawFnsRings.ts",
+    "line": 33,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawCore.ts:2760:arith-flip",
+    "file": "phaser/display/glyph/glyphTextureDrawCore.ts",
+    "line": 85,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in outsetPx * 2",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawCore.ts:90:arith-flip",
+    "file": "phaser/display/glyph/glyphTextureDrawCore.ts",
+    "line": 5,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in R * 0.7",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawCore.ts:3202:num-offbyone",
+    "file": "phaser/display/glyph/glyphTextureDrawCore.ts",
+    "line": 100,
+    "operator": "num-offbyone",
+    "snippet": "24 \u2192 25",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawCore.ts:530:arith-flip",
+    "file": "phaser/display/glyph/glyphTextureDrawCore.ts",
+    "line": 14,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in Math.cos(angle) * radius",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawCore.ts:1574:arith-flip",
+    "file": "phaser/display/glyph/glyphTextureDrawCore.ts",
+    "line": 47,
+    "operator": "arith-flip",
+    "snippet": "- \u2192 + in C - outer * 0.9",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawStroke.ts:2743:arith-flip",
+    "file": "phaser/display/glyph/glyphTextureDrawStroke.ts",
+    "line": 94,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in R * 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/glyphTextureDrawStroke.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawStroke.ts:2476:bool-flip",
+    "file": "phaser/display/glyph/glyphTextureDrawStroke.ts",
+    "line": 86,
+    "operator": "bool-flip",
+    "snippet": "true \u2192 false",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/glyphTextureDrawStroke.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawStroke.ts:890:arith-flip",
+    "file": "phaser/display/glyph/glyphTextureDrawStroke.ts",
+    "line": 33,
+    "operator": "arith-flip",
+    "snippet": "- \u2192 + in (Math.PI * 2 * index) / sides - Math.PI / 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/glyphTextureDrawStroke.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawStroke.ts:2369:bool-flip",
+    "file": "phaser/display/glyph/glyphTextureDrawStroke.ts",
+    "line": 83,
+    "operator": "bool-flip",
+    "snippet": "true \u2192 false",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/glyphTextureDrawStroke.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawStroke.ts:3042:return-undefined",
+    "file": "phaser/display/glyph/glyphTextureDrawStroke.ts",
+    "line": 103,
+    "operator": "return-undefined",
+    "snippet": "return false \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/glyphTextureDrawStroke.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawStroke.ts:1812:arith-flip",
+    "file": "phaser/display/glyph/glyphTextureDrawStroke.ts",
+    "line": 65,
+    "operator": "arith-flip",
+    "snippet": "/ \u2192 * in width / 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/glyphTextureDrawStroke.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawStroke.ts:2890:num-offbyone",
+    "file": "phaser/display/glyph/glyphTextureDrawStroke.ts",
+    "line": 99,
+    "operator": "num-offbyone",
+    "snippet": "82 \u2192 83",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/glyphTextureDrawStroke.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphTextureDrawStroke.ts:1315:num-offbyone",
+    "file": "phaser/display/glyph/glyphTextureDrawStroke.ts",
+    "line": 48,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/glyphTextureDrawStroke.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/instance-manager/DisplayInstanceManager.structural.ts:1394:guard-false",
+    "file": "phaser/display/instance-manager/DisplayInstanceManager.structural.ts",
+    "line": 41,
+    "operator": "guard-false",
+    "snippet": "if (!next) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/instance-manager/DisplayInstanceManager.structural.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/instance-manager/DisplayInstanceManager.structural.ts:3212:guard-true",
+    "file": "phaser/display/instance-manager/DisplayInstanceManager.structural.ts",
+    "line": 90,
+    "operator": "guard-true",
+    "snippet": "if (syncState.mutationRevision !== mutationRevision) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/instance-manager/DisplayInstanceManager.structural.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/instance-manager/DisplayInstanceManager.tutorialAttention.ts:1407:bool-flip",
+    "file": "phaser/display/instance-manager/DisplayInstanceManager.tutorialAttention.ts",
+    "line": 35,
+    "operator": "bool-flip",
+    "snippet": "true \u2192 false",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/instance-manager/DisplayInstanceManager.tutorialAttention.alpha.test.ts",
+      "phaser/display/instance-manager/DisplayInstanceManager.tutorialAttention.interaction.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/interactionHitArea.ts:829:arith-flip",
+    "file": "phaser/display/interactionHitArea.ts",
+    "line": 25,
+    "operator": "arith-flip",
+    "snippet": "/ \u2192 * in size / 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/visual-instance/EntityVisualInstanceRuntime.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/interactionHitArea.ts:2260:num-offbyone",
+    "file": "phaser/display/interactionHitArea.ts",
+    "line": 66,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/visual-instance/EntityVisualInstanceRuntime.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/interactionHitArea.ts:824:return-undefined",
+    "file": "phaser/display/interactionHitArea.ts",
+    "line": 25,
+    "operator": "return-undefined",
+    "snippet": "return size / 2 \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/visual-instance/EntityVisualInstanceRuntime.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/avatar/AvatarModule.ts:4868:guard-true",
+    "file": "phaser/display/modules/avatar/AvatarModule.ts",
+    "line": 113,
+    "operator": "guard-true",
+    "snippet": "if (dCtx.scratch.mainImage === silhouetteImage) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/DisplayDefinitionCatalog.test.ts",
+      "phaser/display/modules/avatar/AvatarModule.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/avatar/AvatarModule.ts:4891:eq-flip",
+    "file": "phaser/display/modules/avatar/AvatarModule.ts",
+    "line": 113,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in dCtx.scratch.mainImage === silhouetteImage",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/DisplayDefinitionCatalog.test.ts",
+      "phaser/display/modules/avatar/AvatarModule.test.ts"
+    ]
+  }
+]

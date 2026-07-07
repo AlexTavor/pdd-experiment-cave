@@ -1,0 +1,196 @@
+[
+  {
+    "id": "terminal/smartPathUtils.ts:7615:bool-flip",
+    "file": "terminal/smartPathUtils.ts",
+    "line": 242,
+    "operator": "bool-flip",
+    "snippet": "false \u2192 true",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/smartPathUtils.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/smartPathUtils.ts:7513:guard-true",
+    "file": "terminal/smartPathUtils.ts",
+    "line": 240,
+    "operator": "guard-true",
+    "snippet": "if (asset?.tooltip?.toLowerCase().startsWith(normalized)) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/smartPathUtils.test.ts"
+    ]
+  },
+  {
+    "id": "terminal/smartPathUtils.ts:7615:return-undefined",
+    "file": "terminal/smartPathUtils.ts",
+    "line": 242,
+    "operator": "return-undefined",
+    "snippet": "return false \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-terminal",
+    "ranTests": [
+      "terminal/smartPathUtils.test.ts"
+    ]
+  },
+  {
+    "id": "vfs/FileSystem.ts:2423:guard-true",
+    "file": "vfs/FileSystem.ts",
+    "line": 71,
+    "operator": "guard-true",
+    "snippet": "if (char === \"*\") \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-vfs",
+    "ranTests": [
+      "terminal/Commands.test.ts",
+      "terminal/commands/bootstrapLoadCommand.test.ts",
+      "terminal/commands/fsCommands.test.ts",
+      "terminal/commands/makeCommands.test.ts",
+      "terminal/commands/projectDuplicateCommand.test.ts",
+      "terminal/commands/projectSaveCommand.test.ts",
+      "terminal/commands/vfsCommands.test.ts",
+      "vfs/FileSystem.batch.test.ts",
+      "vfs/FileSystem.importState.test.ts",
+      "vfs/FileSystem.snapshot.test.ts",
+      "vfs/FileSystem.test.ts"
+    ]
+  },
+  {
+    "id": "vfs/bootstrapHydration.ts:2501:return-undefined",
+    "file": "vfs/bootstrapHydration.ts",
+    "line": 76,
+    "operator": "return-undefined",
+    "snippet": "return `/${params.filename}` \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-vfs",
+    "ranTests": []
+  },
+  {
+    "id": "vfs/bootstrapHydration.ts:1946:guard-true",
+    "file": "vfs/bootstrapHydration.ts",
+    "line": 56,
+    "operator": "guard-true",
+    "snippet": "if (!dbData) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-vfs",
+    "ranTests": []
+  },
+  {
+    "id": "vfs/bootstrapSnapshot.ts:1208:guard-false",
+    "file": "vfs/bootstrapSnapshot.ts",
+    "line": 36,
+    "operator": "guard-false",
+    "snippet": "if (!request) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-vfs",
+    "ranTests": []
+  },
+  {
+    "id": "vfs/indexedDbBatch.ts:2279:return-undefined",
+    "file": "vfs/indexedDbBatch.ts",
+    "line": 65,
+    "operator": "return-undefined",
+    "snippet": "return keys \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-vfs",
+    "ranTests": []
+  },
+  {
+    "id": "vfs/indexedDbBatch.ts:2258:guard-true",
+    "file": "vfs/indexedDbBatch.ts",
+    "line": 65,
+    "operator": "guard-true",
+    "snippet": "if (!glob.trim()) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-vfs",
+    "ranTests": []
+  },
+  {
+    "id": "vfs/pathUtils.ts:361:guard-false",
+    "file": "vfs/pathUtils.ts",
+    "line": 11,
+    "operator": "guard-false",
+    "snippet": "if (!path) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-vfs",
+    "ranTests": []
+  },
+  {
+    "id": "workspace/WorkspaceService.ts:2474:guard-false",
+    "file": "workspace/WorkspaceService.ts",
+    "line": 71,
+    "operator": "guard-false",
+    "snippet": "if (!this.projectRoot || filename.startsWith(`${this.projectRoot\u2026) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-workspace",
+    "ranTests": [
+      "workspace/RefactorService.test.ts",
+      "workspace/WorkspaceService.bootstrapSnapshot.test.ts",
+      "workspace/WorkspaceService.test.ts"
+    ]
+  },
+  {
+    "id": "workspace/projectManifest.ts:1863:guard-false",
+    "file": "workspace/projectManifest.ts",
+    "line": 64,
+    "operator": "guard-false",
+    "snippet": "if (fromObject != null) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-workspace",
+    "ranTests": [
+      "workspace/projectManifest.errors.test.ts",
+      "workspace/projectManifest.test.ts",
+      "workspace/projectManifest.versioning.test.ts"
+    ]
+  },
+  {
+    "id": "workspace/projectManifest.ts:1374:eq-flip",
+    "file": "workspace/projectManifest.ts",
+    "line": 46,
+    "operator": "eq-flip",
+    "snippet": "!== \u2192 === in typeof f !== \"string\"",
+    "status": "survived",
+    "unit": "src-engine-workspace",
+    "ranTests": [
+      "workspace/projectManifest.errors.test.ts",
+      "workspace/projectManifest.test.ts",
+      "workspace/projectManifest.versioning.test.ts"
+    ]
+  },
+  {
+    "id": "workspace/projectManifest.ts:1113:logic-flip",
+    "file": "workspace/projectManifest.ts",
+    "line": 37,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in typeof manifest.name !== \"string\" || manifest.name.trim().le\u2026",
+    "status": "survived",
+    "unit": "src-engine-workspace",
+    "ranTests": [
+      "workspace/projectManifest.errors.test.ts",
+      "workspace/projectManifest.test.ts",
+      "workspace/projectManifest.versioning.test.ts"
+    ]
+  },
+  {
+    "id": "workspace/projectModuleParsing.ts:878:return-undefined",
+    "file": "workspace/projectModuleParsing.ts",
+    "line": 23,
+    "operator": "return-undefined",
+    "snippet": "return semantic \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-workspace",
+    "ranTests": []
+  },
+  {
+    "id": "workspace/projectVersionPersistence.ts:808:eq-flip",
+    "file": "workspace/projectVersionPersistence.ts",
+    "line": 23,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in normalize(`${root}/${file}`) === target",
+    "status": "uncovered",
+    "unit": "src-engine-workspace",
+    "ranTests": []
+  }
+]

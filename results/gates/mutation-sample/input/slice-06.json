@@ -1,0 +1,373 @@
+[
+  {
+    "id": "phaser/display/modules/veins/veinsVisualMath.ts:1344:guard-true",
+    "file": "phaser/display/modules/veins/veinsVisualMath.ts",
+    "line": 43,
+    "operator": "guard-true",
+    "snippet": "if (remaining <= segmentLensPx[i]) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsVisualMath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsVisualMath.ts:227:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsVisualMath.ts",
+    "line": 9,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsVisualMath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsVisualMath.ts:3118:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsVisualMath.ts",
+    "line": 99,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsVisualMath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsVisualMath.ts:263:cmp-boundary",
+    "file": "phaser/display/modules/veins/veinsVisualMath.ts",
+    "line": 10,
+    "operator": "cmp-boundary",
+    "snippet": "< \u2192 <= in revealedLenPx < desiredLenPx",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsVisualMath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsVisualMath.ts:1227:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsVisualMath.ts",
+    "line": 40,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsVisualMath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsVisualMath.ts:3445:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsVisualMath.ts",
+    "line": 108,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsVisualMath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsVisualMath.ts:2172:num-offbyone",
+    "file": "phaser/display/modules/veins/veinsVisualMath.ts",
+    "line": 66,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsVisualMath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/node-overlay/nodeOverlayDisplayBounds.ts:498:guard-false",
+    "file": "phaser/display/node-overlay/nodeOverlayDisplayBounds.ts",
+    "line": 20,
+    "operator": "guard-false",
+    "snippet": "if (!isFiniteNumber(centerX) || !isFiniteNumber(topY) || !isFini\u2026) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/instance-manager/DisplayInstanceManager.nodeOverlayDisplayBounds.test.ts",
+      "phaser/display/modules/avatar/AvatarModule.test.ts",
+      "phaser/display/modules/cave/CaveBackgroundModule.nodeOverlayDisplayBounds.test.ts",
+      "phaser/display/modules/progress-bar/progressBarTick.test.ts",
+      "phaser/display/modules/transfer/TransferDisplayModule.overlayBounds.testUtils.ts",
+      "phaser/display/modules/transfer/TransferGlyphModule.test.ts",
+      "phaser/display/modules/transfer/TransferModule.test.ts",
+      "phaser/display/node-overlay/nodeOverlayDisplayBounds.test.ts",
+      "phaser/display/node-overlay/nodeOverlayDisplayBoundsStore.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/particles/HeatParticlesConfigResolver.ts:257:num-offbyone",
+    "file": "phaser/display/particles/HeatParticlesConfigResolver.ts",
+    "line": 10,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/particles/HeatParticlesConfigResolver.ts:532:cmp-boundary",
+    "file": "phaser/display/particles/HeatParticlesConfigResolver.ts",
+    "line": 22,
+    "operator": "cmp-boundary",
+    "snippet": "< \u2192 <= in intensity < HEAT_THRESHOLD",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/placeholder/PlaceholderVariantRegistry.ts:1019:guard-true",
+    "file": "phaser/display/placeholder/PlaceholderVariantRegistry.ts",
+    "line": 36,
+    "operator": "guard-true",
+    "snippet": "if (this.nextIndex >= ALL_VARIANTS.length) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/placeholder/PlaceholderVariantRegistry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/placeholder/PlaceholderVariantRegistry.ts:1256:arith-flip",
+    "file": "phaser/display/placeholder/PlaceholderVariantRegistry.ts",
+    "line": 41,
+    "operator": "arith-flip",
+    "snippet": "+ \u2192 - in `[PlaceholderVariantRegistry] Capacity exhausted. ` + `Reusi\u2026",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/placeholder/PlaceholderVariantRegistry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/pooling/DisplayTypePool.ts:515:num-offbyone",
+    "file": "phaser/display/pooling/DisplayTypePool.ts",
+    "line": 15,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/pooling/DisplayTypePool.sceneCleanup.test.ts",
+      "phaser/display/pooling/DisplayTypePool.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/resolve-display/resolveDisplaySpec.helpers.ts:2664:eq-flip",
+    "file": "phaser/display/resolve-display/resolveDisplaySpec.helpers.ts",
+    "line": 74,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in asset?.type === \"attribute_pool\"",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/resolve-display/resolveDisplaySpec.helpers.ts:1246:guard-false",
+    "file": "phaser/display/resolve-display/resolveDisplaySpec.helpers.ts",
+    "line": 31,
+    "operator": "guard-false",
+    "snippet": "if (displayKey === BODY_AVATAR_DISPLAY_KEY) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/resolve-display/resolveDisplaySpec.static.ts:2264:logic-flip",
+    "file": "phaser/display/resolve-display/resolveDisplaySpec.static.ts",
+    "line": 61,
+    "operator": "logic-flip",
+    "snippet": "&& \u2192 || in styleId && parseEntityStyle(styles[styleId])",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/visual-instance/EntityVisualInstanceHelpers.ts:2152:guard-true",
+    "file": "phaser/display/visual-instance/EntityVisualInstanceHelpers.ts",
+    "line": 66,
+    "operator": "guard-true",
+    "snippet": "if (scratch.mainImage) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/visual-instance/EntityVisualInstanceRuntime.ts:810:num-offbyone",
+    "file": "phaser/display/visual-instance/EntityVisualInstanceRuntime.ts",
+    "line": 27,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/visual-instance/EntityVisualInstanceRuntime.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/effects/PersistentAttentionRings.ts:1883:bool-flip",
+    "file": "phaser/effects/PersistentAttentionRings.ts",
+    "line": 48,
+    "operator": "bool-flip",
+    "snippet": "false \u2192 true",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/effects/PersistentAttentionRings.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.attention.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/effects/RuntimeVisualEffectsManager.ts:638:return-undefined",
+    "file": "phaser/effects/RuntimeVisualEffectsManager.ts",
+    "line": 12,
+    "operator": "return-undefined",
+    "snippet": "return world.habitiAnnouncement.attention \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/effects/RuntimeVisualEffectsManager.attention.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.deathShake.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/effects/runtimeVisualEffectBursts.ts:1490:arith-flip",
+    "file": "phaser/effects/runtimeVisualEffectBursts.ts",
+    "line": 41,
+    "operator": "arith-flip",
+    "snippet": "+ \u2192 - in 0.22 + t * 0.42",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/effects/PersistentAttentionRings.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.attention.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.deathShake.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/effects/runtimeVisualEffectBursts.ts:3409:num-offbyone",
+    "file": "phaser/effects/runtimeVisualEffectBursts.ts",
+    "line": 107,
+    "operator": "num-offbyone",
+    "snippet": "360 \u2192 361",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/effects/PersistentAttentionRings.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.attention.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.deathShake.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/effects/runtimeVisualEffectBursts.ts:1542:num-offbyone",
+    "file": "phaser/effects/runtimeVisualEffectBursts.ts",
+    "line": 42,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/effects/PersistentAttentionRings.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.attention.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.deathShake.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/effects/runtimeVisualEffectBursts.ts:1221:return-undefined",
+    "file": "phaser/effects/runtimeVisualEffectBursts.ts",
+    "line": 32,
+    "operator": "return-undefined",
+    "snippet": "return textureManager.getGlyphTexture(RUNTIME_RING_TEXTURE_OPTIONS) \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/effects/PersistentAttentionRings.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.attention.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.deathShake.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/effects/runtimeVisualEffectBursts.ts:2198:guard-false",
+    "file": "phaser/effects/runtimeVisualEffectBursts.ts",
+    "line": 70,
+    "operator": "guard-false",
+    "snippet": "if (!textureKey) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/effects/PersistentAttentionRings.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.attention.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.deathShake.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/effects/runtimeVisualEffectBursts.ts:414:num-offbyone",
+    "file": "phaser/effects/runtimeVisualEffectBursts.ts",
+    "line": 8,
+    "operator": "num-offbyone",
+    "snippet": "6 \u2192 7",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/effects/PersistentAttentionRings.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.attention.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.deathShake.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/effects/runtimeVisualEffectBursts.ts:626:num-offbyone",
+    "file": "phaser/effects/runtimeVisualEffectBursts.ts",
+    "line": 13,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/effects/PersistentAttentionRings.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.attention.test.ts",
+      "phaser/effects/RuntimeVisualEffectsManager.deathShake.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/pointer/pointerPreviewAppearance.ts:786:eq-flip",
+    "file": "phaser/pointer/pointerPreviewAppearance.ts",
+    "line": 22,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in readPointerStateString(runtime, \"pointer_preview_mode\") === \u2026",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/pointer/pointerPreviewGeometry.ts:359:arith-flip",
+    "file": "phaser/pointer/pointerPreviewGeometry.ts",
+    "line": 11,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in input.timeMs * 0.008",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/pointer/PointerPreviewSystem.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/pointer/pointerPreviewGeometry.ts:330:arith-flip",
+    "file": "phaser/pointer/pointerPreviewGeometry.ts",
+    "line": 11,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in t * Math.PI",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/pointer/PointerPreviewSystem.test.ts"
+    ]
+  }
+]

@@ -1,0 +1,376 @@
+[
+  {
+    "id": "phaser/veins/veinGeometry.ts:1364:num-offbyone",
+    "file": "phaser/veins/veinGeometry.ts",
+    "line": 41,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/veinGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinGeometry.ts:1407:arith-flip",
+    "file": "phaser/veins/veinGeometry.ts",
+    "line": 41,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in (thickness.pulse_width_multiplier - 1) * clamp(intensity, 0,\u2026",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/veinGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinGeometry.ts:2053:return-undefined",
+    "file": "phaser/veins/veinGeometry.ts",
+    "line": 63,
+    "operator": "return-undefined",
+    "snippet": "return resolvePulsedWidth(base, intensity, config) \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/veinGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinGeometry.ts:1366:arith-flip",
+    "file": "phaser/veins/veinGeometry.ts",
+    "line": 41,
+    "operator": "arith-flip",
+    "snippet": "+ \u2192 - in 1 + (thickness.pulse_width_multiplier - 1) * clamp(intensity\u2026",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/veinGeometry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinPathShape.ts:2044:num-offbyone",
+    "file": "phaser/veins/veinPathShape.ts",
+    "line": 63,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/veinPathShape.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinPathShape.ts:1336:return-undefined",
+    "file": "phaser/veins/veinPathShape.ts",
+    "line": 51,
+    "operator": "return-undefined",
+    "snippet": "return { meanderPoints: [], pathLengthPx: 0 } \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/veinPathShape.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinPathShape.ts:1589:guard-false",
+    "file": "phaser/veins/veinPathShape.ts",
+    "line": 56,
+    "operator": "guard-false",
+    "snippet": "if (count === 0) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/veinPathShape.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinPathShape.ts:2365:arith-flip",
+    "file": "phaser/veins/veinPathShape.ts",
+    "line": 71,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in nx * magnitude",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/veinPathShape.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinPathShape.ts:1320:cmp-boundary",
+    "file": "phaser/veins/veinPathShape.ts",
+    "line": 51,
+    "operator": "cmp-boundary",
+    "snippet": "< \u2192 <= in directLength < 0.001",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/veinPathShape.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinSmoothGuidePath.ts:219:arith-flip",
+    "file": "phaser/veins/veinSmoothGuidePath.ts",
+    "line": 6,
+    "operator": "arith-flip",
+    "snippet": "- \u2192 + in index - 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/veins/veinsRopeUtils.test.ts",
+      "phaser/veins/veinPathShape.test.ts",
+      "phaser/veins/veinSmoothGuidePath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinsDisplayBuilder.ts:710:num-offbyone",
+    "file": "phaser/veins/veinsDisplayBuilder.ts",
+    "line": 21,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/veinConfig.integration.test.ts",
+      "phaser/veins/veinsDisplayBuilder.nervous.test.ts",
+      "phaser/veins/veinsDisplayBuilder.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinsDisplayBuilder.ts:3937:num-offbyone",
+    "file": "phaser/veins/veinsDisplayBuilder.ts",
+    "line": 105,
+    "operator": "num-offbyone",
+    "snippet": "628 \u2192 629",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/veinConfig.integration.test.ts",
+      "phaser/veins/veinsDisplayBuilder.nervous.test.ts",
+      "phaser/veins/veinsDisplayBuilder.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/veinsPresetResolver.ts:1018:guard-false",
+    "file": "phaser/veins/veinsPresetResolver.ts",
+    "line": 25,
+    "operator": "guard-false",
+    "snippet": "if (virtualTimeMs - lastHeartbeatCheckMs < intervalMs) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/veins/veinsPresetResolver.ts:889:guard-false",
+    "file": "phaser/veins/veinsPresetResolver.ts",
+    "line": 22,
+    "operator": "guard-false",
+    "snippet": "if (!config.heartbeats.rules?.length) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "physics/impulse/ImpulseEngine.ts:1610:logic-flip",
+    "file": "physics/impulse/ImpulseEngine.ts",
+    "line": 44,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in width < this.config.minWorldSize || height < this.config.min\u2026",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "compiler/abilities/hommletBlueprintHydration.test.ts",
+      "logic/JsonLogicAdapter.test.ts",
+      "phaser/veins/GraphBuilder.test.ts",
+      "phaser/veins/NervousSystemRules.test.ts",
+      "phaser/veins/graphBuilderUtils.oneOff.test.ts",
+      "phaser/veins/graphBuilderUtils.test.ts",
+      "physics/impulse/ImpulseAnchor.test.ts",
+      "physics/impulse/ImpulseEngine.anchor.test.ts",
+      "physics/impulse/ImpulseEngine.steering.test.ts",
+      "physics/impulse/ImpulseEngine.test.ts",
+      "runtime/CommandsManager.test.ts",
+      "runtime/Runtime.test.ts",
+      "runtime/Snapshot.test.ts",
+      "runtime/runtimePhysicsSeed.test.ts",
+      "runtime/systems/behavior/BehaviorSystem.core.test.ts",
+      "runtime/systems/behavior/BehaviorSystem.flyweight.test.ts",
+      "runtime/systems/behavior/BehaviorSystem.guards.test.ts",
+      "runtime/systems/behavior/CycleConditionalActivationThrottle.integration.test.ts",
+      "runtime/systems/behavior/CycleConditionalActivationThrottle.multi.integration.test.ts",
+      "runtime/systems/behavior/OneOffCycle.powerSink.test.ts",
+      "runtime/systems/behavior/OneOffCycle.test.ts",
+      "runtime/systems/behavior/SamplerIntegration.test.ts",
+      "runtime/systems/behavior/SpawnerIntegration.test.ts",
+      "runtime/systems/behavior/TargetSelector.permissions.test.ts",
+      "runtime/systems/behavior/TriggeredActions.gainUnderstanding.test.ts",
+      "runtime/systems/behavior/TriggeredActions.integration.test.ts",
+      "runtime/systems/behavior/ValueResolver.test.ts",
+      "runtime/systems/behavior/cycleResourceCostBehavior.test.ts",
+      "runtime/systems/behavior/cycleResourceCostRequestCadence.test.ts",
+      "runtime/systems/behavior/cycleResourceCostTolerance.test.ts",
+      "runtime/systems/behavior/targetSelector.test.ts"
+    ]
+  },
+  {
+    "id": "physics/impulse/ImpulseEngine.ts:1583:cmp-boundary",
+    "file": "physics/impulse/ImpulseEngine.ts",
+    "line": 44,
+    "operator": "cmp-boundary",
+    "snippet": "< \u2192 <= in width < this.config.minWorldSize",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "compiler/abilities/hommletBlueprintHydration.test.ts",
+      "logic/JsonLogicAdapter.test.ts",
+      "phaser/veins/GraphBuilder.test.ts",
+      "phaser/veins/NervousSystemRules.test.ts",
+      "phaser/veins/graphBuilderUtils.oneOff.test.ts",
+      "phaser/veins/graphBuilderUtils.test.ts",
+      "physics/impulse/ImpulseAnchor.test.ts",
+      "physics/impulse/ImpulseEngine.anchor.test.ts",
+      "physics/impulse/ImpulseEngine.steering.test.ts",
+      "physics/impulse/ImpulseEngine.test.ts",
+      "runtime/CommandsManager.test.ts",
+      "runtime/Runtime.test.ts",
+      "runtime/Snapshot.test.ts",
+      "runtime/runtimePhysicsSeed.test.ts",
+      "runtime/systems/behavior/BehaviorSystem.core.test.ts",
+      "runtime/systems/behavior/BehaviorSystem.flyweight.test.ts",
+      "runtime/systems/behavior/BehaviorSystem.guards.test.ts",
+      "runtime/systems/behavior/CycleConditionalActivationThrottle.integration.test.ts",
+      "runtime/systems/behavior/CycleConditionalActivationThrottle.multi.integration.test.ts",
+      "runtime/systems/behavior/OneOffCycle.powerSink.test.ts",
+      "runtime/systems/behavior/OneOffCycle.test.ts",
+      "runtime/systems/behavior/SamplerIntegration.test.ts",
+      "runtime/systems/behavior/SpawnerIntegration.test.ts",
+      "runtime/systems/behavior/TargetSelector.permissions.test.ts",
+      "runtime/systems/behavior/TriggeredActions.gainUnderstanding.test.ts",
+      "runtime/systems/behavior/TriggeredActions.integration.test.ts",
+      "runtime/systems/behavior/ValueResolver.test.ts",
+      "runtime/systems/behavior/cycleResourceCostBehavior.test.ts",
+      "runtime/systems/behavior/cycleResourceCostRequestCadence.test.ts",
+      "runtime/systems/behavior/cycleResourceCostTolerance.test.ts",
+      "runtime/systems/behavior/targetSelector.test.ts"
+    ]
+  },
+  {
+    "id": "physics/impulse/ImpulseFlocking.ts:1766:guard-false",
+    "file": "physics/impulse/ImpulseFlocking.ts",
+    "line": 65,
+    "operator": "guard-false",
+    "snippet": "if (neighbor.isStatic) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "physics/impulse/ImpulseFlocking.test.ts"
+    ]
+  },
+  {
+    "id": "physics/impulse/ImpulseFlocking.ts:2165:num-offbyone",
+    "file": "physics/impulse/ImpulseFlocking.ts",
+    "line": 76,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "physics/impulse/ImpulseFlocking.test.ts"
+    ]
+  },
+  {
+    "id": "physics/impulse/ImpulseObstacleAvoidance.ts:429:cmp-boundary",
+    "file": "physics/impulse/ImpulseObstacleAvoidance.ts",
+    "line": 12,
+    "operator": "cmp-boundary",
+    "snippet": "< \u2192 <= in len < EPSILON",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "physics/impulse/ImpulseObstacleAvoidance.test.ts"
+    ]
+  },
+  {
+    "id": "physics/impulse/ImpulseObstacleAvoidance.ts:4483:num-offbyone",
+    "file": "physics/impulse/ImpulseObstacleAvoidance.ts",
+    "line": 161,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "physics/impulse/ImpulseObstacleAvoidance.test.ts"
+    ]
+  },
+  {
+    "id": "physics/impulse/ImpulseObstacleAvoidance.ts:4452:num-offbyone",
+    "file": "physics/impulse/ImpulseObstacleAvoidance.ts",
+    "line": 160,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "physics/impulse/ImpulseObstacleAvoidance.test.ts"
+    ]
+  },
+  {
+    "id": "physics/impulse/ImpulseObstacleAvoidance.ts:2021:guard-true",
+    "file": "physics/impulse/ImpulseObstacleAvoidance.ts",
+    "line": 70,
+    "operator": "guard-true",
+    "snippet": "if (t1 >= 0 && t1 <= 1) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "physics/impulse/ImpulseObstacleAvoidance.test.ts"
+    ]
+  },
+  {
+    "id": "physics/impulse/ImpulseObstacleAvoidance.ts:1069:arith-flip",
+    "file": "physics/impulse/ImpulseObstacleAvoidance.ts",
+    "line": 30,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in projectionHeadingY * config.lookAheadDistance",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "physics/impulse/ImpulseObstacleAvoidance.test.ts"
+    ]
+  },
+  {
+    "id": "physics/impulse/ImpulseObstacleAvoidance.ts:4449:cmp-boundary",
+    "file": "physics/impulse/ImpulseObstacleAvoidance.ts",
+    "line": 160,
+    "operator": "cmp-boundary",
+    "snippet": "<= \u2192 < in config.lookAheadDistance <= 0",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "physics/impulse/ImpulseObstacleAvoidance.test.ts"
+    ]
+  },
+  {
+    "id": "physics/impulse/ImpulseObstacleAvoidance.ts:3476:arith-flip",
+    "file": "physics/impulse/ImpulseObstacleAvoidance.ts",
+    "line": 121,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in overlapThreshold * 1.25",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "physics/impulse/ImpulseObstacleAvoidance.test.ts"
+    ]
+  },
+  {
+    "id": "physics/impulse/ImpulseObstacleAvoidance.ts:1757:guard-false",
+    "file": "physics/impulse/ImpulseObstacleAvoidance.ts",
+    "line": 60,
+    "operator": "guard-false",
+    "snippet": "if (!Number.isFinite(discriminant) || discriminant < 0) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-physics",
+    "ranTests": [
+      "physics/impulse/ImpulseObstacleAvoidance.test.ts"
+    ]
+  }
+]

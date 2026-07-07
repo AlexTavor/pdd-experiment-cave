@@ -1,0 +1,323 @@
+[
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:1811:num-offbyone",
+    "file": "phaser/display/avatar/AvatarPartCatalog.ts",
+    "line": 90,
+    "operator": "num-offbyone",
+    "snippet": "30 \u2192 31",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:673:num-offbyone",
+    "file": "phaser/display/avatar/AvatarPartCatalog.ts",
+    "line": 29,
+    "operator": "num-offbyone",
+    "snippet": "20 \u2192 21",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:3109:num-offbyone",
+    "file": "phaser/display/avatar/AvatarPartCatalog.ts",
+    "line": 159,
+    "operator": "num-offbyone",
+    "snippet": "44 \u2192 45",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:3260:num-offbyone",
+    "file": "phaser/display/avatar/AvatarPartCatalog.ts",
+    "line": 167,
+    "operator": "num-offbyone",
+    "snippet": "40 \u2192 41",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:2300:num-offbyone",
+    "file": "phaser/display/avatar/AvatarPartCatalog.ts",
+    "line": 116,
+    "operator": "num-offbyone",
+    "snippet": "8 \u2192 9",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:431:num-offbyone",
+    "file": "phaser/display/avatar/AvatarPartCatalog.ts",
+    "line": 16,
+    "operator": "num-offbyone",
+    "snippet": "10 \u2192 11",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:1443:num-offbyone",
+    "file": "phaser/display/avatar/AvatarPartCatalog.ts",
+    "line": 70,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:3808:num-offbyone",
+    "file": "phaser/display/avatar/AvatarPartCatalog.ts",
+    "line": 196,
+    "operator": "num-offbyone",
+    "snippet": "34 \u2192 35",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:2414:num-offbyone",
+    "file": "phaser/display/avatar/AvatarPartCatalog.ts",
+    "line": 122,
+    "operator": "num-offbyone",
+    "snippet": "32 \u2192 33",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:1983:num-offbyone",
+    "file": "phaser/display/avatar/AvatarPartCatalog.ts",
+    "line": 99,
+    "operator": "num-offbyone",
+    "snippet": "18 \u2192 19",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarPartCatalog.ts:2335:num-offbyone",
+    "file": "phaser/display/avatar/AvatarPartCatalog.ts",
+    "line": 118,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarTextureGen.ts:2572:guard-true",
+    "file": "phaser/display/avatar/AvatarTextureGen.ts",
+    "line": 81,
+    "operator": "guard-true",
+    "snippet": "if (scene.textures.exists(key)) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/AvatarTextureSupport.ts:840:num-offbyone",
+    "file": "phaser/display/avatar/AvatarTextureSupport.ts",
+    "line": 32,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/avatar/avatarBlink.ts:388:arith-flip",
+    "file": "phaser/display/avatar/avatarBlink.ts",
+    "line": 11,
+    "operator": "arith-flip",
+    "snippet": "/ \u2192 * in t / half",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/avatar/avatarBlink.test.ts",
+      "phaser/display/modules/avatar/AvatarModule.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/avatar/swarmAvatarLayout.ts:1380:arith-flip",
+    "file": "phaser/display/avatar/swarmAvatarLayout.ts",
+    "line": 46,
+    "operator": "arith-flip",
+    "snippet": "/ \u2192 * in 1.08 / Math.sqrt(count + 0.6)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/avatar/swarmAvatarLayout.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/avatar/swarmAvatarLayout.ts:2515:arith-flip",
+    "file": "phaser/display/avatar/swarmAvatarLayout.ts",
+    "line": 75,
+    "operator": "arith-flip",
+    "snippet": "+ \u2192 - in 0.3 + pseudoRandom(`${slotSeed}:amplitude`) * 0.5",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/avatar/swarmAvatarLayout.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/avatar/swarmAvatarLayout.ts:2923:cmp-boundary",
+    "file": "phaser/display/avatar/swarmAvatarLayout.ts",
+    "line": 85,
+    "operator": "cmp-boundary",
+    "snippet": "<= \u2192 < in distance <= maxDistance",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/avatar/swarmAvatarLayout.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/avatar/swarmAvatarLayout.ts:3004:arith-flip",
+    "file": "phaser/display/avatar/swarmAvatarLayout.ts",
+    "line": 87,
+    "operator": "arith-flip",
+    "snippet": "/ \u2192 * in next.x / distance",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/avatar/swarmAvatarLayout.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/avatar/swarmAvatarLayout.ts:1057:num-offbyone",
+    "file": "phaser/display/avatar/swarmAvatarLayout.ts",
+    "line": 37,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/avatar/swarmAvatarLayout.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/displayActivity.ts:2192:guard-false",
+    "file": "phaser/display/displayActivity.ts",
+    "line": 62,
+    "operator": "guard-false",
+    "snippet": "if (!child.id) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/displayActivity.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/displayActivity.ts:511:logic-flip",
+    "file": "phaser/display/displayActivity.ts",
+    "line": 11,
+    "operator": "logic-flip",
+    "snippet": "&& \u2192 || in typeof value === \"number\" && Number.isFinite(value)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/displayActivity.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/displayActivity.ts:546:cmp-boundary",
+    "file": "phaser/display/displayActivity.ts",
+    "line": 11,
+    "operator": "cmp-boundary",
+    "snippet": "> \u2192 >= in value > 0",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/displayActivity.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/GlyphGenerator.ts:924:num-offbyone",
+    "file": "phaser/display/glyph/GlyphGenerator.ts",
+    "line": 31,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/GlyphGenerator.test.ts",
+      "phaser/display/glyph/GlyphGenerator.validation.test.ts",
+      "phaser/display/glyph/GlyphPresetParser.canonical.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/GlyphPRNG.ts:840:arith-flip",
+    "file": "phaser/display/glyph/GlyphPRNG.ts",
+    "line": 31,
+    "operator": "arith-flip",
+    "snippet": "/ \u2192 * in this.state / 0x100000000",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/glyph/GlyphPRNG.ts:1005:arith-flip",
+    "file": "phaser/display/glyph/GlyphPRNG.ts",
+    "line": 36,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in this.unit() * arr.length",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/display/glyph/GlyphTextureGen.ts:2594:logic-flip",
+    "file": "phaser/display/glyph/GlyphTextureGen.ts",
+    "line": 88,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in thickness || 10",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/GlyphTextureGen.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphCanonical.ts:463:guard-false",
+    "file": "phaser/display/glyph/glyphCanonical.ts",
+    "line": 11,
+    "operator": "guard-false",
+    "snippet": "if (a.position !== b.position) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/GlyphGenerator.test.ts",
+      "phaser/display/glyph/GlyphPresetParser.canonical.test.ts",
+      "phaser/display/glyph/GlyphRegistry.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphDelaySignature.ts:315:num-offbyone",
+    "file": "phaser/display/glyph/glyphDelaySignature.ts",
+    "line": 7,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/glyph/GlyphRegistry.advanced.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/display/glyph/glyphDisplayDefaults.ts:1822:num-offbyone",
+    "file": "phaser/display/glyph/glyphDisplayDefaults.ts",
+    "line": 59,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  }
+]

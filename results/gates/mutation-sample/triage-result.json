@@ -1,0 +1,34 @@
+{
+  "n": 385,
+  "design": "stratified: uncovered 135, survived 250; seed 42",
+  "killable_estimate": 6782,
+  "ci95": 174,
+  "ci_low": 6608,
+  "ci_high": 6956,
+  "killable_rate": 0.938,
+  "by_status": {
+    "uncovered": {
+      "n": 135,
+      "killable": 129,
+      "equivalent": 3,
+      "dead": 3,
+      "p_killable": 0.956,
+      "pop": 4087
+    },
+    "survived": {
+      "n": 250,
+      "killable": 229,
+      "equivalent": 20,
+      "dead": 1,
+      "p_killable": 0.916,
+      "pop": 3140
+    }
+  },
+  "sample_verdicts": {
+    "killable": 358,
+    "equivalent": 23,
+    "dead": 4
+  },
+  "noise_rate": 0.07,
+  "primary_metric_note": "Finders reported 15 test-adequacy findings total (R 14, P 1); killable-missed ~ full estimate."
+}

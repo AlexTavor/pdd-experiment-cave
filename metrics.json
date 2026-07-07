@@ -33,9 +33,14 @@
       "4"
     ],
     [
-      "validation cost (USD est)",
-      "$36",
-      "$147"
+      "production cost (USD est)",
+      "~$125",
+      "~$484"
+    ],
+    [
+      "cost / real issue",
+      "~$3.4",
+      "~$3.2"
     ]
   ],
   "severity": {
@@ -125,35 +130,50 @@
   "cost": [
     [
       "lane",
-      "R",
-      "P"
+      "R (raw)",
+      "P (full PDD)"
     ],
     [
-      "validation (adjudicate output)",
+      "production (generate)",
+      "~$125",
+      "~$484"
+    ],
+    [
+      "validation (adjudicate)",
       "$36",
       "$147"
     ],
     [
-      "production (generate findings)",
-      "~$125 (partial)",
-      "pending (entangled run)"
+      "cost / real issue (production)",
+      "~$3.4",
+      "~$3.2"
     ],
     [
       "note",
-      "clean; scales with volume",
-      "controlled re-measure needed"
+      "fan-out, fresh cache",
+      "1 session + sub-agents; gate layer ~0 extra tokens"
     ]
   ],
   "gate": [
     [
       "deterministic gate (PDD-only, R has none)",
       "count",
-      "status"
+      "status / note"
     ],
     [
       "mutation survivors",
       "7227",
-      "killable rate pending sample n=385"
+      "93.8% killable (sample n=385, +/-2.4%)"
+    ],
+    [
+      "  killable gaps (est)",
+      "~6,782",
+      "95% CI 6,608-6,956"
+    ],
+    [
+      "  equivalent + dead (noise)",
+      "~7%",
+      "the gate is almost all signal"
     ],
     [
       "static-gate findings",
@@ -163,7 +183,12 @@
     [
       "boundary survivors",
       "3",
-      "high-severity, likely real"
+      "high-severity"
+    ],
+    [
+      "KILLABLE gaps missed by finders",
+      "~6,782",
+      "finders reported 15 test-gaps; K >> 5"
     ]
   ],
   "progress_arm_run": {
@@ -197,15 +222,15 @@
       "done"
     ],
     [
+      "gate triage (sample n=385)",
+      "done: ~6,782 killable"
+    ],
+    [
       "overlap R vs P",
       "pending"
     ],
     [
       "arm C",
-      "pending"
-    ],
-    [
-      "gate triage (sample n=385)",
       "pending"
     ],
     [

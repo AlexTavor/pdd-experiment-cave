@@ -1,0 +1,127 @@
+[
+  {
+    "id": "phaser/display/modules/menu/PulseModule.ts:1597:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing the effect branch to scale changes tick/destroy from setAlpha to setScale, but the only test mocks createPulseModule entirely so it never exercises this code; a tick test with effect 'alpha' would catch it."
+  },
+  {
+    "id": "phaser/display/modules/progress-bar/progressBarIcon.ts:1839:num-offbyone",
+    "verdict": "killable",
+    "reason": "The fallback default line thickness 10 feeds resolveGlyphPlacementRenderModel and thus the glyph texture, but the only test (progressBarTick) mocks tickProgressBarIcon so this line never runs; a real icon test would pin the thickness."
+  },
+  {
+    "id": "phaser/display/modules/progress-bar/progressBarIcon.ts:882:guard-false",
+    "verdict": "killable",
+    "reason": "Disabling the !cartridge early-return makes resolveGlyphKey dereference an undefined cartridge (cartridge.assets) and throw instead of returning resourceId, an observable change no test covers since tickProgressBarIcon is mocked."
+  },
+  {
+    "id": "phaser/display/modules/progress-bar/progressBarTick.cache.ts:1353:guard-false",
+    "verdict": "killable",
+    "reason": "Forcing the cache-hit guard false makes readCachedProgressBarGeometry recompute and return a fresh object on every call, defeating memoization; a test asserting the same reference is returned twice would catch it."
+  },
+  {
+    "id": "phaser/display/modules/progress-bar/progressBarTick.positioned.ts:564:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing the skip guard true makes resolvePositionedProgressBars continue on every bar so the returned map is always empty, a drastic behavior change reachable in production with no test on this function."
+  },
+  {
+    "id": "phaser/display/modules/progress-bar/progressBarTick.slot.ts:3844:bool-flip",
+    "verdict": "killable",
+    "reason": "Line 112 sets slot.visible = true after rendering an active slot; flipping to false marks an active slot invisible, an observable state change with no direct test of tickActiveProgressBarSlot."
+  },
+  {
+    "id": "phaser/display/modules/veins/VeinsModule.ts:1695:guard-false",
+    "verdict": "killable",
+    "reason": "Forcing the texture-cache guard false makes getTextureKey call getShapeTexture again for repeated shapes; no test uses two edges of the same veinType so the extra call is unobserved, but such a test would catch it."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsBlobVariance.ts:430:arith-flip",
+    "verdict": "killable",
+    "reason": "Changing /999 to *999 alters the centered() value that scales size/spacing/saturation multipliers; tests use variance01=0 which zeroes the term, but production config allows nonzero variance so a nonzero-variance test would catch it."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsBlobVariance.ts:441:arith-flip",
+    "verdict": "killable",
+    "reason": "Changing the -1 to +1 shifts centered() from [-1,1] to [1,3], changing every variance multiplier; masked only because tests use variance01=0, so a nonzero-variance test would distinguish it."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsDisplayTestUtils.ts:2561:num-offbyone",
+    "verdict": "killable",
+    "reason": "The makeEdge fixture default pathLengthPx=100 feeds phase computations in consumers; no assertion pins a value sensitive to 100 vs 101, but the fixture value is observable and a test could pin it."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsGuidePathSampler.ts:509:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing the return guard true makes sampleGuidePathPoint always resolve on segment 0 regardless of distance, changing the sampled point and normal for later segments; reachable via resolveVeinRopePoints but untested."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsGuidePathSampler.ts:519:cmp-boundary",
+    "verdict": "killable",
+    "reason": "Changing remaining <= len to < shifts which segment is chosen when a distance lands exactly on a vertex boundary, an off-by-one that changes the sampled point; reachable but no test on this function."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsPulseLifecycle.ts:1239:arith-flip",
+    "verdict": "killable",
+    "reason": "Changing resolvePulseScale * sizeMultiplier to / sizeMultiplier is masked because both tests use blobSizeVariance01=0 making sizeMultiplier=1; with nonzero variance the scale would differ, so a nonzero-variance test catches it."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopePath.ts:1986:num-offbyone",
+    "verdict": "killable",
+    "reason": "Changing distances.length - 1 to - 2 makes the second-to-last index return the B endpoint and the true last index fall through to a computed wave point, changing output; the only value test compares the function to itself via buildRopePointsFull so it cannot catch it."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopePath.ts:2566:arith-flip",
+    "verdict": "killable",
+    "reason": "Changing ampNoise's * 0.35 to / 0.35 changes the wave amplitude and thus point coordinates; the compatibility-wrapper test compares resolveVeinRopePoints to itself so a golden snapshot on actual points is the missing check."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopePath.ts:2351:arith-flip",
+    "verdict": "killable",
+    "reason": "Changing the envelope Math.sin(Math.PI * distance01) to Math.PI / distance01 drastically alters the wave envelope and output points; unpinned because the only value assertion compares the function against its own wrapper."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopePath.ts:2979:arith-flip",
+    "verdict": "killable",
+    "reason": "Changing 2 * Math.PI * edge.freq * distance01 to a division alters the sine argument and thus the wave shape and output points; not caught because the compatibility test is self-referential and no snapshot pins the coordinates."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopeRenderer.ts:627:num-offbyone",
+    "verdict": "killable",
+    "reason": "Changing a reset value (setScale(1)/setAlpha(1)) to 2 in hideVeinRope goes unobserved because the hide test only asserts setVisible(false) and setPoints not called; asserting the reset value would catch it."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRopeRenderer.ts:1030:num-offbyone",
+    "verdict": "killable",
+    "reason": "Changing syncVeinRope's setPosition(0, 0) to (1, 0) is not asserted by any syncVeinRope test (they check texture/tint/alpha/scale/points/visibility but not position), so a position assertion would catch it."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsRuntimeAlpha.ts:567:guard-false",
+    "verdict": "killable",
+    "reason": "Forcing the tutorial.active guard false makes readAttention return null so readVeinsAlpha yields 0.5 instead of 0.15; the VeinsModule 'dims veins' test sets tutorial.active and asserts 0.15, so a correct test catches this."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsSimplexNoise.ts:1122:num-offbyone",
+    "verdict": "killable",
+    "reason": "Changing contribution's t<=0 return from 0 to 1 injects noise where a corner should contribute nothing, changing simplex output that feeds ampNoise/phaseNoise; reachable with wavinessSimplexScale nonzero but unpinned by any snapshot."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsSimplexNoise.ts:1690:num-offbyone",
+    "verdict": "killable",
+    "reason": "Changing x2 = x0 - 1 + 2 * G2 to 3 * G2 shifts the third simplex corner coordinate, altering the noise value; reachable via resolveVeinRopePoints but no test pins the noise output."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsSimplexNoise.ts:240:arith-flip",
+    "verdict": "killable",
+    "reason": "Flipping G2 = (3 - Math.sqrt(3))/6 to (3 + Math.sqrt(3))/6 changes a core simplex constant used throughout skew/unskew and corner math, altering all noise output; unpinned because no test asserts noise values."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsSimplexNoise.ts:1788:num-offbyone",
+    "verdict": "killable",
+    "reason": "Changing the ii = i & 255 permutation mask to & 256 collapses indexing to bit 8 only, selecting wrong gradients and changing noise output; reachable but no test pins the simplex result."
+  },
+  {
+    "id": "phaser/display/modules/veins/veinsSimplexNoise.ts:1432:arith-flip",
+    "verdict": "killable",
+    "reason": "Changing unskew = (i + j) * G2 to (i - j) * G2 shifts x0/y0 and thus all corner contributions, changing the noise value; reachable via the rope path but unpinned by any noise-value assertion."
+  }
+]

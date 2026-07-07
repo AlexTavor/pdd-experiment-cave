@@ -1,0 +1,82 @@
+[
+  {
+    "id": "terminal/smartPathUtils.ts:7615:bool-flip",
+    "verdict": "killable",
+    "reason": "Flipping the filter's final `return false` to `return true` includes keys whose prefix and tooltip both fail to match, but no test asserts non-matching keys are excluded from getAssetIdSuggestions."
+  },
+  {
+    "id": "terminal/smartPathUtils.ts:7513:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing the tooltip guard to true makes every key pass the filter, adding non-matching suggestions that no test asserts against (tests only use presence checks like .find/.some)."
+  },
+  {
+    "id": "terminal/smartPathUtils.ts:7615:return-undefined",
+    "verdict": "equivalent",
+    "reason": "This return is inside an Array.filter callback, which coerces the result to boolean, so returning undefined excludes the key identically to returning false."
+  },
+  {
+    "id": "vfs/FileSystem.ts:2423:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing `char === \"*\"` true turns every glob char into `.*` so the pattern matches everything, but the scan test uses arrayContaining(['a.json']) and never asserts b.txt is excluded."
+  },
+  {
+    "id": "vfs/bootstrapHydration.ts:2501:return-undefined",
+    "verdict": "killable",
+    "reason": "getDiskReadUrl's production branch returning undefined instead of `/${filename}` changes the fetch URL, and no test exercises the non-dev branch to pin it."
+  },
+  {
+    "id": "vfs/bootstrapHydration.ts:1946:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing `!dbData` true makes the decision always return create_empty in the reachable `!diskData && dbData` case that should return noop, a distinguishable behavior change with no test."
+  },
+  {
+    "id": "vfs/bootstrapSnapshot.ts:1208:guard-false",
+    "verdict": "killable",
+    "reason": "Forcing `!request` false skips the clean 'Fetch is unavailable' error so calling with no fetcher and no global fetch throws a TypeError on `request(...)` instead, distinguishable but untested."
+  },
+  {
+    "id": "vfs/indexedDbBatch.ts:2279:return-undefined",
+    "verdict": "killable",
+    "reason": "Returning undefined instead of `keys` for an empty/whitespace glob changes scan's output from all keys to undefined, catchable by an empty-glob test that does not exist."
+  },
+  {
+    "id": "vfs/indexedDbBatch.ts:2258:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing `!glob.trim()` true always returns unfiltered keys, so a real glob like `*.json` would yield all keys instead of the filtered subset, a change no test pins."
+  },
+  {
+    "id": "vfs/pathUtils.ts:361:guard-false",
+    "verdict": "killable",
+    "reason": "Forcing `!path` false makes matchesPathOrPrefix stop treating an empty path as matching everything, so `matchesPathOrPrefix(key, '')` returns false instead of true, distinguishable but untested."
+  },
+  {
+    "id": "workspace/WorkspaceService.ts:2474:guard-false",
+    "verdict": "killable",
+    "reason": "Forcing the guard false always prepends projectRoot, producing `project/project/A.bp` for an already-prefixed filename or `null/...` when projectRoot is null; the one test only hits the identical unprefixed-with-root case."
+  },
+  {
+    "id": "workspace/projectManifest.ts:1863:guard-false",
+    "verdict": "killable",
+    "reason": "Forcing `fromObject != null` false skips parsing the returned manifest object and falls to the text fallback (throwing 'not found'); readProjectManifest's object path has no test that reaches it."
+  },
+  {
+    "id": "workspace/projectManifest.ts:1374:eq-flip",
+    "verdict": "killable",
+    "reason": "Flipping `!==` to `===` makes a valid string files entry trigger the 'string[] files list' throw; only empty-array cases are tested where `some` returns false regardless, so a non-empty string list would catch it."
+  },
+  {
+    "id": "workspace/projectManifest.ts:1113:logic-flip",
+    "verdict": "killable",
+    "reason": "Changing `||` to `&&` accepts an empty-string name (no throw) and crashes with a TypeError on a missing name; tests only use a valid 'Project' name so both operators agree, but a bad-name test would distinguish it."
+  },
+  {
+    "id": "workspace/projectModuleParsing.ts:878:return-undefined",
+    "verdict": "killable",
+    "reason": "Returning undefined instead of the truthy `semantic` module drops the parsed .bp/.cvs cartridge, which downstream assertions on modules['...'].blueprints would observe."
+  },
+  {
+    "id": "workspace/projectVersionPersistence.ts:808:eq-flip",
+    "verdict": "killable",
+    "reason": "Flipping `===` to `!==` inverts isManifestListedProjectFile's membership test so a listed file returns false; the exported function is reachable but has no test."
+  }
+]

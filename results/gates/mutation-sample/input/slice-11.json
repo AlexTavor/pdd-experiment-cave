@@ -1,0 +1,341 @@
+[
+  {
+    "id": "runtime/handlers/transferBodies.ts:2491:bool-flip",
+    "file": "runtime/handlers/transferBodies.ts",
+    "line": 84,
+    "operator": "bool-flip",
+    "snippet": "false \u2192 true",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/transferBodies.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/transferBodies.ts:1020:arith-flip",
+    "file": "runtime/handlers/transferBodies.ts",
+    "line": 25,
+    "operator": "arith-flip",
+    "snippet": "/ \u2192 * in Math.PI / 12",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/transferBodies.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/transferPendingSpawn.ts:1639:arith-flip",
+    "file": "runtime/handlers/transferPendingSpawn.ts",
+    "line": 47,
+    "operator": "arith-flip",
+    "snippet": "/ \u2192 * in dx / dist",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/handlers/transferResources.ts:487:return-undefined",
+    "file": "runtime/handlers/transferResources.ts",
+    "line": 14,
+    "operator": "return-undefined",
+    "snippet": "return false \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/transferResources.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/transferResources.ts:2205:guard-true",
+    "file": "runtime/handlers/transferResources.ts",
+    "line": 77,
+    "operator": "guard-true",
+    "snippet": "if (entry) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/transferResources.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/transferResources.ts:383:guard-true",
+    "file": "runtime/handlers/transferResources.ts",
+    "line": 12,
+    "operator": "guard-true",
+    "snippet": "if (!state) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/transferResources.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/persistence/flyweightStatePersistence.ts:714:guard-false",
+    "file": "runtime/persistence/flyweightStatePersistence.ts",
+    "line": 18,
+    "operator": "guard-false",
+    "snippet": "if (!isRecord(value)) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/persistence/flyweightStatePersistence.ts:739:return-undefined",
+    "file": "runtime/persistence/flyweightStatePersistence.ts",
+    "line": 18,
+    "operator": "return-undefined",
+    "snippet": "return structuredClone(value) \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/persistence/hydrateRuntime.ts:733:logic-flip",
+    "file": "runtime/persistence/hydrateRuntime.ts",
+    "line": 16,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in !draft || typeof draft !== \"object\"",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "compiler/abilities/hommletBlueprintHydration.test.ts",
+      "runtime/persistence/flyweightPersistence.scaleOnMaxChange.test.ts",
+      "runtime/persistence/hydrateRuntime.flyweight.test.ts",
+      "runtime/persistence/hydrateRuntime.sysWorld.test.ts",
+      "runtime/persistence/hydrateRuntime.test.ts",
+      "runtime/worldSeed.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/persistence/passportPermanentCarryoverRestore.ts:2926:return-undefined",
+    "file": "runtime/persistence/passportPermanentCarryoverRestore.ts",
+    "line": 78,
+    "operator": "return-undefined",
+    "snippet": "return issues \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/persistence/passportPermanentCarryoverRestore.ts:824:eq-flip",
+    "file": "runtime/persistence/passportPermanentCarryoverRestore.ts",
+    "line": 19,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in parent.kind === \"entity_id\"",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/persistence/passportPermanentCarryoverRestore.ts:812:guard-true",
+    "file": "runtime/persistence/passportPermanentCarryoverRestore.ts",
+    "line": 19,
+    "operator": "guard-true",
+    "snippet": "if (parent.kind === \"entity_id\") \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/persistence/passportPermanentCarryoverRestore.ts:2383:return-undefined",
+    "file": "runtime/persistence/passportPermanentCarryoverRestore.ts",
+    "line": 62,
+    "operator": "return-undefined",
+    "snippet": "return issue(entry.id, \"invalid_target_physics_component\") \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/persistence/physicsBodyPersistence.ts:1417:eq-flip",
+    "file": "runtime/persistence/physicsBodyPersistence.ts",
+    "line": 39,
+    "operator": "eq-flip",
+    "snippet": "!== \u2192 === in serialized.layer !== undefined",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/persistence/physicsBodyPersistence.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/runtimeCollectCommands.ts:1887:cmp-boundary",
+    "file": "runtime/runtimeCollectCommands.ts",
+    "line": 52,
+    "operator": "cmp-boundary",
+    "snippet": "> \u2192 >= in resolvedCommands.length > MAX_COMMANDS_PER_TICK",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/runtimeCollectCommands.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/runtimeCoreAdvance.ts:1400:cmp-boundary",
+    "file": "runtime/runtimeCoreAdvance.ts",
+    "line": 41,
+    "operator": "cmp-boundary",
+    "snippet": "<= \u2192 < in safeDt <= 0",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/runtimeInvalidationSummary.helpers.ts:1643:guard-false",
+    "file": "runtime/runtimeInvalidationSummary.helpers.ts",
+    "line": 54,
+    "operator": "guard-false",
+    "snippet": "if (payload.isImmediate !== true) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/runtimePhases.ts:825:cmp-boundary",
+    "file": "runtime/runtimePhases.ts",
+    "line": 20,
+    "operator": "cmp-boundary",
+    "snippet": "> \u2192 >= in arrivals.length > 0",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/runtimePhases.systemPhase.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/runtimePhases.ts:1426:return-undefined",
+    "file": "runtime/runtimePhases.ts",
+    "line": 44,
+    "operator": "return-undefined",
+    "snippet": "return snapshot.reset( context.getSortedEntities(), context.impulse\u2026 \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/runtimePhases.systemPhase.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/runtimePhases.ts:827:num-offbyone",
+    "file": "runtime/runtimePhases.ts",
+    "line": 20,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/runtimePhases.systemPhase.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/runtimeSystemBatch.ts:687:cmp-boundary",
+    "file": "runtime/runtimeSystemBatch.ts",
+    "line": 19,
+    "operator": "cmp-boundary",
+    "snippet": "> \u2192 >= in projectedTotal > MAX_COMMANDS_PER_TICK",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/runtimeSystemBatch.test.ts",
+      "runtime/runtimeSystemRunner.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/runtimeSystemPhase.ts:1160:guard-true",
+    "file": "runtime/runtimeSystemPhase.ts",
+    "line": 35,
+    "operator": "guard-true",
+    "snippet": "if (dt <= 0) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/systems/AutomationSystem.ts:2889:num-offbyone",
+    "file": "runtime/systems/AutomationSystem.ts",
+    "line": 95,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/systems/GlobalEffectsIndexer.ts:853:guard-true",
+    "file": "runtime/systems/GlobalEffectsIndexer.ts",
+    "line": 24,
+    "operator": "guard-true",
+    "snippet": "if (!blueprintId) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/systems/GlobalEffectsIndexer.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/systems/behavior/AdjustState.atomic.cases.ts:2347:num-offbyone",
+    "file": "runtime/systems/behavior/AdjustState.atomic.cases.ts",
+    "line": 75,
+    "operator": "num-offbyone",
+    "snippet": "10 \u2192 11",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/systems/behavior/AdjustState.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/systems/behavior/ValueResolver.ts:548:guard-false",
+    "file": "runtime/systems/behavior/ValueResolver.ts",
+    "line": 11,
+    "operator": "guard-false",
+    "snippet": "if (typeof value !== \"string\" || value.length === 0) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/systems/behavior/ActionExecutor.traits.test.ts",
+      "runtime/systems/behavior/ValueResolver.test.ts",
+      "runtime/systems/behavior/actionExecutorTransfer.selfGuard.test.ts",
+      "runtime/systems/behavior/valueResolverPath.incoming.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/systems/behavior/actionExecutorMutate.ts:699:guard-true",
+    "file": "runtime/systems/behavior/actionExecutorMutate.ts",
+    "line": 18,
+    "operator": "guard-true",
+    "snippet": "if (action.target.startsWith(\"self.powerSink.\")) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/systems/behavior/actionExecutorMutateHelpers.ts:2308:guard-false",
+    "file": "runtime/systems/behavior/actionExecutorMutateHelpers.ts",
+    "line": 75,
+    "operator": "guard-false",
+    "snippet": "if (target.entityId === \"sys_world\") \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/systems/behavior/actionExecutorUtils.ts:451:arith-flip",
+    "file": "runtime/systems/behavior/actionExecutorUtils.ts",
+    "line": 12,
+    "operator": "arith-flip",
+    "snippet": "+ \u2192 - in caveIndex + 1",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/systems/behavior/behaviorSystemUtils.ts:257:return-undefined",
+    "file": "runtime/systems/behavior/behaviorSystemUtils.ts",
+    "line": 6,
+    "operator": "return-undefined",
+    "snippet": "return value > 0 \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  }
+]

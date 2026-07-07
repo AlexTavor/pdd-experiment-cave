@@ -1,0 +1,373 @@
+[
+  {
+    "id": "runtime/contention/ContentionResolver.ts:752:num-offbyone",
+    "file": "runtime/contention/ContentionResolver.ts",
+    "line": 21,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/contention/ContentionResolver.integration.test.ts",
+      "runtime/contention/ContentionResolver.test.ts",
+      "runtime/runtimeCollectCommands.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/contention/ContentionResolver.ts:1767:guard-false",
+    "file": "runtime/contention/ContentionResolver.ts",
+    "line": 50,
+    "operator": "guard-false",
+    "snippet": "if (delta === 0) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/contention/ContentionResolver.integration.test.ts",
+      "runtime/contention/ContentionResolver.test.ts",
+      "runtime/runtimeCollectCommands.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/PatchBlueprintHandler.ts:427:guard-false",
+    "file": "runtime/handlers/PatchBlueprintHandler.ts",
+    "line": 12,
+    "operator": "guard-false",
+    "snippet": "if (!isRecord(entity.state)) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/PatchBlueprintHandler.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/PositionHandler.ts:544:guard-false",
+    "file": "runtime/handlers/PositionHandler.ts",
+    "line": 16,
+    "operator": "guard-false",
+    "snippet": "if (!physics || typeof physics !== \"object\") \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/PositionHandler.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/ResolveTransferHandler.ts:1426:guard-false",
+    "file": "runtime/handlers/ResolveTransferHandler.ts",
+    "line": 52,
+    "operator": "guard-false",
+    "snippet": "if (!incoming || typeof incoming !== \"object\") \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/ResolveTransferHandler.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/TransferHandler.ts:1035:guard-false",
+    "file": "runtime/handlers/TransferHandler.ts",
+    "line": 23,
+    "operator": "guard-false",
+    "snippet": "if (!source || !target) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "balancing/InstantTransferHandler.test.ts",
+      "runtime/Runtime.divergence.test.ts",
+      "runtime/handlers/CancelTransferHandler.test.ts",
+      "runtime/handlers/ResolveTransferHandler.test.ts",
+      "runtime/handlers/TransferHandler.clamping.test.ts",
+      "runtime/handlers/TransferHandler.immediate.test.ts",
+      "runtime/handlers/TransferHandler.integration.test.ts",
+      "runtime/handlers/TransferHandler.permissions.test.ts",
+      "runtime/handlers/TransferHandler.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/UpdateAutomationHandler.ts:859:guard-true",
+    "file": "runtime/handlers/UpdateAutomationHandler.ts",
+    "line": 22,
+    "operator": "guard-true",
+    "snippet": "if (!target) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/handlers/UpdateCaveHandler.ts:1213:logic-flip",
+    "file": "runtime/handlers/UpdateCaveHandler.ts",
+    "line": 43,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in !cave || typeof cave !== \"object\"",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/UpdateCaveHandler.test.ts",
+      "runtime/handlers/UpdateCaveHandler.understanding.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/UpdatePowerSinkHandler.ts:532:guard-false",
+    "file": "runtime/handlers/UpdatePowerSinkHandler.ts",
+    "line": 15,
+    "operator": "guard-false",
+    "snippet": "if (!update) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/systems/behavior/CycleConditionalActivationThrottle.integration.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/capacityUtils.ts:504:num-offbyone",
+    "file": "runtime/handlers/capacityUtils.ts",
+    "line": 14,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/capacityUtils.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/capacityUtils.ts:1891:num-offbyone",
+    "file": "runtime/handlers/capacityUtils.ts",
+    "line": 61,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/capacityUtils.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/killUnifiedBlueprints.ts:552:eq-flip",
+    "file": "runtime/handlers/killUnifiedBlueprints.ts",
+    "line": 19,
+    "operator": "eq-flip",
+    "snippet": "!== \u2192 === in typeof target.blueprintId !== \"string\"",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/handlers/killUnifiedBlueprints.ts:703:guard-false",
+    "file": "runtime/handlers/killUnifiedBlueprints.ts",
+    "line": 23,
+    "operator": "guard-false",
+    "snippet": "if (Object.keys(source).length === 0) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/handlers/spawnBodyIdentity.ts:928:num-offbyone",
+    "file": "runtime/handlers/spawnBodyIdentity.ts",
+    "line": 18,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/spawnBodyIdentity.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/spawnBodyIdentity.ts:1701:guard-false",
+    "file": "runtime/handlers/spawnBodyIdentity.ts",
+    "line": 45,
+    "operator": "guard-false",
+    "snippet": "if (!worldEntity) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/spawnBodyIdentity.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/spawnBodyIdentity.ts:2583:guard-true",
+    "file": "runtime/handlers/spawnBodyIdentity.ts",
+    "line": 67,
+    "operator": "guard-true",
+    "snippet": "if (passport.identitySerial == null) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/spawnBodyIdentity.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/spawnBodyIdentity.ts:870:eq-flip",
+    "file": "runtime/handlers/spawnBodyIdentity.ts",
+    "line": 17,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in typeof value === \"number\"",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/handlers/spawnBodyIdentity.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/spawnCollisionPlacement.ts:508:eq-flip",
+    "file": "runtime/handlers/spawnCollisionPlacement.ts",
+    "line": 16,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in entity.id === body.id",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/handlers/spawnParentResolver.ts:746:eq-flip",
+    "file": "runtime/handlers/spawnParentResolver.ts",
+    "line": 21,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in parent.kind === \"entity_id\"",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/handlers/spawnUnifiedBlueprints/resolveSpawnParent.ts:659:logic-flip",
+    "file": "runtime/handlers/spawnUnifiedBlueprints/resolveSpawnParent.ts",
+    "line": 20,
+    "operator": "logic-flip",
+    "snippet": "|| \u2192 && in !parent || \"parentId\" in parent",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:3317:num-offbyone",
+    "file": "runtime/handlers/spawnUtils.ts",
+    "line": 104,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/persistence/hydrateRuntime.test.ts",
+      "runtime/persistence/passportPermanentCarryover.extract.test.ts",
+      "runtime/persistence/passportPermanentCarryover.restore.test.ts",
+      "runtime/persistence/physicsBodyPersistence.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:808:eq-flip",
+    "file": "runtime/handlers/spawnUtils.ts",
+    "line": 20,
+    "operator": "eq-flip",
+    "snippet": "=== \u2192 !== in blueprintId === \"sys_pointer\"",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/persistence/hydrateRuntime.test.ts",
+      "runtime/persistence/passportPermanentCarryover.extract.test.ts",
+      "runtime/persistence/passportPermanentCarryover.restore.test.ts",
+      "runtime/persistence/physicsBodyPersistence.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:1763:logic-flip",
+    "file": "runtime/handlers/spawnUtils.ts",
+    "line": 53,
+    "operator": "logic-flip",
+    "snippet": "&& \u2192 || in current && typeof current === \"object\"",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/persistence/hydrateRuntime.test.ts",
+      "runtime/persistence/passportPermanentCarryover.extract.test.ts",
+      "runtime/persistence/passportPermanentCarryover.restore.test.ts",
+      "runtime/persistence/physicsBodyPersistence.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:1737:return-undefined",
+    "file": "runtime/handlers/spawnUtils.ts",
+    "line": 51,
+    "operator": "return-undefined",
+    "snippet": "return current \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/persistence/hydrateRuntime.test.ts",
+      "runtime/persistence/passportPermanentCarryover.extract.test.ts",
+      "runtime/persistence/passportPermanentCarryover.restore.test.ts",
+      "runtime/persistence/physicsBodyPersistence.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:1308:guard-false",
+    "file": "runtime/handlers/spawnUtils.ts",
+    "line": 40,
+    "operator": "guard-false",
+    "snippet": "if (!path) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/persistence/hydrateRuntime.test.ts",
+      "runtime/persistence/passportPermanentCarryover.extract.test.ts",
+      "runtime/persistence/passportPermanentCarryover.restore.test.ts",
+      "runtime/persistence/physicsBodyPersistence.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:2837:arith-flip",
+    "file": "runtime/handlers/spawnUtils.ts",
+    "line": 86,
+    "operator": "arith-flip",
+    "snippet": "+ \u2192 - in min + (max - min) * clampedRatio",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/persistence/hydrateRuntime.test.ts",
+      "runtime/persistence/passportPermanentCarryover.extract.test.ts",
+      "runtime/persistence/passportPermanentCarryover.restore.test.ts",
+      "runtime/persistence/physicsBodyPersistence.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:2800:num-offbyone",
+    "file": "runtime/handlers/spawnUtils.ts",
+    "line": 85,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/persistence/hydrateRuntime.test.ts",
+      "runtime/persistence/passportPermanentCarryover.extract.test.ts",
+      "runtime/persistence/passportPermanentCarryover.restore.test.ts",
+      "runtime/persistence/physicsBodyPersistence.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:1673:guard-false",
+    "file": "runtime/handlers/spawnUtils.ts",
+    "line": 51,
+    "operator": "guard-false",
+    "snippet": "if (typeof current === \"number\" && Number.isFinite(current)) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-runtime",
+    "ranTests": [
+      "runtime/persistence/hydrateRuntime.test.ts",
+      "runtime/persistence/passportPermanentCarryover.extract.test.ts",
+      "runtime/persistence/passportPermanentCarryover.restore.test.ts",
+      "runtime/persistence/physicsBodyPersistence.test.ts"
+    ]
+  },
+  {
+    "id": "runtime/handlers/stateEntryNumeric.ts:1020:cmp-boundary",
+    "file": "runtime/handlers/stateEntryNumeric.ts",
+    "line": 31,
+    "operator": "cmp-boundary",
+    "snippet": "> \u2192 >= in entry.value > newMax",
+    "status": "uncovered",
+    "unit": "src-engine-runtime",
+    "ranTests": []
+  }
+]

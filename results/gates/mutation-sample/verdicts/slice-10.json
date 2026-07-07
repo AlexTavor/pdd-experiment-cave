@@ -1,0 +1,147 @@
+[
+  {
+    "id": "runtime/contention/ContentionResolver.ts:752:num-offbyone",
+    "verdict": "killable",
+    "reason": "readPathValue returning 1 instead of 0 when a path segment hits a non-object changes the sort value, so a contention test with a sortBy path traversing a non-object would reorder differently."
+  },
+  {
+    "id": "runtime/contention/ContentionResolver.ts:1767:guard-false",
+    "verdict": "equivalent",
+    "reason": "The explicit `a.index - b.index` tiebreak on delta===0 is redundant given V8's guaranteed stable Array.sort; skipping it (returning delta=0) preserves the same input order, so no test can distinguish."
+  },
+  {
+    "id": "runtime/handlers/PatchBlueprintHandler.ts:427:guard-false",
+    "verdict": "killable",
+    "reason": "Skipping the `entity.state = {}` init when state is not a record makes line 19 dereference `undefined[key]` and throw, which a test patching an entity with missing/non-object state would catch."
+  },
+  {
+    "id": "runtime/handlers/PositionHandler.ts:544:guard-false",
+    "verdict": "killable",
+    "reason": "For a truthy non-object physics the original returns null (logs error), while `if (false)` proceeds and isSamePosition/assignment operate on the non-object, so a test with malformed physics would observe the difference."
+  },
+  {
+    "id": "runtime/handlers/ResolveTransferHandler.ts:1426:guard-false",
+    "verdict": "killable",
+    "reason": "When ledger.incoming is a truthy non-object the original returns null but `if (false)` returns it, causing `incoming[key] = ...` to run on a primitive; a test with a malformed ledger.incoming distinguishes it."
+  },
+  {
+    "id": "runtime/handlers/TransferHandler.ts:1035:guard-false",
+    "verdict": "killable",
+    "reason": "Removing the missing-source/target guard makes calculateTransaction run with an undefined entity instead of logging and returning, so a transfer test with a nonexistent source or target id would catch it."
+  },
+  {
+    "id": "runtime/handlers/UpdateAutomationHandler.ts:859:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing `if (true)` always logs the not-found error and returns, so a valid automation update is silently skipped; an uncovered test updating an existing entity's automation would fail."
+  },
+  {
+    "id": "runtime/handlers/UpdateCaveHandler.ts:1213:logic-flip",
+    "verdict": "killable",
+    "reason": "Changing `||` to `&&` lets a null or truthy-non-object cave bypass the guard and be treated as a component, so a test with a null/non-object cave would observe the missing error and altered progression."
+  },
+  {
+    "id": "runtime/handlers/UpdatePowerSinkHandler.ts:532:guard-false",
+    "verdict": "equivalent",
+    "reason": "Every mergeAttributes call site guards the update argument with a truthy `?` check (baseDemand/maxDemand/allocatedDraw), so `!update` is never true and dropping the early return changes nothing."
+  },
+  {
+    "id": "runtime/handlers/capacityUtils.ts:504:num-offbyone",
+    "verdict": "killable",
+    "reason": "readNumericValue returning 1 instead of 0 for a non-numeric state value shifts saturation and thus calculateHeadroom, so a clamp test with a resource whose value field is missing/non-numeric would differ."
+  },
+  {
+    "id": "runtime/handlers/capacityUtils.ts:1891:num-offbyone",
+    "verdict": "killable",
+    "reason": "Changing `nextAmount > 0` to `nextAmount > 1` drops clamped amounts in (0,1] from the result, so a headroom-limited transfer of a fractional or exactly-1 amount would no longer be recorded."
+  },
+  {
+    "id": "runtime/handlers/killUnifiedBlueprints.ts:552:eq-flip",
+    "verdict": "killable",
+    "reason": "Flipping `!==` to `===` makes the function return early exactly when blueprintId IS a string (the normal case) and proceed otherwise, so an uncovered test with a valid unified blueprint would see no peer kills enqueued."
+  },
+  {
+    "id": "runtime/handlers/killUnifiedBlueprints.ts:703:guard-false",
+    "verdict": "equivalent",
+    "reason": "When source has no memberships, hasUnifiedBlueprintSharedTag({}, peer) is always false so the loop enqueues nothing; skipping the early return only iterates without side effects, yielding identical behavior."
+  },
+  {
+    "id": "runtime/handlers/spawnBodyIdentity.ts:928:num-offbyone",
+    "verdict": "killable",
+    "reason": "Raising the `Math.max(0, ...)` floor to `Math.max(1, ...)` in readBodySerial makes a stored serial of 0 (or negative) read as 1, changing the next assigned bodySerial, which a test seeding bodySerial at 0 would catch."
+  },
+  {
+    "id": "runtime/handlers/spawnBodyIdentity.ts:1701:guard-false",
+    "verdict": "killable",
+    "reason": "Skipping the missing-sys_world guard makes `worldEntity.assignment ??= ...` throw on undefined instead of logging and returning null, so a test spawning a body with no sys_world entity would fail."
+  },
+  {
+    "id": "runtime/handlers/spawnBodyIdentity.ts:2583:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing `if (true)` overwrites state.bodySerial even when passport.identitySerial is already set, so a test supplying a preset identitySerial and asserting the untouched world bodySerial would observe the change."
+  },
+  {
+    "id": "runtime/handlers/spawnBodyIdentity.ts:870:eq-flip",
+    "verdict": "killable",
+    "reason": "Flipping `===` to `!==` makes readBodySerial always return 0 (numbers fail the type check, non-numbers fail isFinite), so the assigned serial never increments past 1; a test spawning a second body expecting serial+1 would catch it."
+  },
+  {
+    "id": "runtime/handlers/spawnCollisionPlacement.ts:508:eq-flip",
+    "verdict": "killable",
+    "reason": "Flipping self-skip `entity.id === body.id` to `!==` makes the loop skip all real other bodies and only consider the body itself, breaking overlap resolution; an uncovered test with an overlapping neighbor would see the position not adjusted."
+  },
+  {
+    "id": "runtime/handlers/spawnParentResolver.ts:746:eq-flip",
+    "verdict": "killable",
+    "reason": "Flipping `parent.kind === \"entity_id\"` to `!==` sends entity_id parents down the tag branch (and tag parents to entityId lookup), resolving the wrong or no parent; an uncovered test with an entity_id parent would get a wrong parent id."
+  },
+  {
+    "id": "runtime/handlers/spawnUnifiedBlueprints/resolveSpawnParent.ts:659:logic-flip",
+    "verdict": "killable",
+    "reason": "Changing `!parent || \"parentId\" in parent` to `&&` makes an undefined parent hit `\"parentId\" in undefined` and throw, and lets a concrete parentId parent fall through instead of returning false; an uncovered peer-parent test distinguishes both."
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:3317:num-offbyone",
+    "verdict": "killable",
+    "reason": "Setting buildPhysicsBody's initial `acceleration.x` to 1 instead of 0 changes the constructed/persisted body, so a persistence test deep-comparing the physics body's acceleration would catch it."
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:808:eq-flip",
+    "verdict": "killable",
+    "reason": "Flipping `blueprintId === \"sys_pointer\"` to `!==` swaps the selected system config (pointer gets world config and vice versa), so a test spawning sys_pointer or sys_world and checking its label/tags/components would differ."
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:1763:logic-flip",
+    "verdict": "killable",
+    "reason": "Changing `current && typeof current === \"object\"` to `||` makes a null final segment reach `\"value\" in null` and throw instead of returning 0, so a radius test with a valueRef path ending in null distinguishes it."
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:1737:return-undefined",
+    "verdict": "killable",
+    "reason": "Returning undefined instead of the resolved number makes a direct numeric valueRef path yield NaN ratio and thus NaN physics.radius, which a test with a top-level numeric path would catch."
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:1308:guard-false",
+    "verdict": "equivalent",
+    "reason": "resolveNumericPath is only ever called with a truthy valueRef/maxRef (guarded by `if (valueRef)`/`if (maxRef)`), so `!path` never holds; and even with an empty path the entity has no top-level numeric `value`, so it still returns 0."
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:2837:arith-flip",
+    "verdict": "killable",
+    "reason": "Flipping `min + (max - min) * clampedRatio` to `min - ...` inverts the radius interpolation, so any test with a nonzero clampedRatio (valueRef resolving above 0) would see a wrong physics.radius."
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:2800:num-offbyone",
+    "verdict": "killable",
+    "reason": "Raising the clamp ceiling from `Math.min(1, ratio)` to `Math.min(2, ratio)` lets ratios in (1,2] escape the 1-cap, so a test with valueRef exceeding maxRef (ratio>1) would compute a larger radius."
+  },
+  {
+    "id": "runtime/handlers/spawnUtils.ts:1673:guard-false",
+    "verdict": "killable",
+    "reason": "Forcing the top-level-number branch to `if (false)` makes a numeric path fall through to the object-value check and return 0 instead of the number, so a direct numeric valueRef test would see radius computed from 0."
+  },
+  {
+    "id": "runtime/handlers/stateEntryNumeric.ts:1020:cmp-boundary",
+    "verdict": "killable",
+    "reason": "Changing `entry.value > newMax` to `>=` triggers scaling when value equals newMax, setting value = newMax*(newMax/oldMax) below newMax instead of leaving it at newMax; an uncovered boundary test with value===newMax, scaleOnMaxChange, and a max decrease catches it."
+  }
+]

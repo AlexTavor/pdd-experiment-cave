@@ -1,0 +1,321 @@
+[
+  {
+    "id": "phaser/pointer/pointerPreviewImage.ts:160:num-offbyone",
+    "file": "phaser/pointer/pointerPreviewImage.ts",
+    "line": 4,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/pointer/pointerPreviewState.ts:666:return-undefined",
+    "file": "phaser/pointer/pointerPreviewState.ts",
+    "line": 18,
+    "operator": "return-undefined",
+    "snippet": "return typeof value === \"string\" ? value : \"\" \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/scenes/GameScene.runtime.ts:394:return-undefined",
+    "file": "phaser/scenes/GameScene.runtime.ts",
+    "line": 11,
+    "operator": "return-undefined",
+    "snippet": "return next \u2192 return undefined",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/scenes/entityDragController.ts:2046:guard-false",
+    "file": "phaser/scenes/entityDragController.ts",
+    "line": 62,
+    "operator": "guard-false",
+    "snippet": "if (!runtime) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/scenes/entityDragController.dragAssignment.test.ts",
+      "phaser/scenes/entityDragController.nonBodyDrag.test.ts",
+      "phaser/scenes/entityDragController.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/scenes/gameSceneMath.ts:1081:guard-true",
+    "file": "phaser/scenes/gameSceneMath.ts",
+    "line": 40,
+    "operator": "guard-true",
+    "snippet": "if (typeof value === \"number\" && Number.isFinite(value)) \u2192 if (true)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/avatar/AvatarModule.test.ts",
+      "phaser/display/modules/transfer/TransferGlyphModule.test.ts",
+      "phaser/display/modules/transfer/TransferModule.test.ts",
+      "phaser/scenes/gameSceneMath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/scenes/gameSceneMath.ts:1107:logic-flip",
+    "file": "phaser/scenes/gameSceneMath.ts",
+    "line": 40,
+    "operator": "logic-flip",
+    "snippet": "&& \u2192 || in typeof value === \"number\" && Number.isFinite(value)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/avatar/AvatarModule.test.ts",
+      "phaser/display/modules/transfer/TransferGlyphModule.test.ts",
+      "phaser/display/modules/transfer/TransferModule.test.ts",
+      "phaser/scenes/gameSceneMath.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/scenes/gameSceneVisualParsers.ts:1152:guard-true",
+    "file": "phaser/scenes/gameSceneVisualParsers.ts",
+    "line": 31,
+    "operator": "guard-true",
+    "snippet": "if (typeof physics.x !== \"number\" || typeof physics.y !== \"numbe\u2026) \u2192 if (true)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/utils/PlaceholderTextureGen.ts:703:arith-flip",
+    "file": "phaser/utils/PlaceholderTextureGen.ts",
+    "line": 25,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in Math.cos(angle) * r",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/utils/PlaceholderTextureGen.ts:1182:bool-flip",
+    "file": "phaser/utils/PlaceholderTextureGen.ts",
+    "line": 44,
+    "operator": "bool-flip",
+    "snippet": "true \u2192 false",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/utils/PlaceholderTextureGen.ts:1288:arith-flip",
+    "file": "phaser/utils/PlaceholderTextureGen.ts",
+    "line": 49,
+    "operator": "arith-flip",
+    "snippet": "- \u2192 + in SIZE - 8",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/utils/ShapeTextureGen.ts:955:num-offbyone",
+    "file": "phaser/utils/ShapeTextureGen.ts",
+    "line": 34,
+    "operator": "num-offbyone",
+    "snippet": "3 \u2192 4",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/utils/ShapeTextureGen.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/utils/ShapeTextureGen.ts:901:num-offbyone",
+    "file": "phaser/utils/ShapeTextureGen.ts",
+    "line": 33,
+    "operator": "num-offbyone",
+    "snippet": "6 \u2192 7",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/utils/ShapeTextureGen.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/utils/ShapeTextureRecipeRenderer.ts:505:num-offbyone",
+    "file": "phaser/utils/ShapeTextureRecipeRenderer.ts",
+    "line": 18,
+    "operator": "num-offbyone",
+    "snippet": "30 \u2192 31",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/utils/ShapeTextureRecipeRenderer.ts:1522:arith-flip",
+    "file": "phaser/utils/ShapeTextureRecipeRenderer.ts",
+    "line": 60,
+    "operator": "arith-flip",
+    "snippet": "+ \u2192 - in bx + leftX",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/utils/TextureManager.ts:2900:return-undefined",
+    "file": "phaser/utils/TextureManager.ts",
+    "line": 84,
+    "operator": "return-undefined",
+    "snippet": "return generateAvatarGlowTexture( this.scene, this.scratchGraphics,\u2026 \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/attribute/AttributePoolShapeModule.test.ts",
+      "phaser/display/modules/avatar/AvatarGlyphModule.test.ts",
+      "phaser/display/modules/glyph/GlyphModule.glyphKey.test.ts",
+      "phaser/display/modules/glyph/GlyphModule.test.ts",
+      "phaser/display/modules/glyph/GlyphModule.testUtils.ts",
+      "phaser/display/modules/transfer/TransferModule.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/utils/TextureManager.ts:3301:return-undefined",
+    "file": "phaser/utils/TextureManager.ts",
+    "line": 100,
+    "operator": "return-undefined",
+    "snippet": "return getTextureManagerStats(this.scene.textures.getTextureKeys()) \u2192 return undefined",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/display/modules/attribute/AttributePoolShapeModule.test.ts",
+      "phaser/display/modules/avatar/AvatarGlyphModule.test.ts",
+      "phaser/display/modules/glyph/GlyphModule.glyphKey.test.ts",
+      "phaser/display/modules/glyph/GlyphModule.test.ts",
+      "phaser/display/modules/glyph/GlyphModule.testUtils.ts",
+      "phaser/display/modules/transfer/TransferModule.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/PulseEngine.ts:2834:num-offbyone",
+    "file": "phaser/veins/PulseEngine.ts",
+    "line": 88,
+    "operator": "num-offbyone",
+    "snippet": "1 \u2192 2",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/PulseEngine.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/VeinsSystem.ts:1197:num-offbyone",
+    "file": "phaser/veins/VeinsSystem.ts",
+    "line": 31,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/VeinsSystem.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:885:guard-false",
+    "file": "phaser/veins/colorUtils.ts",
+    "line": 26,
+    "operator": "guard-false",
+    "snippet": "if (max === gn) \u2192 if (false)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:2840:num-offbyone",
+    "file": "phaser/veins/colorUtils.ts",
+    "line": 91,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:1231:arith-flip",
+    "file": "phaser/veins/colorUtils.ts",
+    "line": 40,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in (q - p) * 6 * temp",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:264:num-offbyone",
+    "file": "phaser/veins/colorUtils.ts",
+    "line": 6,
+    "operator": "num-offbyone",
+    "snippet": "8 \u2192 9",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:286:num-offbyone",
+    "file": "phaser/veins/colorUtils.ts",
+    "line": 6,
+    "operator": "num-offbyone",
+    "snippet": "255 \u2192 256",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:1531:cmp-boundary",
+    "file": "phaser/veins/colorUtils.ts",
+    "line": 51,
+    "operator": "cmp-boundary",
+    "snippet": "< \u2192 <= in l < 0.5",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/veins/colorUtils.ts:1541:arith-flip",
+    "file": "phaser/veins/colorUtils.ts",
+    "line": 51,
+    "operator": "arith-flip",
+    "snippet": "* \u2192 / in l * (1 + s)",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/veins/graphBuilderUtils.ts:730:guard-false",
+    "file": "phaser/veins/graphBuilderUtils.ts",
+    "line": 22,
+    "operator": "guard-false",
+    "snippet": "if (!worldNode) \u2192 if (false)",
+    "status": "survived",
+    "unit": "src-engine-phaser",
+    "ranTests": [
+      "phaser/veins/graphBuilderUtils.oneOff.test.ts",
+      "phaser/veins/graphBuilderUtils.test.ts"
+    ]
+  },
+  {
+    "id": "phaser/veins/pulseEngineMath.ts:566:num-offbyone",
+    "file": "phaser/veins/pulseEngineMath.ts",
+    "line": 15,
+    "operator": "num-offbyone",
+    "snippet": "0 \u2192 1",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  },
+  {
+    "id": "phaser/veins/veinDisplayColors.ts:538:num-offbyone",
+    "file": "phaser/veins/veinDisplayColors.ts",
+    "line": 14,
+    "operator": "num-offbyone",
+    "snippet": "16 \u2192 17",
+    "status": "uncovered",
+    "unit": "src-engine-phaser",
+    "ranTests": []
+  }
+]

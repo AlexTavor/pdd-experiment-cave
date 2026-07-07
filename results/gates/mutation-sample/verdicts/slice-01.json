@@ -1,0 +1,127 @@
+[
+  {
+    "id": "phaser/camera/cameraControllerBindings.ts:1485:logic-flip",
+    "verdict": "killable",
+    "reason": "The move handler's pinch guard `state.pinch && pointer1.isDown && pointer2.isDown` is reachable and flipping && to || changes when the pinch-update branch runs, an observable behavior no test currently pins."
+  },
+  {
+    "id": "phaser/camera/cameraControllerBindings.ts:1297:num-offbyone",
+    "verdict": "killable",
+    "reason": "In the down handler `vx: 0` seeds the drag velocity; changing it to 1 alters the persisted state a test could assert via getState/setState, but no test covers this path."
+  },
+  {
+    "id": "phaser/camera/cameraControllerBootstrap.ts:3352:arith-flip",
+    "verdict": "killable",
+    "reason": "`cam.scrollY = clamped.y - cam.height / (2 * cam.zoom)` differs from the `/` mutant whenever zoom != 1, but the only non-unit-zoom test asserts cam.zoom and never scrollY, so it is an uncovered gap."
+  },
+  {
+    "id": "phaser/camera/cameraControllerBootstrap.ts:3069:num-offbyone",
+    "verdict": "killable",
+    "reason": "getEntity returns undefined so the fallback `y: world.height / 2` is used and flows through clampCenter into scrollY; changing /2 to /3 shifts scrollY but no test asserts scrollX/scrollY."
+  },
+  {
+    "id": "phaser/debug/phaserDebugStats.ts:1880:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing `if (root.__caveDebug)` to true makes ensureDebugApi return undefined on the first call instead of constructing the api, a reachable behavior change no test exercises."
+  },
+  {
+    "id": "phaser/display-export/buildDisplayImageRequest.ts:3262:guard-true",
+    "verdict": "killable",
+    "reason": "Forcing the blueprint-spec guard to `if (true) return null` makes the resolved_display return block (lines 90-102) dead; the current test only exercises the asset fall-through, so a blueprint resolving to a valid non-avatar spec is untested."
+  },
+  {
+    "id": "phaser/display-export/drawTintedTexture.ts:527:guard-true",
+    "verdict": "killable",
+    "reason": "drawTintedTexture is only ever vi.mock'd (renderBodyAvatarImage.test.ts), so its real body never runs; forcing `if (!offCtx)` to true always throws, which a direct unit test would catch."
+  },
+  {
+    "id": "phaser/display-export/drawTintedTexture.ts:638:num-offbyone",
+    "verdict": "killable",
+    "reason": "The real drawTintedTexture is always mocked, so `offCtx.clearRect(0,0,...)` never executes under test; shifting the origin to 1 changes the cleared region a direct canvas test could assert."
+  },
+  {
+    "id": "phaser/display-export/drawTintedTexture.ts:825:num-offbyone",
+    "verdict": "killable",
+    "reason": "drawTintedTexture is mocked in every test, so `padStart(6,\"0\")` never runs; changing 6 to 7 produces a different fillStyle hex string that a direct unit test would distinguish."
+  },
+  {
+    "id": "phaser/display-export/readPhaserTextureSource.ts:458:return-undefined",
+    "verdict": "killable",
+    "reason": "readPhaserTextureSource is only ever vi.mock'd, so returning undefined instead of the image is never observed; a direct unit test asserting the returned CanvasImageSource would catch it."
+  },
+  {
+    "id": "phaser/display-export/renderAttributeDisplayImage.ts:1475:num-offbyone",
+    "verdict": "killable",
+    "reason": "renderAttributeDisplayImage is fully mocked in DisplayImageExportService.test.ts so its real body never runs; `ctx.clearRect(0,0,...)` shifting to 1 is an unobserved behavior change a direct test would pin."
+  },
+  {
+    "id": "phaser/display-export/renderAttributeDisplayImage.ts:738:guard-false",
+    "verdict": "killable",
+    "reason": "The real function is mocked away in the only covering test, so forcing the `textureManager === undefined` throw-guard to false is never exercised; a direct test passing an undefined textureManager would catch the missing throw."
+  },
+  {
+    "id": "phaser/display-export/renderAttributeDisplayImage.ts:494:guard-false",
+    "verdict": "killable",
+    "reason": "renderAttributeDisplayImage is mocked in DisplayImageExportService.test.ts, so forcing the `attribute === null` unsupported-key guard to false never runs; a direct test with an unsupported display key would catch the removed throw."
+  },
+  {
+    "id": "phaser/display-export/renderBodyAvatarImage.ts:654:guard-false",
+    "verdict": "killable",
+    "reason": "renderBodyAvatarImage.test.ts always supplies a non-null ctx so `if (ctx === null)` and `if (false)` take the same path; a test whose canvas.getContext returns null would catch the removed throw, making this an uncovered branch."
+  },
+  {
+    "id": "phaser/display-export/renderCycleProgressCanvas.ts:366:cmp-boundary",
+    "verdict": "killable",
+    "reason": "renderCycleProgressCanvas is vi.mock'd in its only covering test (renderResolvedDisplayImage.test.ts), so the real `points.length < 2` guard never runs; a two-point request distinguishes < from <=, which a direct test would assert."
+  },
+  {
+    "id": "phaser/display-export/renderCycleProgressCanvas.ts:737:num-offbyone",
+    "verdict": "killable",
+    "reason": "The real function is mocked in every test, so `request.points.slice(1)` never executes; changing 1 to 2 drops a segment, an unobserved change a direct unit test would catch."
+  },
+  {
+    "id": "phaser/display-export/renderCycleProgressCanvas.ts:683:num-offbyone",
+    "verdict": "killable",
+    "reason": "renderCycleProgressCanvas is mocked away, so `moveTo(points[0]...)` never runs; changing index 0 to 1 changes the path start, which a direct test of the real function would pin."
+  },
+  {
+    "id": "phaser/display-export/renderResolvedDisplayImage.ts:2629:num-offbyone",
+    "verdict": "killable",
+    "reason": "In drawPlaceholder `ctx.scale(variant.flipX ? -1 : 1, 1)` runs under the real test, but the test only asserts drawImage was called once and never checks ctx.scale arguments, so mutating the literal survives as a gap."
+  },
+  {
+    "id": "phaser/display-export/renderResolvedDisplayImage.ts:2663:num-offbyone",
+    "verdict": "killable",
+    "reason": "drawPlaceholder's `ctx.drawImage(image, -44, -44, 88, 88)` executes under the placeholder test, but the test asserts only the call count, not the coordinates, so changing 44 to 45 is an uncovered gap."
+  },
+  {
+    "id": "phaser/display-export/renderResolvedDisplayImage.ts:2632:num-offbyone",
+    "verdict": "killable",
+    "reason": "The second `1` literal in drawPlaceholder's `ctx.scale(...)` call is passed to a mocked ctx whose arguments are never asserted, so mutating it changes behavior a test could pin but currently does not."
+  },
+  {
+    "id": "phaser/display-export/resolveDisplayImageSpec.ts:569:logic-flip",
+    "verdict": "killable",
+    "reason": "resolveDisplayImageSpec is vi.mock'd in DisplayImageExportService.test.ts, so the real `kind === \"attribute_display\" && !displayKey.trim()` guard never runs; flipping && to || changes which requests fail, catchable by a direct test."
+  },
+  {
+    "id": "phaser/display-export/resolveDisplayImageSpec.ts:852:guard-true",
+    "verdict": "killable",
+    "reason": "The real resolveDisplayImageSpec is mocked away, so forcing the body_avatar empty-seed guard to `if (true)` (always failing) is never exercised; a direct test with a valid body_avatar request would catch the spurious throw."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarAppearanceRegistry.ts:767:arith-flip",
+    "verdict": "killable",
+    "reason": "eyeScaleX is fixed at 1, so `Math.round(eyeScaleX * 100)` yields 100 while the `/` mutant yields 0, changing the appearanceKey from ex100 to ex0; the tests compare keys relatively and never assert the literal key, so this is a gap."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarDisplayConstants.ts:663:num-offbyone",
+    "verdict": "killable",
+    "reason": "LightModule.lights.test.ts imports only AVATAR_SWARM_AURA_*, so it cannot observe the AVATAR_GLOW_STAMPS coordinate; the stamp is consumed by buildBodyAvatarPresentation/AvatarTextureGen, so the offset change is real but untested."
+  },
+  {
+    "id": "phaser/display/avatar/AvatarDisplayConstants.ts:677:num-offbyone",
+    "verdict": "killable",
+    "reason": "This AVATAR_GLOW_STAMPS coordinate feeds glow-stamp placement in AvatarTextureGen/buildBodyAvatarPresentation but is unused by the covering LightModule test, so mutating it changes rendering output no test asserts."
+  }
+]
