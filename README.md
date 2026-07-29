@@ -58,8 +58,8 @@ excluded. Blind-adjudicated by `prompts/judge.md`.
 
 ### Run 1 headline
 
-**[Explore the full dashboard](https://alextavor.github.io/pdd-experiment-cave/)**: all 20
-panels, no install.
+**[Explore the full dashboard](https://alextavor.github.io/pdd-experiment-cave/)**: every panel
+the local dod view renders, minus the live ledger, and no install.
 
 ![Run 1: raw agent against the full method](docs/run1.svg)
 

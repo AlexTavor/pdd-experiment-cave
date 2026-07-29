@@ -35,6 +35,12 @@ if (existsSync(DASHKIT_SRC)) {
 
 const spec = JSON.parse(readFileSync(resolve(REPO, 'view/render-spec.sample.json'), 'utf8'));
 
+// The action ledger is a live-run panel. On a frozen page it shows twelve stale lines under a
+// heading that says "live", which claims the run is still moving. The local dod view keeps it.
+const isLedger = (p) =>
+  p.type === 'log' || (p.type === 'section' && /^action ledger/i.test(p.title || ''));
+const panels = spec.panels.filter((p) => !isLedger(p));
+
 // Inlined rather than fetched so the page also works opened from disk, where fetch of a
 // file:// JSON is blocked.
 const page = `<!doctype html>
@@ -49,7 +55,8 @@ const page = `<!doctype html>
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; }
   header { padding: 28px 24px 8px; max-width: 1100px; margin: 0 auto; }
   header h1 { font-size: 19px; margin: 0 0 6px; font-weight: 700; }
-  header p { font-size: 14px; margin: 0 0 4px; color: #9a9284; line-height: 1.5; }
+  header p { font-size: 14px; margin: 0 0 8px; color: #9a9284; line-height: 1.5; }
+  header p.quiet { font-size: 13px; color: #7d7466; }
   header a { color: #d9a441; }
   main { max-width: 1100px; margin: 0 auto; padding: 0 24px 60px; }
 </style>
@@ -60,14 +67,16 @@ const page = `<!doctype html>
   <p>Run 1 of a three-arm experiment on a 9-subsystem brownfield target. Frozen prompts, pinned
   commits, a kill-condition declared before the run, blind adjudication by a separate judge.
   Arm C and runs 2 and 3 are not done, and the kill-condition has not been evaluated.</p>
-  <p>Method, results and the raw verdicts:
-  <a href="https://github.com/AlexTavor/pdd-experiment-cave">github.com/AlexTavor/pdd-experiment-cave</a>.
-  Rendered by <a href="https://github.com/AlexTavor/dod">dod</a>.</p>
+  <p><a href="https://github.com/AlexTavor/pdd-experiment-cave">Method, results and the raw
+  verdicts</a> are in the repository, including the frozen prompts and the pinned commits that
+  make run 1 reproducible.</p>
+  <p class="quiet">The panels below are drawn by <a href="https://github.com/AlexTavor/dod">dod</a>'s
+  dashkit, the same renderer the local dashboard uses.</p>
 </header>
 <main><div id="root"></div></main>
 <script src="dashkit.js"></script>
 <script>
-  var SPEC = ${JSON.stringify(spec)};
+  var SPEC = ${JSON.stringify({ ...spec, panels })};
   dashkit.renderSpec(SPEC, document.getElementById('root'));
 </script>
 </body>
@@ -75,4 +84,4 @@ const page = `<!doctype html>
 `;
 
 writeFileSync(resolve(DOCS, 'index.html'), page);
-console.log(`wrote docs/index.html (${spec.panels.length} panels)`);
+console.log(`wrote docs/index.html (${panels.length} panels, ledger dropped)`);
