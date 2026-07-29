@@ -1,6 +1,8 @@
 # Experiment: PDD versus a raw agent on a large codebase
 
-Status: DRAFT plan, not yet running. Created for review, uncommitted.
+Status: running. Run 1 is in for arms R and P, blind-adjudicated; headline numbers are in
+[README.md](README.md). Everything below is pre-registered and has not been edited since the
+run started. Only the [status grid](#status-grid-updated-as-cells-complete) at the end moves.
 
 ## Why this exists (the oil-check)
 
@@ -200,13 +202,14 @@ actual spread is known.
 
 | Stage | State |
 |---|---|
-| Pin commits | pending |
-| Chunk + verify taxonomy-free | verify GREEN (validity-taxonomy-free.md); chunk pending |
-| Freeze prompts | pending |
-| Gate suite (wide) | pending |
-| Arm R (3 runs) | pending |
-| Arm C (3 runs) | pending |
-| Arm P (3 runs) | pending |
-| Blind adjudication | pending |
-| Survivor triage | pending |
+| Pin commits | done (`results/experiment.json`, `results/target.json`) |
+| Chunk + verify taxonomy-free | verify GREEN (validity-taxonomy-free.md); chunk pending with arm C |
+| Freeze prompts | done (`prompts/`, hashes pinned in `results/experiment.json`) |
+| Gate suite (wide) | extracted; mutation sample triaged (n=385), static-gate validation (n=58) |
+| Arm R (3 runs) | run 1 done and adjudicated; runs 2 and 3 pending |
+| Arm C (3 runs) | not started |
+| Arm P (3 runs) | run 1 done and adjudicated; runs 2 and 3 pending |
+| Blind adjudication | done for R and P, run 1 (`results/adjudication/`) |
+| Survivor triage | done, sampled at n=385 (`results/gates/mutation-sample/`) |
+| Overlap R vs P | pending |
 | Metrics + kill-condition | pending |
