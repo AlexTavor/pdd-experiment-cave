@@ -35,11 +35,20 @@ if (existsSync(DASHKIT_SRC)) {
 
 const spec = JSON.parse(readFileSync(resolve(REPO, 'view/render-spec.sample.json'), 'utf8'));
 
-// The action ledger is a live-run panel. On a frozen page it shows twelve stale lines under a
-// heading that says "live", which claims the run is still moving. The local dod view keeps it.
-const isLedger = (p) =>
-  p.type === 'log' || (p.type === 'section' && /^action ledger/i.test(p.title || ''));
-const panels = spec.panels.filter((p) => !isLedger(p));
+// Two sections belong to a run in motion and say nothing on a frozen page: the action ledger,
+// whose heading claims "live" over twelve lines from 2026-07-07, and progress, whose tables are
+// a to-do list for runs that are not going to happen. The local dod view still renders both.
+//
+// A section owns every panel after it until the next section, so dropping one means dropping
+// its untitled tables too. Filtering on the section alone would leave those behind, headless.
+const DROP_SECTIONS = [/^action ledger/i, /^progress$/i];
+
+const panels = [];
+let dropping = false;
+for (const p of spec.panels) {
+  if (p.type === 'section') dropping = DROP_SECTIONS.some((re) => re.test(p.title || ''));
+  if (!dropping) panels.push(p);
+}
 
 // Inlined rather than fetched so the page also works opened from disk, where fetch of a
 // file:// JSON is blocked.
@@ -84,4 +93,4 @@ const page = `<!doctype html>
 `;
 
 writeFileSync(resolve(DOCS, 'index.html'), page);
-console.log(`wrote docs/index.html (${panels.length} panels, ledger dropped)`);
+console.log(`wrote docs/index.html (${panels.length} panels, ${spec.panels.length - panels.length} dropped)`);
