@@ -58,6 +58,11 @@ excluded. Blind-adjudicated by `prompts/judge.md`.
 
 ### Run 1 headline
 
+**[Explore the full dashboard](https://alextavor.github.io/pdd-experiment-cave/)**: all 20
+panels, no install.
+
+![Run 1: raw agent against the full method](docs/run1.svg)
+
 | Metric | R (raw) | P (full PDD) |
 |---|---|---|
 | real issues | 37 | 150 |
@@ -73,10 +78,28 @@ Two run-1 results that do not flatter PDD, stated here rather than left in `metr
 `cover-the-mirror` static gate returned **0 real findings out of 36**, which is noise and
 should be filtered out of the suite.
 
-The deterministic gate layer is where the gap is widest. The mutation gate surfaced 7,227
-survivors, of which roughly 6,782 are killable (93.8%, sampled at n=385), against 15
-test-adequacy gaps found by the finders across both arms. Static gates ran at 17% signal
-overall, `boundary-tests` best at 6/10.
+### Where the signal actually came from
+
+The deterministic gate layer is where the gap is widest, and this table is the result the whole
+experiment turns on. Every source, by how much real work it produced and at what precision:
+
+| Source | Raw | Real / killable | Signal |
+|---|---:|---:|---:|
+| mutation gate | 7,227 | ~6,782 | 93% |
+| R raw agent (baseline) | 38 | 37 | 97% |
+| P atlas: risk | 77 | 63 | 82% |
+| P atlas: footgun | 65 | 55 | 85% |
+| P atlas: silent-failure | 40 | 32 | 80% |
+| static: boundary-tests | 10 | 6 | 60% |
+| static: silent-failure | 5 | 3 | 60% |
+| static: no-op-paths | 3 | 1 | 33% |
+| static: pin-values | 4 | **0** | **0%** |
+| static: cover-the-mirror | 36 | **0** | **0%** |
+
+One cheap deterministic gate produced roughly 6,782 real items at 93% precision. Every finder
+in both arms combined produced 15 test-adequacy gaps. Two static gates produced nothing at all
+across 40 findings and should be cut from the suite. The killable figure is an estimate from a
+stratified sample of 385 with a 95% interval of 6,608 to 6,956.
 
 The dod dashboard renders the grid, the head-to-head and the event stream live. The full
 status grid is in [plan.md](plan.md).

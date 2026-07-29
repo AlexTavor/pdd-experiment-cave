@@ -121,6 +121,21 @@ function buildSpec() {
   return { title: m.title || META.name, refresh_ms: META.refresh_ms, panels };
 }
 
+// `--dump <path>` writes the spec and exits. The published dashboard is a static page, so the
+// spec has to be producible without a listening server; this is also what regenerates
+// render-spec.sample.json, which drifted from results/ once already.
+const dumpAt = (() => {
+  const i = process.argv.indexOf('--dump');
+  return i >= 0 ? process.argv[i + 1] : null;
+})();
+
+if (dumpAt) {
+  const out = path.resolve(ROOT, dumpAt);
+  fs.writeFileSync(out, JSON.stringify(buildSpec(), null, 2) + '\n');
+  process.stdout.write(`wrote ${out}\n`);
+  process.exit(0);
+}
+
 function send(res, code, obj) {
   res.writeHead(code, { 'content-type': 'application/json; charset=utf-8', 'cache-control': 'no-store' });
   res.end(JSON.stringify(obj));
