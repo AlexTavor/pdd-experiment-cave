@@ -80,3 +80,11 @@ overall, `boundary-tests` best at 6/10.
 
 The dod dashboard renders the grid, the head-to-head and the event stream live. The full
 status grid is in [plan.md](plan.md).
+
+## Reuse
+
+[MIT](LICENSE), code and data alike. The results are here to be argued with, so re-running the
+protocol against your own target, or disputing an adjudication, is the point. Prompts are
+frozen in `prompts/` and commits are pinned in `results/experiment.json`, which is what makes
+run 1 reproducible.
+
